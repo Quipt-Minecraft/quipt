@@ -37,7 +37,7 @@ public class NetworkUtils {
                 conn.setRequestProperty("Authorization", basicAuth);
             }
             return conn.getInputStream();
-        } catch (Exception _) {
+        } catch (Exception ignored) {
         }
         return InputStream.nullInputStream();
     }
@@ -50,7 +50,7 @@ public class NetworkUtils {
 
             in.close();
             out.close();
-        } catch (IOException _) {
+        } catch (IOException ignored) {
         }
     }
 }
