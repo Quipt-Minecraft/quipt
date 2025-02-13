@@ -8,8 +8,6 @@
 
 package me.quickscythe.quipt.api;
 
-
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,9 +17,6 @@ import java.net.URL;
 import java.util.Base64;
 
 public class NetworkUtils {
-
-
-
 
     public static InputStream downloadFile(String url, String... auth) {
         try {
@@ -42,7 +37,7 @@ public class NetworkUtils {
                 conn.setRequestProperty("Authorization", basicAuth);
             }
             return conn.getInputStream();
-        } catch (Exception ex) {
+        } catch (Exception _) {
         }
         return InputStream.nullInputStream();
     }
@@ -55,7 +50,7 @@ public class NetworkUtils {
 
             in.close();
             out.close();
-        } catch (IOException ex) {
+        } catch (IOException _) {
         }
     }
 }
