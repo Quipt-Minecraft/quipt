@@ -36,6 +36,7 @@ public class NetworkUtils {
                 String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userCredentials.getBytes()));
                 conn.setRequestProperty("Authorization", basicAuth);
             }
+
             return conn.getInputStream();
         } catch (Exception ignored) {
         }
