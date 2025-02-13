@@ -60,3 +60,8 @@ jobs:
         env:
           VERSION_NAME: ${{ github.event.release.name }}
           VERSION_IS_PRERELEASE: ${{ github.event.release.prerelease }}
+      - name: Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: ./*/build/libs/
