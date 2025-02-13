@@ -35,9 +35,10 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-        run: chmod -c 777 gradlew
         with:
           cache-read-only: false
+      - name: Setup Permissions
+        run: chmod -c 777 gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
