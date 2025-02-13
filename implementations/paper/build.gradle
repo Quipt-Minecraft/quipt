@@ -1,5 +1,4 @@
 
-import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 
 plugins {
     id 'java-library'
@@ -45,5 +44,4 @@ dependencies {
 
 
 }
-paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.getMOJANG_PRODUCTION()
 

@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "com.modrinth.minotaur" version "2.+"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 
 }
 
@@ -29,6 +30,22 @@ repositories {
 //    }
 }
 
+dependencies {
+//    implementation project(":bot")
+//    implementation project(":core")
+//    implementation project(":paper")
+
+    shadow project(":bot")
+    shadow project(":core")
+    shadow project(":paper")
+
+    subprojects {
+        subprojects.each { subproject ->
+            implementation project(":${subproject.name}")
+        }
+    }
+}
+
 
 project(":paper") {
     processResources {
@@ -41,6 +58,13 @@ project(":paper") {
     }
 
 
+}
+
+shadowJar {
+    archiveBaseName.set('combined-project')
+    archiveVersion.set('1.0.0')
+    mergeServiceFiles()
+    configurations = [project.configurations.runtimeClasspath]
 }
 
 //apply plugin: "com.gradleup.shadow"
@@ -96,3 +120,5 @@ modrinth {
 }
 
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+
+//tasks.runServer.dependsOn(tasks.shadowJar)

@@ -16,11 +16,11 @@ import java.io.File;
 public class Plugin implements QuiptPlugin {
 
     private final String name = "Quipt";
-    private final File dataFolder;
+    private final File dataFolder = new File("config");;
 
 
     public Plugin() {
-        dataFolder = new File("config");
+
         if(!dataFolder.exists()) dataFolder.mkdir();
 
     }
