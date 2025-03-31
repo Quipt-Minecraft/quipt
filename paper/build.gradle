@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id "io.papermc.paperweight.userdev" version "2.0.0-beta.13"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
+}
+
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "ch.qos.logback:logback-classic:$logback_version"
+
+
+    paperweight.paperDevBundle("${minecraft_version}-${paper_version}")
+
+
+
+
+    implementation project(":common")
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks {
+    runServer {
+        minecraftVersion("${minecraft_version}")
+    }
+
+}
+
+tasks.assemble {
+    dependsOn(tasks.reobfJar)
+}
+
+processResources {
+    def pluginProperties = [minecraft_version: minecraft_version, author: author, name: rootProject.name, project_version: project_version, quipt_core_version: quipt_core_version, quipt_bot_version: quipt_bot_version, json_version: json_version, jgit_version: jgit_version]
+    inputs.properties pluginProperties
+    filteringCharset 'UTF-8'
+
+    filesMatching('paper-plugin.yml') {
+        expand pluginProperties
+    }
+}
+task copyGradleProperties(type: Copy) {
+    from rootProject.file('gradle.properties')
+    into "src/main/resources/"
+}
+
+tasks.processResources.dependsOn(copyGradleProperties)
+//tasks.sourcesJar.dependsOn(copyGradleProperties)

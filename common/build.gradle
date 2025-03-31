@@ -1,0 +1,26 @@
+plugins {
+
+}
+
+group = 'com.quiptmc'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "ch.qos.logback:logback-classic:$logback_version"
+
+    implementation "net.kyori:adventure-api:$adventure_api_version"
+    implementation "net.kyori:adventure-text-serializer-gson:$adventure_api_version"
+    implementation "net.kyori:adventure-text-serializer-plain:$adventure_api_version"
+    implementation project(":bot")
+//    implementation "net.dv8tion:JDA:$jda_version"
+}
+
+test {
+    useJUnitPlatform()
+}

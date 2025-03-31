@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'maven-publish'
+}
+
+application {
+    mainClass = "com.quiptmc.discord.Bot" // Set the main class for the application
+}
+
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.vanillaflux.com/repository/quipt/"
+    }
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    implementation "net.dv8tion:JDA:$jda_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "com.sparkjava:spark-core:$spark_version"
+    implementation "mysql:mysql-connector-java:$sql_version"
+    implementation "org.jfree:jfreechart:$jfree_version"
+    implementation "org.json:json:$json_version"
+    implementation "com.quiptmc:quipt-core:$quipt_core_version"
+//    implementation project(":core")
+//    api group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.incremental = true
+
+    // Set this to the version of java you want to use,
+    // the minimum required for JDA is 1.8
+    sourceCompatibility = '21'
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+tasks.register('runBot', JavaExec) {
+    mainClass = main // Ensure this is correctly set
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = [
+            '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005' // Choose a port
+    ]
+    dependsOn tasks.build
+}

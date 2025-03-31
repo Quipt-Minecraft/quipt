@@ -1,0 +1,7 @@
+name: "${name}"
+version: "${project_version}"
+author: "${author}"
+api-version: "${minecraft_version}"
+main: com.quiptmc.paper.Initializer
+loader: com.quiptmc.paper.Loader
+

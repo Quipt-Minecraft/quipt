@@ -1,0 +1,134 @@
+plugins {
+    id 'java'
+    id "com.modrinth.minotaur" version "2.+"
+    id 'maven-publish'
+}
+
+group = "com.quiptmc"
+version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+
+repositories {
+    mavenCentral()
+
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = 'localRepo'
+            url = layout.buildDirectory.dir("repo")
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    def log = System.getenv("CHANGELOG")
+    if (log != null) changelog = log else changelog = file("changelog.md").text
+    projectId = "${modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${build_status}"
+    gameVersions = ["1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4"]
+    uploadFile = jar
+    loaders = ["paper"]
+    syncBodyFrom = file("readme.md").text
+    dependencies {}
+}
+
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+
+
+task sendDataToUrl {
+    doLast {
+        try {
+            URL url = new URL("https://discord.com/api/webhooks/1331731988230443150/gYnT_JblP6gz4Ztb3g94eebS9pwxdMdsrefTY3_yAiDKwkGr0CjvYp41v46yuniyoPCv")
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection()
+            connection.setRequestMethod("POST")
+            connection.setRequestProperty("Content-Type", "application/json; utf-8")
+            connection.setRequestProperty("Accept", "application/json")
+            connection.setDoOutput(true)
+
+
+            String jsonInputString = "{\"embeds\":[{\"title\": \"Update Received\", \"description\": \"A new version of ${rootProject.name} has been uploaded to Modrinth.\", \"color\":1638162,\"fields\":[{\"name\":\"Version\",\"value\":\"${version}\",\"inline\":true},{\"name\":\"Download\",\"value\":\"[here](https://modrinth.com/plugin/${modrinth_id}/version/${version})\",\"inline\":true}]}]}"
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8")
+                os.write(input, 0, input.length)
+            }
+
+            int responseCode = connection.getResponseCode()
+            System.out.println("Response Code: " + responseCode)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+    }
+}
+
+//tasks.modrinth.dependsOn sendDataToUrl
+
+
+subprojects {
+    apply plugin: "java"
+
+    repositories {
+        maven {
+            name = "quipt"
+            url = "https://repo.vanillaflux.com/repository/quipt/"
+        }
+    }
+
+    dependencies {
+        implementation "org.json:json:$json_version"
+        implementation "com.quiptmc:quipt-core:$quipt_core_version"
+        implementation "com.quiptmc:quipt-bot:${quipt_bot_version}"
+        implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
+        implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
+        implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
+    }
+}
+
+task paperJar(type: Jar){
+    archiveBaseName.set(rootProject.name + "-paper")
+    from project(":common").sourceSets.main.output
+    from project(":paper").sourceSets.main.output
+}
+
+task fabricJar(type: Jar){
+    archiveBaseName.set(rootProject.name + "-fabric")
+    from project(":common").sourceSets.main.output
+    from project(":fabric").sourceSets.main.output
+}
+
+task superJar(type: Jar){
+    archiveBaseName.set(rootProject.name + "-all")
+    from project(":common").sourceSets.main.output
+    from project(":paper").sourceSets.main.output
+    from project(":fabric").sourceSets.main.output
+}
+
+def targetJavaVersion = 21
+java {
+    withSourcesJar()
+    withJavadocJar()
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
