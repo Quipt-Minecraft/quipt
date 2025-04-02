@@ -1,7 +1,12 @@
+import dex.plugins.outlet.v2.util.ReleaseType
+import groovy.text.SimpleTemplateEngine
+
 plugins {
     id 'java'
-    id "com.modrinth.minotaur" version "2.+"
     id 'maven-publish'
+    id 'fabric-loom' version '1.9-SNAPSHOT' apply false
+    id 'io.github.dexman545.outlet' version '1.6.1' apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
 }
 
 group = "com.quiptmc"
@@ -62,6 +67,78 @@ subprojects {
     }
 }
 
+configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
+    apply plugin: 'com.modrinth.minotaur'
+    apply plugin: 'io.github.dexman545.outlet'
+
+    outlet {
+        mcVersionRange = supported_minecraft_versions
+        allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
+    }
+
+    modrinth {
+
+        token = "mrp_nqXWMlgBz9VF1wlJTeZa4l5fj1aCbislqlabfHmK5vhsI1Gtc7xa4uHMVKXp"
+        def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+        projectId = "${modrinth_id}"
+        versionNumber = "${version}"
+        versionType = "${build_status}"
+        gameVersions = outlet.mcVersions()
+        uploadFile = jar
+        loaders = [project.name]
+        syncBodyFrom = rootProject.file("readme.md").text
+        dependencies {}
+    }
+
+    tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+
+
+
+    task discord {
+        doLast {
+            try {
+                var channel = System.getenv("DISCORD_CHANNEL")
+                var token = System.getenv("DISCORD_TOKEN")
+                URL url = uri("https://discord.com/api/webhooks/$channel/$token").toURL()
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection()
+                connection.setRequestMethod("POST")
+                connection.setRequestProperty("Content-Type", "application/json; utf-8")
+                connection.setRequestProperty("Accept", "application/json")
+                connection.setDoOutput(true)
+
+
+                // Read the file and process the template variables
+                String jsonTemplate = rootProject.file("modrinth.json").text
+
+                // Create a template engine and bind the variables
+                def engine = new SimpleTemplateEngine()
+                def template = engine.createTemplate(jsonTemplate)
+                def binding = [
+                        project: project,
+                        rootProject: rootProject,
+                        version: version,
+                        modrinth_id: modrinth_id
+                ]
+
+                // Process the template with the bindings
+                String jsonInputString = template.make(binding).toString()
+
+                try (OutputStream os = connection.getOutputStream()) {
+                    byte[] input = jsonInputString.getBytes("utf-8")
+                    os.write(input, 0, input.length)
+                }
+
+                int responseCode = connection.getResponseCode()
+                System.out.println("Response Code: " + responseCode)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
+    }
+    tasks.modrinth.dependsOn discord
+
+}
+
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
@@ -77,70 +154,12 @@ publishing {
     }
 }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    def log = System.getenv("CHANGELOG")
-    if (log != null) changelog = log else changelog = file("changelog.md").text
-    projectId = "${modrinth_id}"
-    versionNumber = "${version}"
-    versionType = "${build_status}"
-    gameVersions = ["1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4"]
-    uploadFile = jar
-    loaders = ["paper"]
-    syncBodyFrom = file("readme.md").text
-    dependencies {}
-}
-
-tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 
-task sendDataToUrl {
-    doLast {
-        try {
-            URL url = new URL("https://discord.com/api/webhooks/1331731988230443150/gYnT_JblP6gz4Ztb3g94eebS9pwxdMdsrefTY3_yAiDKwkGr0CjvYp41v46yuniyoPCv")
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection()
-            connection.setRequestMethod("POST")
-            connection.setRequestProperty("Content-Type", "application/json; utf-8")
-            connection.setRequestProperty("Accept", "application/json")
-            connection.setDoOutput(true)
 
 
-            String jsonInputString = "{\"embeds\":[{\"title\": \"Update Received\", \"description\": \"A new version of ${rootProject.name} has been uploaded to Modrinth.\", \"color\":1638162,\"fields\":[{\"name\":\"Version\",\"value\":\"${version}\",\"inline\":true},{\"name\":\"Download\",\"value\":\"[here](https://modrinth.com/plugin/${modrinth_id}/version/${version})\",\"inline\":true}]}]}"
-
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes("utf-8")
-                os.write(input, 0, input.length)
-            }
-
-            int responseCode = connection.getResponseCode()
-            System.out.println("Response Code: " + responseCode)
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-    }
-}
 
 //tasks.modrinth.dependsOn sendDataToUrl
-
-
-task paperJar(type: Jar){
-    archiveBaseName.set(rootProject.name + "-paper")
-    from project(":common").sourceSets.main.output
-    from project(":paper").sourceSets.main.output
-}
-
-task fabricJar(type: Jar){
-    archiveBaseName.set(rootProject.name + "-fabric")
-    from project(":common").sourceSets.main.output
-    from project(":fabric").sourceSets.main.output
-}
-
-task superJar(type: Jar){
-    archiveBaseName.set(rootProject.name + "-all")
-    from project(":common").sourceSets.main.output
-    from project(":paper").sourceSets.main.output
-    from project(":fabric").sourceSets.main.output
-}
 
 def targetJavaVersion = 21
 java {

@@ -1,0 +1,21 @@
+{
+  "embeds": [
+    {
+      "title": "New ${project.name} version released!",
+      "description": "A new version of ${rootProject.name} for ${project.name} has been uploaded to Modrinth.",
+      "color": 1638162,
+      "fields": [
+        {
+          "name": "Version",
+          "value": "${version}",
+          "inline": true
+        },
+        {
+          "name": "Download",
+          "value": "[here](https://modrinth.com/plugin/${modrinth_id}/versions)",
+          "inline": true
+        }
+      ]
+    }
+  ]
+}
