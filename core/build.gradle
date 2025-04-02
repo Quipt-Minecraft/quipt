@@ -2,9 +2,6 @@ plugins {
     id 'java'
 }
 
-group = 'com.quiptmc'
-version = '0.1.7-MC1.21.4-alpha.3'
-
 repositories {
     mavenCentral()
 }
