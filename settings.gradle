@@ -13,4 +13,5 @@ include 'common'
 include 'paper'
 include 'fabric'
 include 'bot'
+include 'core'
 

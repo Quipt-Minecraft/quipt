@@ -5,6 +5,8 @@ plugins {
     id 'maven-publish'
 }
 
+
+
 application {
     mainClass = "com.quiptmc.discord.Bot" // Set the main class for the application
 }
@@ -26,8 +28,7 @@ dependencies {
     implementation "mysql:mysql-connector-java:$sql_version"
     implementation "org.jfree:jfreechart:$jfree_version"
     implementation "org.json:json:$json_version"
-    implementation "com.quiptmc:quipt-core:$quipt_core_version"
-//    implementation project(":core")
+    implementation project(":core")
 //    api group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 }
 
@@ -46,7 +47,7 @@ tasks.test {
 
 publishing {
     publications {
-        create("common", MavenPublication) {
+        create("bot", MavenPublication) {
             artifactId = project.name
             from components.java
         }

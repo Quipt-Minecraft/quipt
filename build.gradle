@@ -23,6 +23,8 @@ test {
 
 
 allprojects {
+    group = "com.quiptmc"
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
     repositories {
         mavenCentral()
@@ -50,6 +52,13 @@ subprojects {
                 }
             }
         }
+
+    }
+    dependencies {
+        implementation "org.json:json:$json_version"
+        implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
+        implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
+        implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
     }
 }
 
@@ -113,26 +122,6 @@ task sendDataToUrl {
 
 //tasks.modrinth.dependsOn sendDataToUrl
 
-
-subprojects {
-    apply plugin: "java"
-
-    repositories {
-        maven {
-            name = "quipt"
-            url = "https://repo.vanillaflux.com/repository/quipt/"
-        }
-    }
-
-    dependencies {
-        implementation "org.json:json:$json_version"
-        implementation "com.quiptmc:quipt-core:$quipt_core_version"
-        implementation "com.quiptmc:quipt-bot:${quipt_bot_version}"
-        implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
-        implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
-        implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
-    }
-}
 
 task paperJar(type: Jar){
     archiveBaseName.set(rootProject.name + "-paper")

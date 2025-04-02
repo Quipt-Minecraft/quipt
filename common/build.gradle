@@ -2,8 +2,6 @@ plugins {
     id "maven-publish"
 }
 
-group = 'com.quiptmc'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -18,8 +16,8 @@ dependencies {
     implementation "net.kyori:adventure-api:4.19.0"
     implementation "net.kyori:adventure-text-serializer-gson:$adventure_api_version"
     implementation "net.kyori:adventure-text-serializer-plain:$adventure_api_version"
+    implementation project(":core")
     implementation project(":bot")
-//    implementation "net.dv8tion:JDA:$jda_version"
 }
 
 test {
@@ -32,4 +30,12 @@ publishing {
             from components.java
         }
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 17
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }

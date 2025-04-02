@@ -4,17 +4,8 @@ import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.utils.NetworkUtils;
 import com.quiptmc.minecraft.files.ApiConfig;
-import com.quiptmc.minecraft.files.WebConfig;
-import com.quiptmc.minecraft.utils.chat.MessageUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 
 public class ApiManager {
 

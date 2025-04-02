@@ -29,8 +29,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    implementation "com.quiptmc:quipt-bot:${quipt_bot_version}"
-
+    implementation project(":core")
 
     implementation project(":common")
 }
@@ -60,4 +59,13 @@ publishing {
             from components.java
         }
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 17 // or 17
+
+    // Force Java version for all modules
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
