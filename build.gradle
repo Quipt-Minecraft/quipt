@@ -137,6 +137,10 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
     }
     tasks.modrinth.dependsOn discord
 
+    tasks.named('publish').configure {
+        finalizedBy tasks.modrinth
+    }
+
 }
 
 publishing {
