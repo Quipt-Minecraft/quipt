@@ -46,7 +46,8 @@ tasks.test {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        create("common", MavenPublication) {
+            artifactId = project.name
             from components.java
         }
     }

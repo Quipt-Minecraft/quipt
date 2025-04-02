@@ -22,9 +22,41 @@ test {
 }
 
 
+allprojects {
+
+    repositories {
+        mavenCentral()
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    publishing {
+        publications {
+            create("mavenJava", MavenPublication) {
+                artifactId = project.name
+                from components.java
+            }
+        }
+        repositories {
+            maven {
+                name = "quipt"
+                url = uri("https://repo.vanillaflux.com/repository/quipt/")
+
+                credentials {
+                    username = System.getenv("NEXUS_USERNAME")
+                    password = System.getenv("NEXUS_PASSWORD")
+                }
+            }
+        }
+    }
+}
+
 publishing {
     publications {
-        maven(MavenPublication) {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.name
             from components.java
         }
     }

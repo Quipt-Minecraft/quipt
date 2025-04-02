@@ -1,6 +1,6 @@
 plugins {
     id 'fabric-loom' version '1.9-SNAPSHOT'
-
+    id 'maven-publish'
 }
 
 
@@ -50,5 +50,14 @@ processResources {
         expand "version": project_version,
                 "minecraft_version": minecraft_version,
                 "loader_version": loader_version
+    }
+}
+
+publishing {
+    publications {
+        create("fabric", MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
     }
 }
