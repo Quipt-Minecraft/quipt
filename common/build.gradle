@@ -10,11 +10,12 @@ repositories {
 }
 
 dependencies {
+
     testImplementation platform("org.junit:junit-bom:$junit_version")
     testImplementation "org.junit.jupiter:junit-jupiter"
     testImplementation "ch.qos.logback:logback-classic:$logback_version"
 
-    implementation "net.kyori:adventure-api:$adventure_api_version"
+    implementation "net.kyori:adventure-api:4.19.0"
     implementation "net.kyori:adventure-text-serializer-gson:$adventure_api_version"
     implementation "net.kyori:adventure-text-serializer-plain:$adventure_api_version"
     implementation project(":bot")
