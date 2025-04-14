@@ -48,12 +48,11 @@ subprojects {
         }
         repositories {
             maven {
-                name = "quipt"
-                url = uri("https://repo.vanillaflux.com/repository/quipt/")
-
+                // Replace OWNER and REPOSITORY with your GitHub username or organization name and the repository name
+                url "https://maven.pkg.github.com/OWNER/REPOSITORY"
                 credentials {
-                    username = System.getenv("NEXUS_USERNAME")
-                    password = System.getenv("NEXUS_PASSWORD")
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
                 }
             }
         }
