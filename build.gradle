@@ -4,7 +4,7 @@ import groovy.text.SimpleTemplateEngine
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom' version '1.9-SNAPSHOT' apply false
+    id 'fabric-loom' version '1.10-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
 }
@@ -64,6 +64,19 @@ subprojects {
         implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
         implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
         implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
+    }
+}
+
+configure(subprojects.findAll {it.name == "fabric"}) {
+
+    apply plugin: 'fabric-loom'
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${minecraft_version}"
+        mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+        modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     }
 }
 

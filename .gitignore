@@ -43,3 +43,5 @@ bin/
 /.idea/
 /paper/run/
 /fabric/run/
+/.run/
+/fabric/server/
