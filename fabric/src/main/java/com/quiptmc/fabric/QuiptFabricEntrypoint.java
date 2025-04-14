@@ -6,6 +6,10 @@ import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 
 public class QuiptFabricEntrypoint extends QuiptEntrypoint {
 
+    public QuiptFabricEntrypoint(ServerLoader<?> loader) {
+        super(loader);
+    }
+
     @Override
     public void onInitialize() {
         CoreUtils.init(new QuiptFabricIntegration(new ServerLoader<>(ServerLoader.Type.FABRIC, mod().orElse(null))));
