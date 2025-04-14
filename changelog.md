@@ -1,1 +1,1 @@
-ClassLoader now looks in `/libraries` for dependencies, rather than trying to make a new directory in the plugins folder.
+Fabric QuiptEntrypoint is now a MinecraftIntegration

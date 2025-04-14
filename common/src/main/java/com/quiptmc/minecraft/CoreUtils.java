@@ -17,7 +17,7 @@ public class CoreUtils {
     }
 
     public static void init(MinecraftIntegration integration) {
-
+        ApiUtils.init();
 //        QueueTask task = new QueueTask() {
 //            @Override
 //            public void run() {

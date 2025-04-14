@@ -11,11 +11,15 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Optional;
 
-public abstract class QuiptEntrypoint  {
+public abstract class QuiptEntrypoint extends MinecraftIntegration  {
 
     @Nullable
     private JavaMod mod = null;
     private final Logger LOGGER = LoggerFactory.getLogger(QuiptEntrypoint.class);
+
+    public QuiptEntrypoint(ServerLoader<?> loader) {
+        super(loader);
+    }
 
     public void run(EntrypointContainer<QuiptEntrypoint> entrypoint) {
         ModContainer container = entrypoint.getProvider();
