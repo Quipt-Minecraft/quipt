@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id "io.papermc.paperweight.userdev" version "2.0.0-beta.16"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id "maven-publish"
 }
 
 
@@ -66,16 +65,6 @@ task copyGradleProperties(type: Copy) {
 
 tasks.processResources.dependsOn(copyGradleProperties)
 //tasks.sourcesJar.dependsOn(copyGradleProperties)
-
-publishing {
-    publications {
-        create("paper", MavenPublication) {
-            artifactId = project.name
-            from components.java
-        }
-    }
-}
-
 
 
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)

@@ -1,6 +1,5 @@
 plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT'
-    id 'maven-publish'
 }
 
 
@@ -47,15 +46,6 @@ processResources {
                 "minecraft_version": minecraft_version,
                 "loader_version": loader_version,
                 "supported_minecraft_versions": supported_minecraft_versions
-    }
-}
-
-publishing {
-    publications {
-        create("fabric", MavenPublication) {
-            artifactId = project.name
-            from components.java
-        }
     }
 }
 
