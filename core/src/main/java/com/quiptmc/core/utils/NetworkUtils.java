@@ -1,18 +1,21 @@
 package com.quiptmc.core.utils;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.Base64;
-import java.util.logging.Logger;
 
 /**
  * A utility class for network operations
  */
 public class NetworkUtils {
+    
+    private static Logger logger = LoggerFactory.getLogger("NetworkUtils");
 
     private NetworkUtils() {
         throw new IllegalStateException("Utility class");
@@ -44,7 +47,7 @@ public class NetworkUtils {
             }
             return conn.getInputStream();
         } catch (Exception ex) {
-            Logger.getLogger("Core").info("An error occurred while downloading file from url: " + url);
+           logger.info("An error occurred while downloading file from url: " + url);
         }
         return InputStream.nullInputStream();
     }
@@ -63,13 +66,13 @@ public class NetworkUtils {
                 out.write(buffer, 0, bytesRead);
             }
         } catch (IOException ex) {
-            Logger.getLogger("Core").info("An error occurred while saving file");
+           logger.info("An error occurred while saving file");
         } finally {
             try {
                 in.close();
                 out.close();
             } catch (IOException e) {
-                Logger.getLogger("Core").info("An error occurred while closing streams");
+               logger.info("An error occurred while closing streams");
             }
         }
     }
@@ -86,7 +89,7 @@ public class NetworkUtils {
             }
             return stringBuilder.toString();
         } catch (Exception ex) {
-            Logger.getLogger("Network").info("An error occurred while converting InputStream to String");
+           logger.info("An error occurred while converting InputStream to String");
             ex.printStackTrace();
         }
         return null;
@@ -117,7 +120,7 @@ public class NetworkUtils {
             conn.getOutputStream().write(data.toString().getBytes());
             return streamToString(conn.getInputStream());
         } catch (Exception ex) {
-            Logger.getLogger("Network").info("An error occurred while downloading file from (post) url: " + url);
+            logger.info("An error occurred while downloading file from (post) url: {}", url);
             ex.printStackTrace();
         }
         return null;

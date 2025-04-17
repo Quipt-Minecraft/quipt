@@ -14,7 +14,7 @@
       "com.quiptmc.fabric.Initializer"
     ],
     "quipt": [
-        "com.quiptmc.fabric.QuiptFabricEntrypoint"
+        "com.quiptmc.fabric.FabricLoaderEntrypoint"
     ]
   },
   "mixins": [

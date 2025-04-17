@@ -2,8 +2,8 @@ package com.quiptmc.core.logger;
 
 
 import com.quiptmc.core.QuiptIntegration;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 public class QuiptLogger {
 
     QuiptIntegration integration;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Creates a new logger
@@ -28,7 +29,7 @@ public class QuiptLogger {
      * @param message The message to log
      */
     public void log(String message) {
-        Logger.getLogger(integration.name()).info(message);
+        logger.info(message);
     }
 
     /**
@@ -38,7 +39,7 @@ public class QuiptLogger {
      * @param args    The arguments to format the message with
      */
     public void log(String message, Object... args) {
-        Logger.getLogger(integration.name()).info(message.formatted(args));
+        logger.info(message, args);
     }
 
     /**
@@ -47,7 +48,7 @@ public class QuiptLogger {
      * @param message The warning to log
      */
     public void warn(String message) {
-        Logger.getLogger(integration.name()).warning(message);
+        logger.warn(message);
     }
 
     /**
@@ -57,7 +58,7 @@ public class QuiptLogger {
      * @param args    The arguments to format the warning with
      */
     public void warn(String message, Object... args) {
-        Logger.getLogger(integration.name()).warning(message.formatted(args));
+        logger.warn(message, args);
     }
 
     /**
@@ -66,7 +67,7 @@ public class QuiptLogger {
      * @param message The error to log
      */
     public void error(String message) {
-        Logger.getLogger(integration.name()).severe(message);
+        logger.error(message);
     }
 
     /**
@@ -76,7 +77,7 @@ public class QuiptLogger {
      * @param args    The arguments to format the error with
      */
     public void error(String message, Object... args) {
-        Logger.getLogger(integration.name()).severe(message.formatted(args));
+        logger.error(message, args);
     }
 
     /**
@@ -86,7 +87,7 @@ public class QuiptLogger {
      * @param throwable The throwable to log
      */
     public void error(String message, Throwable throwable) {
-        Logger.getLogger(integration.name()).severe(message);
+        logger.error(message);
         throwable.printStackTrace();
     }
 
@@ -98,7 +99,7 @@ public class QuiptLogger {
      * @param args      The arguments to format the error with
      */
     public void error(String message, Throwable throwable, Object... args) {
-        Logger.getLogger(integration.name()).severe(message.formatted(args));
+        logger.error(message, args);
         throwable.printStackTrace();
     }
 
@@ -108,7 +109,7 @@ public class QuiptLogger {
      * @param message The debug message to log
      */
     public void debug(String message) {
-        Logger.getLogger(integration.name()).fine(message);
+        logger.debug(message);
     }
 
     /**
@@ -118,7 +119,7 @@ public class QuiptLogger {
      * @param args    The arguments to format the debug message with
      */
     public void debug(String message, Object... args) {
-        Logger.getLogger(integration.name()).fine(message.formatted(args));
+        logger.debug(message, args);
     }
 
     /**
@@ -127,7 +128,7 @@ public class QuiptLogger {
      * @param message The trace message to
      */
     public void trace(String message) {
-        Logger.getLogger(integration.name()).finest(message);
+        logger.trace(message);
     }
 
     /**
@@ -137,7 +138,7 @@ public class QuiptLogger {
      * @param args    The arguments to format the trace message with
      */
     public void trace(String message, Object... args) {
-        Logger.getLogger(integration.name()).finest(message.formatted(args));
+        logger.trace(message, args);
     }
 
 

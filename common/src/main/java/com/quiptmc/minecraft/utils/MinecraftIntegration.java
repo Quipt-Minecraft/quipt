@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public abstract class MinecraftIntegration<T> extends QuiptIntegration {
+public class MinecraftIntegration<T> extends QuiptIntegration {
 
     public final String NAME;
     private final File dataFolder;

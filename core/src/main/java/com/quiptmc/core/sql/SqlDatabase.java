@@ -1,9 +1,10 @@
 package com.quiptmc.core.sql;
 
 
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * Represents a SQL database
@@ -54,7 +55,7 @@ public class SqlDatabase {
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger("Core").info("An error occurred while connecting databse (" + url + ")");
+            LoggerFactory.getLogger("Core").info("An error occurred while connecting databse (" + url + ")");
             return false;
         }
         return false;

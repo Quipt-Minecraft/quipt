@@ -19,7 +19,7 @@ public class CoreUtils {
         //DO NOT USE BUKKIT CODE HERE. ONLY REGISTER DATA UNRELATED TO PAPER AND QUIPT INTEGRATIONS
     }
 
-    public static void init(MinecraftIntegration integration) {
+    public static void init(MinecraftIntegration<?> integration) {
         if(CoreUtils.integration == null) {
             CoreUtils.integration = integration;
         }
