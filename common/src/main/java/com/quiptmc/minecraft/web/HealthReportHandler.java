@@ -65,27 +65,27 @@ public class HealthReportHandler extends QuiptServlet {
     }
 
     public void copyResources(String resourcePath, File targetDirectory, boolean isRoot) throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File resourceDirectory = new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
-
-        if (resourceDirectory.isDirectory()) {
-            for (String child : Objects.requireNonNull(resourceDirectory.list())) {
-                copyResources(resourcePath + "/" + child, isRoot ? targetDirectory : new File(targetDirectory, resourceDirectory.getName()), false);
-            }
-        } else {
-            if (!targetDirectory.exists() && !targetDirectory.mkdirs()) {
-                throw new IOException("Failed to create target directory: " + targetDirectory);
-            }
-
-            try (InputStream resourceStream = classLoader.getResourceAsStream(resourcePath)) {
-                if (resourceStream == null) {
-                    throw new IOException("Resource not found: " + resourcePath);
-                }
-
-                File targetFile = new File(targetDirectory, resourceDirectory.getName());
-                Files.copy(resourceStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-        }
+//        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//        File resourceDirectory = new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
+//
+//        if (resourceDirectory.isDirectory()) {
+//            for (String child : Objects.requireNonNull(resourceDirectory.list())) {
+//                copyResources(resourcePath + "/" + child, isRoot ? targetDirectory : new File(targetDirectory, resourceDirectory.getName()), false);
+//            }
+//        } else {
+//            if (!targetDirectory.exists() && !targetDirectory.mkdirs()) {
+//                throw new IOException("Failed to create target directory: " + targetDirectory);
+//            }
+//
+//            try (InputStream resourceStream = classLoader.getResourceAsStream(resourcePath)) {
+//                if (resourceStream == null) {
+//                    throw new IOException("Resource not found: " + resourcePath);
+//                }
+//
+//                File targetFile = new File(targetDirectory, resourceDirectory.getName());
+//                Files.copy(resourceStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//            }
+//        }
     }
 
     @Override

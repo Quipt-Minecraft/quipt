@@ -90,7 +90,7 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 
     modrinth {
 
-        token = "mrp_nqXWMlgBz9VF1wlJTeZa4l5fj1aCbislqlabfHmK5vhsI1Gtc7xa4uHMVKXp"
+        token = System.getenv("MODRINTH_TOKEN")
         def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
         projectId = "${modrinth_id}"
         versionNumber = "${version}"
