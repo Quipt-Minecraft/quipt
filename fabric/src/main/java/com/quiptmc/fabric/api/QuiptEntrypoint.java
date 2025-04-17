@@ -11,27 +11,23 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Optional;
 
-public abstract class QuiptEntrypoint extends MinecraftIntegration  {
+public abstract class QuiptEntrypoint<T extends JavaMod> extends MinecraftIntegration<T>  {
 
-    @Nullable
-    private JavaMod mod = null;
     private final Logger LOGGER = LoggerFactory.getLogger(QuiptEntrypoint.class);
 
-    public QuiptEntrypoint(ServerLoader<?> loader) {
-        super(loader);
+    public QuiptEntrypoint(String name, String version, String id) {
+        super(name, new ServerLoader<>(ServerLoader.Type.FABRIC, new JavaMod(name, version, id)));
     }
 
     public void run(EntrypointContainer<QuiptEntrypoint> entrypoint) {
-        ModContainer container = entrypoint.getProvider();
-        mod = new JavaMod(container.getMetadata());
-//        logger().log("Initializing {} v{} ({})...", mod.name(), mod.version(), mod.id());
+        LOGGER.info("Initializing {} v{} ({})...", mod().name(), mod().version(), mod().id());
         onInitialize();
-        LOGGER.info("Initializing {} v{} ({})...", mod.name(), mod.version(), mod.id());
+
     }
 
 
-    public Optional<JavaMod> mod() {
-        return Optional.ofNullable(mod);
+    public JavaMod mod() {
+        return (JavaMod) loader().instance();
     }
 
     public abstract void onInitialize();

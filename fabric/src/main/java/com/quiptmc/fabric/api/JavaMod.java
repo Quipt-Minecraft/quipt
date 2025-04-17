@@ -9,14 +9,14 @@ import java.util.Collection;
 
 public class JavaMod {
 
-    String name;
-    String id;
-    String version;
-    String description;
-    Collection<Person> authors;
-    ContactInformation contact;
+    private final String name;
+    private final String id;
+    private final String version;
+    private final String description;
+    private final Collection<Person> authors;
+    private final ContactInformation contact;
 
-    File dataFolder;
+    private final File dataFolder;
 
     public JavaMod(ModMetadata metadata){
         this.name = metadata.getName();
@@ -25,6 +25,60 @@ public class JavaMod {
         this.description = metadata.getDescription();
         this.authors = metadata.getAuthors();
         this.contact = metadata.getContact();
+        this.dataFolder = new File("config/" + name +"/");
+        if(!dataFolder.exists()) dataFolder.mkdirs();
+    }
+
+    public JavaMod(String name){
+        this.name = name;
+        this.id = name.toLowerCase();
+        this.version = "1.0.0";
+        this.description = "No description provided.";
+        this.authors = null;
+        this.contact = null;
+        this.dataFolder = new File("config/" + name +"/");
+        if(!dataFolder.exists()) dataFolder.mkdirs();
+    }
+
+    public JavaMod(String name, String version){
+        this.name = name;
+        this.id = name.toLowerCase();
+        this.version = version;
+        this.description = "No description provided.";
+        this.authors = null;
+        this.contact = null;
+        this.dataFolder = new File("config/" + name +"/");
+        if(!dataFolder.exists()) dataFolder.mkdirs();
+    }
+    public JavaMod(String name, String version, String id){
+        this.name = name;
+        this.id = id;
+        this.version = version;
+        this.description = "No description provided.";
+        this.authors = null;
+        this.contact = null;
+        this.dataFolder = new File("config/" + name +"/");
+        if(!dataFolder.exists()) dataFolder.mkdirs();
+    }
+
+    public JavaMod(String name, String version, String id, String description){
+        this.name = name;
+        this.id = id;
+        this.version = version;
+        this.description = description;
+        this.authors = null;
+        this.contact = null;
+        this.dataFolder = new File("config/" + name +"/");
+        if(!dataFolder.exists()) dataFolder.mkdirs();
+    }
+
+    public JavaMod(String name, String version, String id, String description, Collection<Person> authors, ContactInformation contact){
+        this.name = name;
+        this.id = id;
+        this.version = version;
+        this.description = description;
+        this.authors = authors;
+        this.contact = contact;
         this.dataFolder = new File("config/" + name +"/");
         if(!dataFolder.exists()) dataFolder.mkdirs();
     }

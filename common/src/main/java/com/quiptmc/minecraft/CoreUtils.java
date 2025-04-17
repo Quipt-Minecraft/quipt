@@ -6,10 +6,13 @@ import com.quiptmc.minecraft.web.ResourcePackHandler;
 import com.sun.management.OperatingSystemMXBean;
 
 import java.lang.management.ManagementFactory;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoreUtils {
 
-    private static MinecraftIntegration integration;
+    private static MinecraftIntegration integration = null;
+    private static final Map<String, MinecraftIntegration> integrations = new HashMap<>();
 
 
     public static void preInit() {
@@ -17,46 +20,10 @@ public class CoreUtils {
     }
 
     public static void init(MinecraftIntegration integration) {
-//        QueueTask task = new QueueTask() {
-//            @Override
-//            public void run() {
-//
-//            }
-//
-//            @Override
-//            public double progress() {
-//                return 0;
-//            }
-//
-//        };
-//
-//
-//        QueueManager.queueTask("init", task);
-
-//        Registries.KEYS.register("entities").ifPresent(key -> {
-//            Registries.REGISTRAR.add(key, new Registry<>(QuiptEntityType.class));
-//            Registries.REGISTRAR.get(key, QuiptEntityType.class).ifPresent(registry -> {
-//                registry.register("allay", new QuiptEntityType<>(QuiptAlly.class));
-//                registry.register("armadillo", new QuiptEntityType<>(QuiptArmadillo.class));
-//                registry.register("axolotl", new QuiptEntityType<>(QuiptAxolotl.class));
-//                registry.register("bat", new QuiptEntityType<>(QuiptBat.class));
-//                registry.register("bee", new QuiptEntityType<>(QuiptBee.class));
-//                registry.register("blaze", new QuiptEntityType<>(QuiptBlaze.class));
-//                registry.register("bogged", new QuiptEntityType<>(QuiptBogged.class));
-//                registry.register("breeze", new QuiptEntityType<>(QuiptBreeze.class));
-//                registry.register("camel", new QuiptEntityType<>(QuiptCamel.class));
-//                registry.register("cat", new QuiptEntityType<>(QuiptCat.class));
-//                registry.register("cave_spider", new QuiptEntityType<>(QuiptCaveSpider.class));
-//                registry.register("chicken", new QuiptEntityType<>(QuiptChicken.class));
-//                registry.register("cod", new QuiptEntityType<>(QuiptCod.class));
-//                registry.register("cow", new QuiptEntityType<>(QuiptCow.class));
-//                registry.register("creeper", new QuiptEntityType<>(QuiptCreeper.class));
-//                registry.register("dolphin", new QuiptEntityType<>(QuiptDolphin.class));
-//
-//            });
-//        });
-
-        CoreUtils.integration = integration;
+        if(CoreUtils.integration == null) {
+            CoreUtils.integration = integration;
+        }
+        integrations.put(integration.name(), integration);
         integration.enable();
     }
 

@@ -25,7 +25,9 @@ public final class Initializer extends JavaPlugin {
             materialRegistry.register(bukkitMat.name(), new MinecraftMaterial(bukkitMat.translationKey(), bukkitMat.name(), bukkitMat.getMaxStackSize(), bukkitMat.isBlock(), bukkitMat.isItem(), bukkitMat.isAir()));
         }
 
-        CoreUtils.init(new QuiptPaperIntegration(new ServerLoader<>(ServerLoader.Type.PAPER, this)));
+
+
+        CoreUtils.init(new QuiptPaperIntegration("Quipt", new ServerLoader<>(ServerLoader.Type.PAPER, this)));
 
         CommandManager.init(this);
 

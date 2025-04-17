@@ -37,9 +37,9 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public abstract class MinecraftIntegration extends QuiptIntegration {
+public abstract class MinecraftIntegration<T> extends QuiptIntegration {
 
-    public final String NAME = "Quipt";
+    public final String NAME;
     private final File dataFolder;
     private final ServerLoader<?> loader;
 
@@ -48,7 +48,8 @@ public abstract class MinecraftIntegration extends QuiptIntegration {
     private ApiManager apiManager;
     private CallbackHandler callbackHandler;
 
-    public MinecraftIntegration(@Nullable ServerLoader<?> loader) {
+    public MinecraftIntegration(String name, ServerLoader<?> loader) {
+        this.NAME = name;
         this.loader = loader;
         this.dataFolder = new File("plugins/" + name());
     }

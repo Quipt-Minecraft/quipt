@@ -2,13 +2,14 @@ package com.quiptmc.paper;
 
 import com.quiptmc.minecraft.utils.MinecraftIntegration;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
-public class QuiptPaperIntegration extends MinecraftIntegration {
+public class QuiptPaperIntegration<T extends JavaPlugin> extends MinecraftIntegration<T> {
 
 
-    public QuiptPaperIntegration(@Nullable ServerLoader<?> loader) {
-        super(loader);
+    public QuiptPaperIntegration(String name, @Nullable ServerLoader<T> loader) {
+        super(name, loader);
     }
 
     @Override
