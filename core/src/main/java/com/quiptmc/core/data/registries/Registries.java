@@ -34,6 +34,11 @@ public class Registries {
         return registry;
     }
 
+    public <T> Registry<T> register(String key, Class<T> registryTypeClass) {
+        RegistryKey key = KEYS.register(key).orElseThrow();
+        return add(key, new Registry<T>(registryTypeClass));
+    }
+
     /**
      * Retrieves a registry associated with the given key.
      *
