@@ -35,7 +35,8 @@ public class Registries {
     }
 
     public <T> Registry<T> register(String key, Class<T> registryTypeClass) {
-        RegistryKey key = KEYS.register(key).orElseThrow();
+        KEYS.register(key);
+        RegistryKey key = KEYS.get(key).orElseThrow();
         return add(key, new Registry<T>(registryTypeClass));
     }
 
