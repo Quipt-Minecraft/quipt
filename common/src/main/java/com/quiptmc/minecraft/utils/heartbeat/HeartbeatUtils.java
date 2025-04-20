@@ -8,7 +8,7 @@ import com.quiptmc.minecraft.utils.heartbeat.runnable.Heartbeat;
 
 public class HeartbeatUtils {
 
-    private static final Registry<Heartbeat> registry = Registries.REGISTRAR.add(Registries.KEYS.register("heartbeat").get(), new Registry<>(Heartbeat.class));
+    private static final Registry<Heartbeat> registry = Registries.register("heartbeat", Heartbeat.class);
 
     public static void init(QuiptIntegration plugin) {
         Heartbeat heartbeat = new Heartbeat(plugin);

@@ -3,6 +3,7 @@ package com.quiptmc.tests.core;
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;
 import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.data.registries.Registries;
 import com.quiptmc.tests.core.config.*;
 import com.quiptmc.tests.core.factory.ObjectFactory;
 import org.junit.jupiter.api.Test;
@@ -72,6 +73,7 @@ public class IntegrationTests {
 
         logger.info("launchIntegrationTwiceClearWhenDone: simulating shut-down");
         ConfigManager.reset();
+        Registries.reset();
 
         logger.info("launchIntegrationTwiceClearWhenDone: creating second integration");
         QuiptIntegration integration2 = ObjectFactory.createIntegration();

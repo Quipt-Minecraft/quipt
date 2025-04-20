@@ -45,3 +45,5 @@ bin/
 /fabric/run/
 /.run/
 /fabric/server/
+/fabric/client/
+/fabric/src/main/generated/

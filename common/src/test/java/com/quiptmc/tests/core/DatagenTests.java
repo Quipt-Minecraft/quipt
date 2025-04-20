@@ -32,11 +32,7 @@ public class DatagenTests {
 
     @Test
     public void testRegistries() {
-        Optional<RegistryKey> key = Registries.KEYS.register("messages");
-        if (key.isEmpty()) throw new RuntimeException("Failed to register key");
-
-        Registries.REGISTRAR.add(key.get(), new Registry<>(Message.class));
-        Registry<Message> messages = Registries.REGISTRAR.get(key.get(), Message.class).orElseThrow(() -> new RuntimeException("Failed to get registry"));
+        Registry<Message> messages = Registries.register("messages", Message.class);
         messages.register("test", new Message("Hello, World!"));
 
         if (messages.get("test").isPresent()) messages.get("test").get().send();

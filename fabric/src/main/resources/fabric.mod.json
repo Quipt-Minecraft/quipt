@@ -8,10 +8,16 @@
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/quipt-fabric/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
+    "fabric-datagen": [
+      "com.quiptmc.fabric.client.datagen.EntrypointDataGenerator"
+    ],
     "main": [
       "com.quiptmc.fabric.Initializer"
+    ],
+    "client": [
+      "com.quiptmc.fabric.client.EntrypointClient"
     ],
     "quipt": [
         "com.quiptmc.fabric.FabricLoaderEntrypoint"

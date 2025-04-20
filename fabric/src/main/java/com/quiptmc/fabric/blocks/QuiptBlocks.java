@@ -14,10 +14,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Function;
-
 public class QuiptBlocks {
 
-    private static final Registry<QuiptBlock> blocks = Registries.REGISTRAR.add(Registries.KEYS.register("blocks").orElseThrow(), new Registry<>(QuiptBlock.class));
+    private static final Registry<QuiptBlock> blocks = Registries.register("blocks", QuiptBlock.class);
+
+    public static QuiptBlock get(String name) {
+        return blocks.get(name).orElseThrow(() -> new IllegalArgumentException("Block " + name + " not found"));
+    }
 
     public static QuiptBlock register(String name, Function<AbstractBlock.Settings, QuiptBlock> blockFactory, AbstractBlock.Settings settings, boolean shouldRegisterItem) {
         // Create a registry key for the block
@@ -35,15 +38,19 @@ public class QuiptBlocks {
             BlockItem blockItem = new BlockItem(block, new Item.Settings().registryKey(itemKey));
             net.minecraft.registry.Registry.register(net.minecraft.registry.Registries.ITEM, itemKey, blockItem);
         }
-
+        blocks.register(name, block);
         return net.minecraft.registry.Registry.register(net.minecraft.registry.Registries.BLOCK, blockKey, block);
     }
 
     private static RegistryKey<Block> keyOfBlock(String name) {
-        return RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(CoreUtils.integration().name(), name));
+        return RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("quipt", name));
     }
 
     private static RegistryKey<Item> keyOfItem(String name) {
-        return RegistryKey.of(RegistryKeys.ITEM, Identifier.of(CoreUtils.integration().name(), name));
+        return RegistryKey.of(RegistryKeys.ITEM, Identifier.of("quipt", name));
+    }
+
+    public static Registry<QuiptBlock> blocks() {
+        return blocks;
     }
 }
