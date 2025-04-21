@@ -1,5 +1,6 @@
 package com.quiptmc.fabric.blocks;
 
+import com.quiptmc.core.annotations.Nullable;
 import com.quiptmc.fabric.blocks.abstracts.QuiptBlock;
 import com.quiptmc.fabric.blocks.abstracts.QuiptBlockWithEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -25,7 +26,7 @@ public class QuiptBlocks {
         return entityTypes.get(name).orElseThrow(() -> new IllegalArgumentException("BlockEntityType " + name + " not found"));
     }
 
-    public static QuiptBlock register(String name, Function<AbstractBlock.Settings, QuiptBlock> blockFactory, AbstractBlock.Settings settings, boolean shouldRegisterItem) {
+    public static QuiptBlock register(String name, Function<AbstractBlock.Settings, QuiptBlock> blockFactory, AbstractBlock.Settings settings, boolean shouldRegisterItem, @Nullable  FabricBlockEntityTypeBuilder.Factory<?> entityFactory) {
         // Create a registry key for the block
         RegistryKey<Block> blockKey = keyOfBlock(name);
         // Create the block instance
@@ -47,7 +48,7 @@ public class QuiptBlocks {
             entityTypes.register(name, Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
                     Identifier.of("quipt", name),
-                    FabricBlockEntityTypeBuilder.create(GatewayBlockEntity::new, block.block()).build()
+                    FabricBlockEntityTypeBuilder.create(entityFactory, block.block()).build()
             ));
         }
         return block;
