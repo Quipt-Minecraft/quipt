@@ -13,14 +13,15 @@ public class QuiptParticle {
 
     private final static com.quiptmc.core.data.registries.Registry<ParticleType> PARTICLE_TYPE_REGISTRY = com.quiptmc.core.data.registries.Registries.register("particles", ParticleType.class);
 
-    public static void register(String key, ParticleType type){
-        Registry.register(Registries.PARTICLE_TYPE, Identifier.of(CoreUtils.integration().name(), "sparkle_particle"), type);
+    public static void register(String key, ParticleType<? extends ParticleEffect> type) {
+        Registry.register(Registries.PARTICLE_TYPE, Identifier.of("quipt", key), type);
         PARTICLE_TYPE_REGISTRY.register(key, type);
     }
 
 
-    public static ParticleType<SimpleParticleType> get(String key) {
+    public static <T extends ParticleEffect> ParticleType<T> get(String key) {
         return PARTICLE_TYPE_REGISTRY.get(key).orElseThrow();
     }
+
 
 }
