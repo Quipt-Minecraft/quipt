@@ -1,5 +1,9 @@
 package com.quiptmc.core.data.registries;
 
+import com.quiptmc.core.logger.QuiptLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -8,6 +12,7 @@ public class Registries {
 
     private final static Map<RegistryKey, Registry<?>> registries = new HashMap<>();
     private final static Map<String, RegistryKey> keys = new HashMap<>();
+    private static final Logger log = LoggerFactory.getLogger(Registries.class);
 
     public static <T> Registry<T> register(String key, Class<T> registryTypeClass) {
         if(keys.containsKey(key)) throw new IllegalArgumentException("Key already registered: " + key);
@@ -47,6 +52,19 @@ public class Registries {
             registry.clear();
         }
         keys.clear();
+    }
+
+    public static void dump(QuiptLogger logger) {
+        for (Map.Entry<String, RegistryKey> keyEntry : keys.entrySet()) {
+            String skey = keyEntry.getKey();
+            RegistryKey key = keyEntry.getValue();
+            Registry<?> registry = registries.get(key);
+            logger.log("Dumping Registry: " + skey);
+            registry.forEach((s, instance)->{
+                logger.log("Key: '" + skey + ":" + s + "'");
+                logger.log("Value: " + instance.toString());
+            });
+        }
     }
 
 //

@@ -1,11 +1,12 @@
 package com.quiptmc.core.data.registries;
 
+import com.quiptmc.core.data.MapEntryConsumer;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * A generic registry for managing objects of type T.
@@ -116,9 +117,10 @@ public class Registry<T> {
      *
      * @param consumer the consumer to apply to each entry
      */
-    public void forEach(Consumer<T> consumer) {
-        registry.forEach((s, t) -> consumer.accept(t));
+    public void forEach(MapEntryConsumer<String, T> consumer) {
+        registry.forEach(consumer::accept);
     }
+
 
     /**
      * Retrieves an entry from the registry by its key.
