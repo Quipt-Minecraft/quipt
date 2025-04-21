@@ -21,7 +21,7 @@ public abstract class QuiptEntrypoint {
         ModMetadata metadata = entrypoint.getProvider().getMetadata();
         integration = new MinecraftIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
         LOGGER.info("Initializing {} v{} ({})...", metadata.getName(), metadata.getVersion(), metadata.getId());
-        onInitialize();
+        onInitialize(metadata);
 
     }
 
@@ -29,5 +29,5 @@ public abstract class QuiptEntrypoint {
         return integration;
     }
 
-    public abstract void onInitialize();
+    public abstract void onInitialize(ModMetadata metadata);
 }
