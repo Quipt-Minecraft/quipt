@@ -12,7 +12,7 @@ public class RegistryKey {
      *
      * @param key the key to be used in the registry
      */
-    public RegistryKey(String key) {
+    RegistryKey(String key) {
         this.key = key;
     }
 

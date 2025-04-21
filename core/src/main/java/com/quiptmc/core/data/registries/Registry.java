@@ -19,6 +19,9 @@ public class Registry<T> {
      */
     private final Map<String, T> registry = new HashMap<>();
 
+
+    private final RegistryKey key;
+
     /**
      * The class type of the objects managed by this registry.
      */
@@ -29,8 +32,13 @@ public class Registry<T> {
      *
      * @param type the class type of the objects to be managed by this registry
      */
-    public Registry(Class<T> type) {
+    public Registry(RegistryKey key, Class<T> type) {
+        this.key = key;
         this.type = type;
+    }
+
+    public RegistryKey key() {
+        return key;
     }
 
     /**
@@ -68,7 +76,7 @@ public class Registry<T> {
     /**
      * Retrieves an entry from the registry by its key, or returns a default value if the key is not found.
      *
-     * @param key the key of the entry to retrieve
+     * @param key          the key of the entry to retrieve
      * @param defaultValue the default value to return if the key is not found
      * @return the entry associated with the key, or the default value if the key is not found
      */
@@ -80,7 +88,7 @@ public class Registry<T> {
      * Registers a new entry in the registry with the given ID.
      *
      * @param id the ID of the entry to register
-     * @param t the entry to register
+     * @param t  the entry to register
      */
     public void register(String id, T t) {
         registry.put(id, t);

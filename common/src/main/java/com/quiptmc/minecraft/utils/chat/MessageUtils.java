@@ -18,7 +18,7 @@ import static net.kyori.adventure.text.Component.translatable;
 
 public class MessageUtils {
 
-    private static final Registry<Component> registry = Registries.REGISTRAR.add(Registries.KEYS.register("messages").get(), new Registry<>(Component.class));
+    private static final Registry<Component> registry = Registries.register("messages", Component.class);
 
     private static MessagesConfig config;
 
