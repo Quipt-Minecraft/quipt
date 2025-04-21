@@ -13,8 +13,7 @@ public class FabricLoaderEntrypoint extends QuiptEntrypoint {
     @Override
     public void onInitialize(ModMetadata metadata) {
         CoreUtils.init(this.integration());
-        QuiptParticle.register("sparkle", FabricParticleTypes.simple());
-        QuiptParticle.register("sparkle2", FabricParticleTypes.simple());
+
 
     }
 }

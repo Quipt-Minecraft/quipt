@@ -18,7 +18,6 @@ public class EntrypointClient  implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ParticleFactoryRegistry.getInstance().register(QuiptParticle.get("sparkle"), PortalParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(QuiptParticle.get("sparkle2"), ConnectionParticle.EnchantFactory::new);
+
     }
 }
