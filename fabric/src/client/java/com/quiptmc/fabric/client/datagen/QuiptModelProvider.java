@@ -14,37 +14,47 @@ import java.util.Optional;
 
 public class QuiptModelProvider extends FabricModelProvider {
 
-    //    private static final Model CUBE_ALL = createModel("cube_all", "", TextureKey.ALL);
     private final Registry<Model> MODELS = Registries.register("models", Model.class);
+    private final Model CUBE_ALL = new Model(
+            Optional.of(Identifier.of("minecraft", "block/cube_all")),
+            Optional.empty(),
+            TextureKey.ALL);
 
     public QuiptModelProvider(FabricDataOutput output) {
         super(output);
-//        createModel("cube_all", "", TextureKey.ALL);
+//        createModel("cube_all.json", "", TextureKey.ALL);
     }
+
+    private Model createModel(final String id, final @NotNull String variant, final TextureKey... textureKeys) {
+        Model model = new Model(Optional.of(Identifier.of("quipt", "block/%s%s".formatted(id, variant))), variant.isEmpty() ? Optional.empty() : Optional.of(variant), textureKeys);
+        MODELS.register(id, model);
+        return model;
+    }
+
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
         QuiptBlocks.blocks().forEach((block) -> {
-            generateModelForBlock(block, blockStateModelGenerator);
+            generateModelForBlock(block.block(), blockStateModelGenerator);
         });
+    }
+
+    private Model determineModelType(Block block) {
+//        // Example logic - extend this to support more block types
+//        // You could use instanceof checks or block properties
+        return CUBE_ALL;
     }
 
     private void generateModelForBlock(Block block, BlockStateModelGenerator generator) {
         // Choose appropriate model based on block properties or metadata
-//        Model model = determineModelType(block);
+        Model model = determineModelType(block);
 
         // Generate appropriate texture mapping
-//        TextureMap textureMap = generateTextureMap(block, model);
+        TextureMap textureMap = generateTextureMap(block, model);
 
-//        final Identifier modelId = model.upload(block, textureMap, generator.modelCollector);
-//        generator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(block, modelId));
-//        generator.registerParentedItemModel(block, modelId);
+        final Identifier modelId = model.upload(block, textureMap, generator.modelCollector);
+        generator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(block, modelId));
+        generator.registerParentedItemModel(block, modelId);
     }
-
-//    private Model determineModelType(Block block) {
-//        // Example logic - extend this to support more block types
-//        // You could use instanceof checks or block properties
-////        return MODELS.getCubeAll();
-//    }
 
     private TextureMap generateTextureMap(Block block, Model model) {
         // Default to simple texture mapping
@@ -55,4 +65,5 @@ public class QuiptModelProvider extends FabricModelProvider {
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         // Item model generation code
     }
+
 }

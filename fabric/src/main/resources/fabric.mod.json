@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "quipt-fabric",
+  "id": "quipt",
   "version": "${version}",
-  "name": "quipt-fabric",
+  "name": "quipt",
   "description": "",
   "authors": [],
   "contact": {},
