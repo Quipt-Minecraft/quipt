@@ -8,6 +8,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+
 rootProject.name = 'quipt'
 include 'common'
 include 'paper'

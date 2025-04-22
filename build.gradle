@@ -14,7 +14,10 @@ version = "${project_version}-MC${minecraft_version}-${build_status}.${build_num
 
 repositories {
     mavenCentral()
-
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 dependencies {
