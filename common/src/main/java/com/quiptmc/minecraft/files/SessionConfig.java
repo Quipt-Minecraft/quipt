@@ -9,9 +9,9 @@
 package com.quiptmc.minecraft.files;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.Config;
-import com.quiptmc.core.config.ConfigTemplate;
-import com.quiptmc.core.config.ConfigValue;
+import com.quiptmc.core.storage.Config;
+import com.quiptmc.core.storage.ConfigTemplate;
+import com.quiptmc.core.storage.ConfigValue;
 import org.json.JSONObject;
 
 import java.io.File;

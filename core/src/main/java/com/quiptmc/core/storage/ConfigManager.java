@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.quiptmc.core.config;
+package com.quiptmc.core.storage;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,20 +14,27 @@ import com.fasterxml.jackson.dataformat.toml.TomlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.quiptmc.core.QuiptIntegration;
+import com.quiptmc.core.data.registries.Registries;
+import com.quiptmc.core.data.registries.Registry;
+import com.quiptmc.core.storage.cloud.CloudStorage;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * Manages config files
  */
 public class ConfigManager {
 
-    private static final Map<String, Config> data = new HashMap<>();
+    //    private static final Map<String, Config> data = new HashMap<>();
+    private static final Registry<Config> configs = Registries.register("configs", Config.class);
+    private static final Registry<CloudStorage> storage = Registries.register("cloud_storage", CloudStorage.class);
 
     private static final Class[] incompatibleTypes = {short.class, char.class, Short.class, Character.class, ArrayList.class};
 
@@ -65,13 +72,21 @@ public class ConfigManager {
                     integration.log("QuiptConfig", file.createNewFile() ? "Success" : "Failure");
                 }
                 T content = template.getConstructor(File.class, String.class, ConfigTemplate.Extension.class, QuiptIntegration.class).newInstance(file, cf.name(), cf.ext(), integration);
-
+                String key = integration.name() + "/" + cf.name();
                 //Variables set. Now time to load the file or default values
                 JSONObject writtenData = loadJson(file, cf.ext());
+                if (writtenData.has("cloudStorage") && !writtenData.getJSONObject("cloudStorage").isEmpty()) {
+                    System.out.println("Cloud storage found");
+                    CloudStorage.Settings settings = null;
+                    CloudStorage cloud = registerCloudStorage(key, settings);
+                    cloud.read(file.getPath());
+                    writtenData = loadJson(file, cf.ext());
+                }
 
                 assignFieldsFromJson(content, writtenData);
 
-                data.put(integration.name() + "/" + cf.name(), content);
+                configs.register(key, content);
+
                 content.save();
                 return content;
             } else {
@@ -81,6 +96,12 @@ public class ConfigManager {
                  IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static CloudStorage registerCloudStorage(String name, CloudStorage.Settings settings) {
+        CloudStorage cloudStorage = new CloudStorage(settings);
+        storage.register(name, cloudStorage);
+        return cloudStorage;
     }
 
     private static <T extends Config> void assignFieldsFromJson(T content, JSONObject writtenData) {
@@ -124,7 +145,7 @@ public class ConfigManager {
      * @return The config file
      */
     public static <T extends Config> T getConfig(QuiptIntegration integration, Class<T> clazz) {
-        return (T) data.get(integration.name() + "/" + clazz.getAnnotation(ConfigTemplate.class).name());
+        return (T) configs.get(integration.name() + "/" + clazz.getAnnotation(ConfigTemplate.class).name()).get();
     }
 
     /**
@@ -134,7 +155,7 @@ public class ConfigManager {
      * @return The config file
      */
     public static Config getConfig(String name) {
-        return data.get(name);
+        return configs.get(name).orElseThrow();
     }
 
     public static <E extends Config, D extends NestedConfig<E>> D getNestedConfig(E parent, Class<D> nestedTemplate, String name) {
@@ -212,12 +233,12 @@ public class ConfigManager {
      * Saves all config files
      */
     public static void saveAll() {
-        for (Config config : data.values()) {
-            saveConfig(config);
-        }
+        configs.forEach((s, c) -> {
+            saveConfig(c);
+        });
     }
 
     public static void reset() {
-        data.clear();
+        configs.clear();
     }
 }

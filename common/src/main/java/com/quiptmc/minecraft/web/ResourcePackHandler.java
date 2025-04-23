@@ -1,6 +1,6 @@
 package com.quiptmc.minecraft.web;
 
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.core.server.QuiptServer;
 import com.quiptmc.core.server.QuiptServlet;
 import com.quiptmc.minecraft.files.ResourceConfig;

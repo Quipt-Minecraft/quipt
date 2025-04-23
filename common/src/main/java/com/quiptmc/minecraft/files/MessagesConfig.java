@@ -1,14 +1,14 @@
 package com.quiptmc.minecraft.files;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.Config;
-import com.quiptmc.core.config.ConfigTemplate;
-import com.quiptmc.core.config.ConfigValue;
+import com.quiptmc.core.storage.Config;
+import com.quiptmc.core.storage.ConfigTemplate;
+import com.quiptmc.core.storage.ConfigValue;
 import org.json.JSONObject;
 
 import java.io.File;
 
-import static com.quiptmc.core.config.ConfigTemplate.Extension.QPT;
+import static com.quiptmc.core.storage.ConfigTemplate.Extension.QPT;
 
 @ConfigTemplate(name = "message", ext = QPT)
 public class MessagesConfig extends Config {

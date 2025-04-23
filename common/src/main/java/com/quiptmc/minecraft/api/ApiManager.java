@@ -1,7 +1,7 @@
 package com.quiptmc.minecraft.api;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.core.utils.NetworkUtils;
 import com.quiptmc.minecraft.files.ApiConfig;
 import org.json.JSONException;

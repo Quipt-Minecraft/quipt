@@ -1,7 +1,7 @@
 package com.quiptmc.tests.core.config;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.ConfigTemplate;
+import com.quiptmc.core.storage.ConfigTemplate;
 
 import java.io.File;
 

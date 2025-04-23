@@ -1,9 +1,9 @@
 package com.quiptmc.minecraft.files.discord;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.Config;
-import com.quiptmc.core.config.ConfigValue;
-import com.quiptmc.core.config.NestedConfig;
+import com.quiptmc.core.storage.Config;
+import com.quiptmc.core.storage.ConfigValue;
+import com.quiptmc.core.storage.NestedConfig;
 
 public class AnnouncementsNestedConfig<T extends Config> extends NestedConfig<T> {
 

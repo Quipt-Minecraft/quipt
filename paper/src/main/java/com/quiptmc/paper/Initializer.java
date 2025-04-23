@@ -2,7 +2,7 @@ package com.quiptmc.paper;
 
 import com.quiptmc.core.data.registries.Registry;
 import com.quiptmc.minecraft.CoreUtils;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.minecraft.api.MinecraftMaterial;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import com.quiptmc.paper.commands.CommandManager;

@@ -1,7 +1,7 @@
 package com.quiptmc.minecraft.listeners;
 
 import com.quiptmc.minecraft.CoreUtils;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.core.entity.QuiptPlayer;
 import com.quiptmc.core.events.QuiptPlayerChatEvent;
 import com.quiptmc.core.events.QuiptPlayerDeathEvent;

@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.quiptmc.core.config;
+package com.quiptmc.core.storage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +15,8 @@ import com.fasterxml.jackson.dataformat.toml.TomlMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.quiptmc.core.QuiptIntegration;
+import com.quiptmc.core.annotations.Nullable;
+import com.quiptmc.core.storage.cloud.CloudStorage;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -33,12 +35,17 @@ public abstract class Config {
     private final ConfigTemplate.Extension extension;
     private final String name;
     private final QuiptIntegration integration;
+    @Nullable
+    private final CloudStorage cloud;
 
     /**
      * Version of the config
      */
     @ConfigValue(override = true)
     public Number version = 1;
+
+    @ConfigValue(override = true)
+    public JSONObject cloudStorage = new JSONObject();
 
     /**
      * Creates a new config file
@@ -49,10 +56,18 @@ public abstract class Config {
      * @param integration The plugin that owns this config
      */
     public Config(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
+        this(file, name, extension, integration, null);
+    }
+
+    public Config(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration, CloudStorage cloud) {
         this.file = file;
         this.name = name;
         this.extension = extension;
         this.integration = integration;
+        this.cloud = cloud;
+        if(cloud != null) {
+            cloudStorage.put("test", cloud.settings.bucketName);
+        }
     }
 
     /**
@@ -92,10 +107,14 @@ public abstract class Config {
     private boolean write() {
         try (FileWriter writer = new FileWriter(file())) {
             writer.write(format(extension));
+            if(cloud!=null){
+                cloud.write(file());
+            }
             return true;
         } catch (IOException e) {
             return false;
         }
+
 
 
     }

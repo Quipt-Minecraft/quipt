@@ -1,7 +1,7 @@
 package com.quiptmc.minecraft.utils.chat;
 
 import com.quiptmc.minecraft.CoreUtils;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.core.data.registries.Registries;
 import com.quiptmc.core.data.registries.Registry;
 import com.quiptmc.minecraft.files.MessagesConfig;

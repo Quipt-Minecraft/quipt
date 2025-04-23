@@ -1,4 +1,4 @@
-package com.quiptmc.core.config;
+package com.quiptmc.core.storage;
 
 import com.quiptmc.core.QuiptIntegration;
 import org.json.JSONObject;

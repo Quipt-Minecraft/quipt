@@ -1,7 +1,7 @@
 package com.quiptmc.tests.core.factory;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.tests.core.config.TestConfig;
 import com.quiptmc.tests.core.config.TestNestedConfig;
 import org.slf4j.Logger;

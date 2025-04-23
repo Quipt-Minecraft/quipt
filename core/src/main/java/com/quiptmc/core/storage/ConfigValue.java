@@ -1,4 +1,4 @@
-package com.quiptmc.core.config;
+package com.quiptmc.core.storage;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

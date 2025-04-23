@@ -1,7 +1,7 @@
 package com.quiptmc.minecraft.utils.teleportation;
 
 import com.quiptmc.minecraft.CoreUtils;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
 import com.quiptmc.minecraft.files.TeleportationConfig;
 import com.quiptmc.minecraft.utils.MinecraftIntegration;

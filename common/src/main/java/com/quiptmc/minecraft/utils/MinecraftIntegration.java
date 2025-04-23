@@ -1,9 +1,8 @@
 package com.quiptmc.minecraft.utils;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.annotations.Nullable;
-import com.quiptmc.core.config.ConfigManager;
-import com.quiptmc.core.config.ConfigTemplate;
+import com.quiptmc.core.storage.ConfigManager;
+import com.quiptmc.core.storage.ConfigTemplate;
 import com.quiptmc.core.discord.embed.Embed;
 import com.quiptmc.core.server.QuiptServer;
 import com.quiptmc.core.utils.TaskScheduler;

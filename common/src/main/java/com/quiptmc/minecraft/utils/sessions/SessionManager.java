@@ -2,7 +2,7 @@ package com.quiptmc.minecraft.utils.sessions;
 
 import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.storage.ConfigManager;
 import com.quiptmc.minecraft.api.MinecraftEntityType;
 import com.quiptmc.minecraft.api.MinecraftMaterial;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
