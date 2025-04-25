@@ -1,1 +1,1 @@
-Fabric QuiptEntrypoint is now a MinecraftIntegration
+Fabric Integrations no longer crash on initialization due to "ClassNotFoundException".
