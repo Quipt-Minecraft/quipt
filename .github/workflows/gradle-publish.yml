@@ -84,6 +84,7 @@ jobs:
         run: |
           ./gradlew publish
         env:
+          GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           PACKAGES_USERNAME: ${{ secrets.PACKAGES_USERNAME }}
