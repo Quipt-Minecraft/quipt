@@ -26,7 +26,6 @@ test {
     useJUnitPlatform()
 }
 
-
 allprojects {
     group = "com.quiptmc"
     version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
@@ -38,6 +37,21 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
+    configurations {
+        includes
+    }
+
+
+
+    jar {
+        // Include the content of the 'include' configuration in the JAR
+        from {
+            configurations.includes.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+
+        // Avoid duplicate files when merging JARs
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 
     publishing {
         publications {
@@ -65,6 +79,7 @@ subprojects {
         implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
     }
 }
+
 
 configure(subprojects.findAll {it.name == "fabric"}) {
 

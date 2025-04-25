@@ -7,7 +7,7 @@
   "authors": [],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/quipt-fabric/icon.png",
+  "icon": "assets/quipt/icon.png",
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
@@ -24,9 +24,9 @@
     ]
   },
   "mixins": [
-    "quipt-fabric.mixins.json",
+    "quipt.mixins.json",
     {
-      "config": "quipt-fabric.client.mixins.json",
+      "config": "quipt.client.mixins.json",
       "environment": "client"
     }
   ],

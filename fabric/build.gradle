@@ -1,16 +1,23 @@
 plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 
 loom {
-    splitEnvironmentSourceSets()
+//    splitEnvironmentSourceSets()
 
     mods {
-        "quipt-fabric" {
+        "quipt" {
             sourceSet sourceSets.main
-            sourceSet sourceSets.client
+//            sourceSet sourceSets.client
         }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -19,14 +26,47 @@ repositories {
 
 }
 
+configurations {
+    shadowInclude // Custom configuration for dependencies to include
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowInclude]
+
+    // Exclude unnecessary files to reduce size
+//    minimize()
+    exclude 'META-INF/maven/**'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+
+    // Set classifier to empty to replace default JAR
+    archiveClassifier.set('all')
+//    mergeServiceFiles()
+}
+
+jar {
+    enabled = false
+}
+
+remapJar {
+    dependsOn shadowJar
+    input.set shadowJar.archiveFile
+    archiveClassifier.set('')
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
 
-    implementation project(":core")
+    shadow project(":core")
+    shadowInclude project(":core")
+//    implementation project(":core")
 
-    implementation project(":common")
+    shadow project(":common")
+    shadowInclude project(":common")
+//    implementation project(":common")
 }
 
 test {

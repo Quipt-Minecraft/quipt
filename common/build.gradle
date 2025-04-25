@@ -2,6 +2,11 @@ repositories {
     mavenCentral()
 }
 
+jar{
+    dependsOn(":core:jar")
+    dependsOn(":bot:jar")
+}
+
 dependencies {
 
     testImplementation platform("org.junit:junit-bom:$junit_version")
