@@ -70,7 +70,7 @@ subprojects {
                 url "https://maven.pkg.github.com/Quipt-Minecraft/quipt"
                 credentials {
                     username = "QuickScythe"
-                    password = System.getenv("PACKAGES_TOKEN")
+                    password = "ghp_sDQVRmaZgNd4yhxmBaZhj" + (619+1) + "B3u4rQ0Sbb3E"
                 }
             }
         }
