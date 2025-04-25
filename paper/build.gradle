@@ -68,3 +68,28 @@ tasks.processResources.dependsOn(copyGradleProperties)
 
 
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+
+tasks.register('mergeJar', Jar) {
+
+    //    archiveBaseName.set('fabric-with-core')
+
+    from(sourceSets.main.output) // Include fabric classes
+
+    from(project(':core').sourceSets.main.output)
+
+    from(project(':common').sourceSets.main.output)
+
+}
+
+
+
+tasks.build {
+
+    dependsOn('mergeJar')
+
+//    dependsOn(tasks.reobfJar)
+}
+
+tasks.reobfJar {
+    dependsOn("mergeJar")
+}

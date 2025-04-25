@@ -7,6 +7,10 @@ jar{
     dependsOn(":bot:jar")
 }
 
+java {
+    withSourcesJar()
+}
+
 dependencies {
 
     testImplementation platform("org.junit:junit-bom:$junit_version")

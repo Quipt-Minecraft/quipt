@@ -1,5 +1,7 @@
 import dex.plugins.outlet.v2.util.ReleaseType
 import groovy.text.SimpleTemplateEngine
+import org.gradle.api.artifacts.component.ProjectComponentSelector
+
 
 plugins {
     id 'java'
@@ -7,6 +9,7 @@ plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
 group = "com.quiptmc"
@@ -37,21 +40,22 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
-    configurations {
-        includes
-    }
+
+//    jar {
+//        // Include the content of the 'include' configuration in the JAR
+//        from {
+//            sourceSets.main.output
+//        }
+//
+//        exclude {
+//            it.file in configurations.runtimeClasspath.files
+//        }
+//
+//        // Avoid duplicate files when merging JARs
+//        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//    }
 
 
-
-    jar {
-        // Include the content of the 'include' configuration in the JAR
-        from {
-            configurations.includes.collect { it.isDirectory() ? it : zipTree(it) }
-        }
-
-        // Avoid duplicate files when merging JARs
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
 
     publishing {
         publications {
@@ -97,11 +101,22 @@ configure(subprojects.findAll {it.name == "fabric"}) {
 configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
     apply plugin: 'com.modrinth.minotaur'
     apply plugin: 'io.github.dexman545.outlet'
+//    apply plugin: 'com.github.johnrengelman.shadow'
+
+
+
+
 
     outlet {
         mcVersionRange = supported_minecraft_versions
         allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
     }
+
+
+//    tasks.build {
+//        dependsOn tasks.shadowJar
+//    }
+
 
     modrinth {
 
