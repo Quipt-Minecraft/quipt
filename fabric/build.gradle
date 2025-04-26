@@ -1,4 +1,3 @@
-
 plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT'
 }
@@ -18,17 +17,53 @@ java {
     }
 }
 
+configurations {
+    includedDeps.extendsFrom(configurations.include)
+}
+
 tasks.register('mergeJar', Jar) {
-//    archiveBaseName.set('fabric-with-core')
     from(sourceSets.main.output) // Include fabric classes
     from(project(':core').sourceSets.main.output)
     from(project(':common').sourceSets.main.output)
+
+    configurations.includedDeps.each { dep ->
+        from(zipTree(dep)) {
+            exclude "META-INF/**"
+        }
+    }
+    // Make sure it doesn't conflict with remapJar output
+    archiveClassifier = ""
+
+    // Ensure there are no duplicate entries
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+
 
 tasks.build {
     dependsOn('mergeJar')
 }
 
+
+
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    include(implementation "org.json:json:$json_version")
+    include(implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version")
+    include(implementation "org.eclipse.jetty:jetty-server:$jetty_server_version")
+    include(implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version")
+
+    include(implementation(project(":core")))
+    include(implementation(project(":common")))
+}
 
 modrinth {
 
@@ -44,69 +79,19 @@ modrinth {
     dependencies {}
 }
 
-
-repositories {
-    mavenCentral()
-}
-//configurations {
-//    internal
-//}
-
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-
-    implementation "org.json:json:$json_version"
-    implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
-    implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
-    implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
-
-    include(implementation(project(":core")))
-    include(implementation(project(":common")))
-//    internal project(":core")
-//     project(":core")
-
-//    shadowInclude project(":core")
-//    implementation project(":core")
-
-//    implementation project(":common")
-//    internal project(":common")
-//    shadowInclude project(":common")
-//    implementation project(":common")
-}
-
 test {
     useJUnitPlatform()
 }
 
+
 remapJar {
-    from(sourceSets.main.output) // Include fabric classes
-//    from(project(':core').sourceSets.main.output)
-//    from(project(':common').sourceSets.main.output)
+    input = tasks.mergeJar.archiveFile
+    archiveClassifier = "dev"
 }
 
 tasks.generateMetadataFileForMavenJavaPublication {
     dependsOn(tasks.mergeJar)
 }
-
-tasks.mergeJar {
-    dependsOn(tasks.remapJar)
-}
-
-
-
-//shadowJar {
-//    // Combine the project's own output with internal dependencies.
-//    from sourceSets.main.output
-//    from {
-//        project.configurations.internal.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-//}
-
-//tasks.build {
-//    dependsOn tasks.shadowJar
-//}
-
 
 processResources {
     inputs.property "version", project_version
@@ -131,3 +116,5 @@ tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
+
+
