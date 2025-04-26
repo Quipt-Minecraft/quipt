@@ -17,7 +17,7 @@ import com.quiptmc.core.config.files.discord.ChannelsNestedConfig;
 
 import java.io.File;
 
-@ConfigTemplate(name = "com/quiptmc/discord")
+@ConfigTemplate(name = "discord")
 public class DiscordConfig extends Config {
 
     @ConfigValue
