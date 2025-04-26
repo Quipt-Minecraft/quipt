@@ -4,7 +4,6 @@ package com.quiptmc.fabric.listeners;
 import com.quiptmc.core.events.QuiptPlayerChatEvent;
 import com.quiptmc.core.events.QuiptPlayerJoinEvent;
 import com.quiptmc.core.events.QuiptPlayerLeaveEvent;
-import com.quiptmc.fabric.FabricLoaderEntrypoint;
 import com.quiptmc.fabric.api.FabricIntegration;
 import com.quiptmc.fabric.utils.FabricConversionUtils;
 import com.quiptmc.minecraft.CoreUtils;

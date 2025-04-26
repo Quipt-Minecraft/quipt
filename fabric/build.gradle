@@ -22,6 +22,7 @@ configurations {
 }
 
 tasks.register('mergeJar', Jar) {
+    dependsOn(tasks.remapJar)
     from(sourceSets.main.output) // Include fabric classes
     from(project(':core').sourceSets.main.output)
     from(project(':common').sourceSets.main.output)
