@@ -34,6 +34,21 @@ dependencies {
 
 }
 
+
+modrinth {
+
+    token = System.getenv("MODRINTH_TOKEN")
+    def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+    projectId = "${modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${build_status}"
+    gameVersions = outlet.mcVersions()
+    uploadFile = jar
+    loaders = [project.name]
+    syncBodyFrom = rootProject.file("readme.md").text
+    dependencies {}
+}
+
 test {
     useJUnitPlatform()
 }
