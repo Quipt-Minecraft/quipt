@@ -22,7 +22,6 @@ configurations {
 }
 
 tasks.register('mergeJar', Jar) {
-    dependsOn(tasks.remapJar)
     from(sourceSets.main.output) // Include fabric classes
     from(project(':core').sourceSets.main.output)
     from(project(':common').sourceSets.main.output)
@@ -43,7 +42,7 @@ tasks.register('mergeJar', Jar) {
 
 
 tasks.build {
-    dependsOn('mergeJar')
+    dependsOn('remapJar')
 }
 
 
@@ -76,7 +75,7 @@ modrinth {
     versionNumber = "${version}"
     versionType = "${build_status}"
     gameVersions = outlet.mcVersions()
-    uploadFile = mergeJar
+    uploadFile = remapJar
     loaders = [project.name]
     syncBodyFrom = rootProject.file("readme.md").text
     dependencies {}
