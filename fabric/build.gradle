@@ -81,7 +81,7 @@ remapJar {
 //    from(project(':common').sourceSets.main.output)
 }
 
-tasks.publishMavenJavaPublicationToMavenRepository {
+tasks.generateMetadataFileForMavenJavaPublication {
     dependsOn(tasks.mergeJar)
 }
 
