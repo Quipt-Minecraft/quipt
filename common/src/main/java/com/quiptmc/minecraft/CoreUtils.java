@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class CoreUtils {
 
-    private static MinecraftIntegration integration = null;
+    private static MinecraftIntegration quipt = null;
     private static final Map<String, MinecraftIntegration> integrations = new HashMap<>();
 
 
@@ -20,16 +20,20 @@ public class CoreUtils {
     }
 
     public static void init(MinecraftIntegration<?> integration) {
-        if(CoreUtils.integration == null) {
-            CoreUtils.integration = integration;
+        if(CoreUtils.quipt == null) {
+            CoreUtils.quipt = integration;
         }
         integrations.put(integration.name(), integration);
         integration.enable();
     }
 
 
-    public static MinecraftIntegration integration() {
-        return integration;
+    public static MinecraftIntegration quipt() {
+        return quipt;
+    }
+
+    public static MinecraftIntegration integration(String name) {
+        return integrations.get(name);
     }
 
     public static double getCPUUsage() {
@@ -37,6 +41,6 @@ public class CoreUtils {
     }
 
     public static ResourcePackHandler packHandler() {
-        return integration().packHandler();
+        return quipt().packHandler();
     }
 }

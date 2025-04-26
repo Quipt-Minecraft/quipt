@@ -1,10 +1,10 @@
-package com.quiptmc.minecraft.files;
+package com.quiptmc.core.config.files;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.ConfigValue;
-import com.quiptmc.minecraft.files.web.HealthReportNestedConfig;
+import com.quiptmc.core.config.files.web.HealthReportNestedConfig;
 
 import java.io.File;
 

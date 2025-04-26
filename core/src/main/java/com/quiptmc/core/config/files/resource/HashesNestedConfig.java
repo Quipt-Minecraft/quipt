@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.quiptmc.minecraft.files.resource;
+package com.quiptmc.core.config.files.resource;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;

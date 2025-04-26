@@ -25,6 +25,7 @@ tasks.register('mergeJar', Jar) {
     from(sourceSets.main.output) // Include fabric classes
     from(project(':core').sourceSets.main.output)
     from(project(':common').sourceSets.main.output)
+    from(project(":bot").sourceSets.main.output)
 
     configurations.includedDeps.each { dep ->
         from(zipTree(dep)) {
@@ -63,6 +64,7 @@ dependencies {
 
     include(implementation(project(":core")))
     include(implementation(project(":common")))
+    include(implementation(project(":bot")))
 }
 
 modrinth {

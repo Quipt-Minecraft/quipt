@@ -37,7 +37,7 @@ public class Heartbeat implements Runnable {
         for (Map.Entry<Integer, FlutterTask> entry : FLUTTERS.entrySet()) {
             if (!entry.getValue().getFlutter().run()) {
                 FLUTTERS_REMOVE.add(entry.getKey());
-                CoreUtils.integration().logger().log("Flutter " + entry.getKey(), "There was an error during this flutter. Removing from heartbeat.");
+                CoreUtils.quipt().logger().log("Flutter " + entry.getKey(), "There was an error during this flutter. Removing from heartbeat.");
             }
         }
 

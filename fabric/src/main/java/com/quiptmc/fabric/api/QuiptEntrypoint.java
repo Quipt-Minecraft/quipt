@@ -15,11 +15,11 @@ import java.util.Optional;
 public abstract class QuiptEntrypoint {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private MinecraftIntegration integration = null;
+    private FabricIntegration integration = null;
 
     public void run(EntrypointContainer<QuiptEntrypoint> entrypoint) {
         ModMetadata metadata = entrypoint.getProvider().getMetadata();
-        integration = new MinecraftIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
+        integration = new FabricIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
         LOGGER.info("Initializing {} v{} ({})...", metadata.getName(), metadata.getVersion(), metadata.getId());
         onInitialize(metadata);
 

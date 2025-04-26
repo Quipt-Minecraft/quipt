@@ -3,7 +3,7 @@ package com.quiptmc.minecraft.utils.teleportation;
 import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
-import com.quiptmc.minecraft.files.TeleportationConfig;
+import com.quiptmc.core.config.files.TeleportationConfig;
 import com.quiptmc.minecraft.utils.MinecraftIntegration;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import com.quiptmc.minecraft.utils.heartbeat.Flutter;
@@ -22,7 +22,7 @@ public class LocationUtils {
     static TeleportationConfig config;
 
     public static void start(MinecraftIntegration integration) {
-        config = ConfigManager.registerConfig(CoreUtils.integration(), TeleportationConfig.class);
+        config = ConfigManager.registerConfig(CoreUtils.quipt(), TeleportationConfig.class);
         Flutter flutter = () -> {
             requests.addAll(requestsAddQueue);
             requestsAddQueue.clear();

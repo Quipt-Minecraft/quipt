@@ -7,7 +7,7 @@ import com.quiptmc.minecraft.api.MinecraftEntityType;
 import com.quiptmc.minecraft.api.MinecraftMaterial;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
 import com.quiptmc.minecraft.api.MinecraftStatistic;
-import com.quiptmc.minecraft.files.SessionConfig;
+import com.quiptmc.core.config.files.SessionConfig;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
@@ -67,7 +67,7 @@ public class SessionManager {
             }
         }
         CURRENT_SESSIONS.put(uid, session);
-        CoreUtils.integration().logger().log("Session", "Started session for " + name);
+        CoreUtils.quipt().logger().log("Session", "Started session for " + name);
     }
 
     public static void finishSession(MinecraftPlayer player) {
@@ -117,7 +117,7 @@ public class SessionManager {
         config.sessions.getJSONArray(uid.toString()).put(session);
         CURRENT_SESSIONS.remove(uid);
         config.save();
-        CoreUtils.integration().logger().log("Session", "Finished session for " + name);
+        CoreUtils.quipt().logger().log("Session", "Finished session for " + name);
     }
 
     public static long getOverallPlaytime(Audience player) {

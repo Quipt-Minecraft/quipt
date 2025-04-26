@@ -20,7 +20,7 @@ public class QuiptEntityType<T extends QuiptEntity> {
             entity = quiptEntityType.getConstructor(constructorClasses).newInstance(constructorArguments);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
-            CoreUtils.integration().logger().error("Failed to spawn entity of type " + quiptEntityType.getSimpleName(), e);
+            CoreUtils.quipt().logger().error("Failed to spawn entity of type " + quiptEntityType.getSimpleName(), e);
         }
         return Optional.ofNullable(entity);
     }

@@ -6,33 +6,34 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.quiptmc.minecraft.files;
+package com.quiptmc.core.config.files;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.ConfigValue;
-import com.quiptmc.minecraft.files.discord.AnnouncementsNestedConfig;
-import com.quiptmc.minecraft.files.discord.ChannelsNestedConfig;
+import com.quiptmc.core.config.files.resource.AuthNestedConfig;
+import com.quiptmc.core.config.files.resource.HashesNestedConfig;
 
 import java.io.File;
 
-@ConfigTemplate(name = "com/quiptmc/discord")
-public class DiscordConfig extends Config {
+@ConfigTemplate(name = "resources",ext = ConfigTemplate.Extension.QPT)
+public class ResourceConfig extends Config {
 
     @ConfigValue
-    public boolean enable_bot = false;
+    public String repo_url = "";
 
     @ConfigValue
-    public String bot_token = "<token_here>";
+    public String repo_branch = "main";
 
     @ConfigValue
-    public AnnouncementsNestedConfig<?> announcements = null;
+    public AuthNestedConfig<ResourceConfig> auth = null;
 
     @ConfigValue
-    public ChannelsNestedConfig<?> channels = null;
+    public HashesNestedConfig<ResourceConfig> hashes = null;
 
-    public DiscordConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
+
+    public ResourceConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
     }
 }

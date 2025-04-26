@@ -12,7 +12,7 @@ import com.quiptmc.core.utils.TaskScheduler;
 import com.quiptmc.discord.Bot;
 import com.quiptmc.discord.api.guild.QuiptGuild;
 import com.quiptmc.discord.api.guild.channel.QuiptTextChannel;
-import com.quiptmc.minecraft.files.DiscordConfig;
+import com.quiptmc.core.config.files.DiscordConfig;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +23,7 @@ public class QuiptPlayerListener implements Listener.QuiptPlayerJoinListener, Li
         QuiptPlayer player = event.player();
         String message = event.message();
 
-        DiscordConfig config = ConfigManager.getConfig(CoreUtils.integration(), DiscordConfig.class);
+        DiscordConfig config = ConfigManager.getConfig(CoreUtils.quipt(), DiscordConfig.class);
         if (config.enable_bot && config.announcements.join) {
             for (QuiptGuild guild : Bot.qda().getGuilds()) {
                 for (QuiptTextChannel channel : guild.getTextChannels()) {
@@ -38,7 +38,7 @@ public class QuiptPlayerListener implements Listener.QuiptPlayerJoinListener, Li
     @Override
     public void onPlayerChat(QuiptPlayerChatEvent e) {
 
-        DiscordConfig config = ConfigManager.getConfig(CoreUtils.integration(), DiscordConfig.class);
+        DiscordConfig config = ConfigManager.getConfig(CoreUtils.quipt(), DiscordConfig.class);
         if (config.enable_bot && config.announcements.chat) {
             for (QuiptGuild guild : Bot.qda().getGuilds()) {
                 for (QuiptTextChannel channel : guild.getTextChannels()) {
@@ -52,7 +52,7 @@ public class QuiptPlayerListener implements Listener.QuiptPlayerJoinListener, Li
 
     @Override
     public void onPlayerLeave(QuiptPlayerLeaveEvent e) {
-        DiscordConfig config = ConfigManager.getConfig(CoreUtils.integration(), DiscordConfig.class);
+        DiscordConfig config = ConfigManager.getConfig(CoreUtils.quipt(), DiscordConfig.class);
         if (config.enable_bot && config.announcements.leave) {
             for (QuiptGuild guild : Bot.qda().getGuilds()) {
                 for (QuiptTextChannel channel : guild.getTextChannels()) {
@@ -66,7 +66,7 @@ public class QuiptPlayerListener implements Listener.QuiptPlayerJoinListener, Li
 
     @Override
     public void onPlayerDeath(QuiptPlayerDeathEvent e) {
-        DiscordConfig config = ConfigManager.getConfig(CoreUtils.integration(), DiscordConfig.class);
+        DiscordConfig config = ConfigManager.getConfig(CoreUtils.quipt(), DiscordConfig.class);
         if (config.enable_bot && config.announcements.death) {
             for (QuiptGuild guild : Bot.qda().getGuilds()) {
                 for (QuiptTextChannel channel : guild.getTextChannels()) {

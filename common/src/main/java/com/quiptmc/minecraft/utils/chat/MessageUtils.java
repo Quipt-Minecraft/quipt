@@ -4,7 +4,7 @@ import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.data.registries.Registries;
 import com.quiptmc.core.data.registries.Registry;
-import com.quiptmc.minecraft.files.MessagesConfig;
+import com.quiptmc.core.config.files.MessagesConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -23,7 +23,7 @@ public class MessageUtils {
     private static MessagesConfig config;
 
     public static void start() {
-        config = ConfigManager.getConfig(CoreUtils.integration(), MessagesConfig.class);
+        config = ConfigManager.getConfig(CoreUtils.quipt(), MessagesConfig.class);
         createDefaultMessages();
         for (String key : config.messages.keySet()) {
             if (registry.get(key).isEmpty()) {

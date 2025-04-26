@@ -1,4 +1,4 @@
-package com.quiptmc.minecraft.files.discord;
+package com.quiptmc.core.config.files.discord;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;

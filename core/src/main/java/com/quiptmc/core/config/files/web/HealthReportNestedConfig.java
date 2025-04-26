@@ -1,4 +1,4 @@
-package com.quiptmc.minecraft.files.web;
+package com.quiptmc.core.config.files.web;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;

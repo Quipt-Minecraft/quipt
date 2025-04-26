@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +44,7 @@ public class HealthReportHandler extends QuiptServlet {
             }
         }
 
-        HeartbeatUtils.heartbeat(CoreUtils.integration()).addFlutter(new Flutter() {
+        HeartbeatUtils.heartbeat(CoreUtils.quipt()).addFlutter(new Flutter() {
             long lastRan = 0;
             long delay = TimeUnit.MILLISECONDS.convert(5, TimeUnit.SECONDS);
 

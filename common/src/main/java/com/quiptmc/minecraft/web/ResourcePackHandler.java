@@ -3,7 +3,7 @@ package com.quiptmc.minecraft.web;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.server.QuiptServer;
 import com.quiptmc.core.server.QuiptServlet;
-import com.quiptmc.minecraft.files.ResourceConfig;
+import com.quiptmc.core.config.files.ResourceConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eclipse.jgit.api.Git;
