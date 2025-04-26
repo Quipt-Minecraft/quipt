@@ -1,5 +1,6 @@
 package com.quiptmc.paper.world;
 
+import com.quiptmc.minecraft.api.world.QuiptChunkGenerator;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class VoidChunkGenerator extends ChunkGenerator {
+public class VoidChunkGenerator extends ChunkGenerator implements QuiptChunkGenerator {
 
 
     @Override
