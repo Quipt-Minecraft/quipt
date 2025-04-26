@@ -82,6 +82,9 @@ tasks.register('mergeJar', Jar) {
 }
 
 
+tasks.generateMetadataFileForMavenJavaPublication {
+    dependsOn("mergeJar")
+}
 
 tasks.build {
 

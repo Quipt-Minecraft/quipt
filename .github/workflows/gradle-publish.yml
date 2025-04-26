@@ -87,7 +87,5 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          PACKAGES_USERNAME: ${{ secrets.PACKAGES_USERNAME }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
           DISCORD_CHANNEL: ${{ secrets.DISCORD_CHANNEL }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
