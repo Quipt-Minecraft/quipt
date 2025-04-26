@@ -69,8 +69,8 @@ subprojects {
                 // Replace OWNER and REPOSITORY with your GitHub username or organization name and the repository name
                 url "https://maven.pkg.github.com/Quipt-Minecraft/quipt"
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = "QuickScythe"
+                    password = System.getenv("PACKAGES_TOKEN")
                 }
             }
         }
