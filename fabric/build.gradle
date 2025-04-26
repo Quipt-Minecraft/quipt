@@ -81,6 +81,14 @@ remapJar {
 //    from(project(':common').sourceSets.main.output)
 }
 
+tasks.publishMavenJavaPublicationToMavenRepository {
+    dependsOn(tasks.mergeJar)
+}
+
+tasks.mergeJar {
+    dependsOn(tasks.remapJar)
+}
+
 
 
 //shadowJar {
