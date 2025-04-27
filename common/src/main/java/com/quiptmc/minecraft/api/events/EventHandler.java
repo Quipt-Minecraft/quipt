@@ -1,7 +1,7 @@
-package com.quiptmc.core.events;
+package com.quiptmc.minecraft.api.events;
 
 import com.quiptmc.core.QuiptIntegration;
-import com.quiptmc.core.events.listeners.Listener;
+import com.quiptmc.minecraft.api.events.listeners.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +38,36 @@ public class EventHandler {
      * @param event the event to handle
      */
     public void handle(QuiptEvent event) {
-        for (Listener listener : listeners) {
-            if (event.listener().isAssignableFrom(listener.getClass())) {
-                handleEvent(event, listener);
+        if (event instanceof QuiptPlayerJoinEvent joinEvent) {
+            for (Listener listener : listeners) {
+                if (listener instanceof Listener.QuiptPlayerJoinListener) {
+                    ((Listener.QuiptPlayerJoinListener) listener).onPlayerJoin(joinEvent);
+                }
             }
         }
-    }
+        if (event instanceof QuiptPlayerLeaveEvent leaveEvent) {
+            for (Listener listener : listeners) {
+                if (listener instanceof Listener.QuiptPlayerLeaveListener) {
+                    ((Listener.QuiptPlayerLeaveListener) listener).onPlayerLeave(leaveEvent);
+                }
+            }
+        }
+        if (event instanceof QuiptPlayerDeathEvent deathEvent) {
+            for (Listener listener : listeners) {
+                if (listener instanceof Listener.QuiptPlayerDeathEventListener) {
+                    ((Listener.QuiptPlayerDeathEventListener) listener).onPlayerDeath(deathEvent);
+                }
+            }
+        }
+        if (event instanceof QuiptPlayerChatEvent chatEvent) {
+            for (Listener listener : listeners) {
+                if (listener instanceof Listener.QuiptPlayerChatListener) {
+                    ((Listener.QuiptPlayerChatListener) listener).onPlayerChat(chatEvent);
+                }
+            }
+        }
 
+    }
     /**
      * Dispatches the specified event to the appropriate listener.
      *

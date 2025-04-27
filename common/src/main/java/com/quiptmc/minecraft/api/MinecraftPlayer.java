@@ -1,24 +1,25 @@
 package com.quiptmc.minecraft.api;
 
+import com.quiptmc.minecraft.api.statistics.MinecraftStat;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 
+import java.util.UUID;
+
 public interface MinecraftPlayer extends Audience {
-    int getStatistic(MinecraftStatistic stat);
+    int getStatistic(MinecraftStat stat);
 
-    int getStatistic(MinecraftStatistic stat, MinecraftMaterial material);
-
-    int getStatistic(MinecraftStatistic stat, MinecraftEntityType entity);
-
+    int getStatistic(MinecraftStat stat, MinecraftMaterial material);
+    int getStatistic(MinecraftStat stat, MinecraftEntityType entity);
     void teleport(MinecraftPlayer target);
-
-    default String getName() {
-        return MessageUtils.plainText(get(Identity.DISPLAY_NAME).orElseThrow());
-    }
 
     default Component name(){
         return get(Identity.DISPLAY_NAME).orElseThrow();
+    }
+
+    default UUID uuid(){
+        return get(Identity.UUID).orElseThrow();
     }
 }

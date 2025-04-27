@@ -1,7 +1,7 @@
-package com.quiptmc.core.events;
+package com.quiptmc.minecraft.api.events;
 
-import com.quiptmc.core.entity.QuiptPlayer;
-import com.quiptmc.core.events.listeners.Listener;
+import com.quiptmc.minecraft.api.MinecraftPlayer;
+import com.quiptmc.minecraft.api.events.listeners.Listener;
 
 /**
  * Event triggered when a player joins the Quipt system.
@@ -9,7 +9,7 @@ import com.quiptmc.core.events.listeners.Listener;
  * @param player the player who is joining
  * @param message the message associated with the player's arrival
  */
-public record QuiptPlayerJoinEvent(QuiptPlayer player, String message) implements QuiptEvent {
+public record QuiptPlayerJoinEvent(MinecraftPlayer player, String message) implements QuiptEvent {
 
     /**
      * Returns the listener class associated with this event.

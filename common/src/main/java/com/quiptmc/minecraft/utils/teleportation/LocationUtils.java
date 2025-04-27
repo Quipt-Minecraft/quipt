@@ -109,20 +109,20 @@ public class LocationUtils {
 
 
         public void send() {
-            requester.sendMessage(MessageUtils.get("quipt.tpr.sent.requester", target.getName()));
-            target.sendMessage(MessageUtils.get("quipt.tpr.sent.target", requester.getName()));
+            requester.sendMessage(MessageUtils.get("quipt.tpr.sent.requester", MessageUtils.plainText(target.name())));
+            target.sendMessage(MessageUtils.get("quipt.tpr.sent.target", MessageUtils.plainText(requester.name())));
         }
 
         public void accept() {
-            requester.sendMessage(MessageUtils.get("quipt.tpr.accepted.requester", target.getName()));
-            target.sendMessage(MessageUtils.get("quipt.tpr.accepted.target", requester.getName()));
+            requester.sendMessage(MessageUtils.get("quipt.tpr.accepted.requester", MessageUtils.plainText(target.name())));
+            target.sendMessage(MessageUtils.get("quipt.tpr.accepted.target", MessageUtils.plainText(requester.name())));
             requester.teleport(target);
             LocationUtils.requestsRemoveQueue.add(this);
         }
 
         public void deny() {
-            requester.sendMessage(MessageUtils.get("quipt.tpr.denied.requester", target.getName()));
-            target.sendMessage(MessageUtils.get("quipt.tpr.denied.target", requester.getName()));
+            requester.sendMessage(MessageUtils.get("quipt.tpr.denied.requester", MessageUtils.plainText(target.name())));
+            target.sendMessage(MessageUtils.get("quipt.tpr.denied.target", MessageUtils.plainText(requester.name())));
             LocationUtils.requestsRemoveQueue.add(this);
         }
     }

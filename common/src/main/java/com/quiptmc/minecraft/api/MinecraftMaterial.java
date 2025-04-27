@@ -11,7 +11,7 @@ public record MinecraftMaterial(String id, String name, int maxStackSize, boolea
 
 
     public static void init(){
-        Registries.register("materials", MinecraftMaterial.class);
+        registry = Registries.register("materials", MinecraftMaterial.class);
     }
 
     public static Optional<Registry<MinecraftMaterial>> registry(){
@@ -19,7 +19,7 @@ public record MinecraftMaterial(String id, String name, int maxStackSize, boolea
     }
 
     public static MinecraftMaterial[] values() {
-        return null;
+        return registry.values();
     }
 
     public String name() {

@@ -1,9 +1,9 @@
-package com.quiptmc.core.events.listeners;
+package com.quiptmc.minecraft.api.events.listeners;
 
-import com.quiptmc.core.events.QuiptPlayerChatEvent;
-import com.quiptmc.core.events.QuiptPlayerDeathEvent;
-import com.quiptmc.core.events.QuiptPlayerJoinEvent;
-import com.quiptmc.core.events.QuiptPlayerLeaveEvent;
+import com.quiptmc.minecraft.api.events.QuiptPlayerChatEvent;
+import com.quiptmc.minecraft.api.events.QuiptPlayerDeathEvent;
+import com.quiptmc.minecraft.api.events.QuiptPlayerJoinEvent;
+import com.quiptmc.minecraft.api.events.QuiptPlayerLeaveEvent;
 
 /**
  * Represents a listener for Quipt events.
@@ -14,13 +14,13 @@ public interface Listener {
     /**
      * Listener for player leave events.
      */
-    interface QuiptPlayerLeaveListener<E extends QuiptPlayerLeaveEvent> extends Listener {
+    interface QuiptPlayerLeaveListener extends Listener {
         /**
          * Called when a player leaves.
          *
          * @param event the player leaves event
          */
-        void onPlayerLeave(E event);
+        void onPlayerLeave(QuiptPlayerLeaveEvent event);
     }
 
     /**

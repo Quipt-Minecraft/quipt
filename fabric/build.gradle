@@ -61,6 +61,10 @@ dependencies {
     include(implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version")
     include(implementation "org.eclipse.jetty:jetty-server:$jetty_server_version")
     include(implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version")
+//    include(modImplementation( "net.kyori:adventure-api:4.19.0"))
+
+    include(modImplementation("net.kyori:adventure-platform-fabric:6.3.0"))
+
 
     include(implementation(project(":core")))
     include(implementation(project(":common")))

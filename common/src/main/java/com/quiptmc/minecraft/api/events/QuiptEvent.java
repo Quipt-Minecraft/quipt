@@ -1,6 +1,6 @@
-package com.quiptmc.core.events;
+package com.quiptmc.minecraft.api.events;
 
-import com.quiptmc.core.events.listeners.Listener;
+import com.quiptmc.minecraft.api.events.listeners.Listener;
 
 /**
  * Represents a Quipt event.

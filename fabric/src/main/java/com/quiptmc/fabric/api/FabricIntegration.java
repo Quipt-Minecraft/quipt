@@ -9,7 +9,7 @@ import com.quiptmc.core.config.files.resource.AuthNestedConfig;
 import com.quiptmc.core.config.files.resource.HashesNestedConfig;
 import com.quiptmc.core.config.files.web.HealthReportNestedConfig;
 import com.quiptmc.core.discord.embed.Embed;
-import com.quiptmc.core.events.EventHandler;
+import com.quiptmc.minecraft.api.events.EventHandler;
 import com.quiptmc.core.server.QuiptServer;
 import com.quiptmc.core.utils.TaskScheduler;
 import com.quiptmc.discord.Bot;

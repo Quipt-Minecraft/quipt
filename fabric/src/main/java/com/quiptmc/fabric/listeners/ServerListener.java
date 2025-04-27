@@ -1,9 +1,10 @@
 package com.quiptmc.fabric.listeners;
 
 
-import com.quiptmc.core.events.QuiptPlayerChatEvent;
-import com.quiptmc.core.events.QuiptPlayerJoinEvent;
-import com.quiptmc.core.events.QuiptPlayerLeaveEvent;
+import com.quiptmc.fabric.api.FabricPlayer;
+import com.quiptmc.minecraft.api.events.QuiptPlayerChatEvent;
+import com.quiptmc.minecraft.api.events.QuiptPlayerJoinEvent;
+import com.quiptmc.minecraft.api.events.QuiptPlayerLeaveEvent;
 import com.quiptmc.fabric.api.FabricIntegration;
 import com.quiptmc.fabric.utils.FabricConversionUtils;
 import com.quiptmc.minecraft.CoreUtils;
@@ -25,14 +26,21 @@ public class ServerListener implements ServerLifecycleEvents.ServerStopping, Ser
     @Override
     public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
         System.out.println("Player " + handler.player.getGameProfile().getName() + " is ready to play");
-        QuiptPlayerJoinEvent event = new QuiptPlayerJoinEvent(FabricConversionUtils.player(handler.player), handler.player.getGameProfile().getName() + " joined the game");
+        QuiptPlayerJoinEvent event = new QuiptPlayerJoinEvent(FabricPlayer.of(handler.player), handler.player.getGameProfile().getName() + " joined the game");
         ((FabricIntegration) CoreUtils.quipt()).events().handle(event);
     }
 
     @Override
     public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
-        QuiptPlayerLeaveEvent event = new QuiptPlayerLeaveEvent(FabricConversionUtils.player(handler.player), handler.player.getGameProfile().getName() + " left the game");
-        ((FabricIntegration) CoreUtils.quipt()).events().handle(event);
+        System.out.println("Player " + handler.player.getGameProfile().getName() + " is disconnecting");
+        try {
+            QuiptPlayerLeaveEvent event = new QuiptPlayerLeaveEvent(FabricPlayer.of(handler.player), handler.player.getGameProfile().getName() + " left the game");
+            ((FabricIntegration) CoreUtils.quipt()).events().handle(event);
+        } catch (Exception e) {
+            System.out.println("There was an error.");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -46,7 +54,7 @@ public class ServerListener implements ServerLifecycleEvents.ServerStopping, Ser
 
     @Override
     public void onChatMessage(SignedMessage message, ServerPlayerEntity player, MessageType.Parameters parameters) {
-        QuiptPlayerChatEvent event = new QuiptPlayerChatEvent(FabricConversionUtils.player(player), message.getContent().getLiteralString());
+        QuiptPlayerChatEvent event = new QuiptPlayerChatEvent(FabricPlayer.of(player), message.getContent().getLiteralString());
         ((FabricIntegration) CoreUtils.quipt()).events().handle(event);
     }
 }

@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * A generic registry for managing objects of type T.
@@ -139,5 +140,20 @@ public class Registry<T> {
      */
     public int size() {
         return registry.size();
+    }
+
+    public T[] values() {
+        return (T[]) registry.values().toArray();
+    }
+
+    public static class Keys {
+
+        public static RegistryKey generate(){
+            return new RegistryKey(UUID.randomUUID().toString());
+        }
+
+        public static RegistryKey generate(String name){
+            return new RegistryKey(name);
+        }
     }
 }

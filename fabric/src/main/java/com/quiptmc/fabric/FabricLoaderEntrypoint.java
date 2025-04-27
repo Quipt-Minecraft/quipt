@@ -1,9 +1,11 @@
 package com.quiptmc.fabric;
 
+import com.quiptmc.core.data.registries.Registry;
 import com.quiptmc.fabric.api.QuiptEntrypoint;
 import com.quiptmc.fabric.listeners.ServerListener;
 import com.quiptmc.fabric.particles.QuiptParticle;
 import com.quiptmc.minecraft.CoreUtils;
+import com.quiptmc.minecraft.api.MinecraftMaterial;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -17,6 +19,14 @@ public class FabricLoaderEntrypoint extends QuiptEntrypoint {
     @Override
     public void onInitialize(ModMetadata metadata) {
         CoreUtils.init(this.integration());
+        MinecraftMaterial.init();
+        Registry<MinecraftMaterial> materialRegistry = MinecraftMaterial.registry().orElseThrow();
+//        for (Material bukkitMat : Material.values()) {
+//            if (bukkitMat.isLegacy()) continue;
+//            materialRegistry.register(bukkitMat.name(), new MinecraftMaterial(bukkitMat.translationKey(), bukkitMat.name(), bukkitMat.getMaxStackSize(), bukkitMat.isBlock(), bukkitMat.isItem(), bukkitMat.isAir()));
+//        }
+
+
 
         ServerListener mainListener = new ServerListener();
         ServerLifecycleEvents.SERVER_STOPPING.register(mainListener);

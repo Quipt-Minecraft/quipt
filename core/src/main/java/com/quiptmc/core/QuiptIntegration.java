@@ -2,10 +2,6 @@ package com.quiptmc.core;
 
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.config.files.ApiConfig;
-import com.quiptmc.core.data.Metadata;
-import com.quiptmc.core.data.registries.Registries;
-import com.quiptmc.core.data.registries.Registry;
-import com.quiptmc.core.events.EventHandler;
 import com.quiptmc.core.logger.QuiptLogger;
 import com.quiptmc.core.utils.NetworkUtils;
 import org.json.JSONException;
