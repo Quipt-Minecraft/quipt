@@ -5,7 +5,7 @@ import com.quiptmc.core.data.registries.Registry;
 import com.quiptmc.minecraft.api.MinecraftEntityType;
 import com.quiptmc.minecraft.api.MinecraftMaterial;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
-import com.quiptmc.minecraft.api.MinecraftStat;
+import com.quiptmc.minecraft.api.statistics.MinecraftStat;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
