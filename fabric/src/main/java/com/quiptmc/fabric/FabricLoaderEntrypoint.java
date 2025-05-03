@@ -21,11 +21,7 @@ public class FabricLoaderEntrypoint extends QuiptEntrypoint {
         CoreUtils.init(this.integration());
         MinecraftMaterial.init();
         Registry<MinecraftMaterial> materialRegistry = MinecraftMaterial.registry().orElseThrow();
-//        for (Material bukkitMat : Material.values()) {
-//            if (bukkitMat.isLegacy()) continue;
-//            materialRegistry.register(bukkitMat.name(), new MinecraftMaterial(bukkitMat.translationKey(), bukkitMat.name(), bukkitMat.getMaxStackSize(), bukkitMat.isBlock(), bukkitMat.isItem(), bukkitMat.isAir()));
-//        }
-
+        //todo register materials?
 
 
         ServerListener mainListener = new ServerListener();

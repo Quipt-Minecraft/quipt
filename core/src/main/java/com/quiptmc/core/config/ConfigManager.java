@@ -57,7 +57,7 @@ public class ConfigManager {
                 }
 
                 integration.log("QuiptConfig", "Registering config file \"" + cf.name() + "\".");
-                if (!integration.dataFolder().exists()) integration.dataFolder().mkdir();
+                if (!integration.dataFolder().exists()) integration.dataFolder().mkdirs();
                 File file = new File(integration.dataFolder(), cf.name() + "." + cf.ext().extension());
                 if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
                 if (!file.exists()) {

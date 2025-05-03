@@ -7,6 +7,7 @@ import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.ConfigValue;
 
 import java.io.File;
+import java.util.UUID;
 
 @ConfigTemplate(name = "api")
 public class ApiConfig extends Config {
@@ -18,7 +19,10 @@ public class ApiConfig extends Config {
 //    public String endpoint = "https://api.quiptmc.com";
 
     @ConfigValue
-    public String secret = "You Should Change This To Literally Anything Else";
+    public String secret = UUID.randomUUID().toString();
+
+    @ConfigValue
+    public String id = "default";
 
     public ApiConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);

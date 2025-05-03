@@ -118,7 +118,8 @@ public class SessionManager {
         config.sessions.getJSONArray(uid.toString()).put(session);
         CURRENT_SESSIONS.remove(uid);
         config.save();
-        CoreUtils.quipt().logger().log("Session", "Finished session for " + name);
+        QuiptIntegration.ApiManager.ApiResponse response = CoreUtils.quipt().api().api("sessions/update/" + uid, session);
+        CoreUtils.quipt().logger().log("Finished session for {}: {}",  name, response.raw().toString(2));
     }
 
     public static long getOverallPlaytime(MinecraftPlayer player) {

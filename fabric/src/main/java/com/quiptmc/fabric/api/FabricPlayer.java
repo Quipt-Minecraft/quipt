@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class FabricPlayer implements MinecraftPlayer {
+
     public static final Registry<FabricPlayer> registry = Registries.register("players", FabricPlayer.class);
     private static final Map<UUID, FabricPlayer> playerMap = new HashMap<>();
 

@@ -18,7 +18,8 @@ java {
 }
 
 configurations {
-    includedDeps.extendsFrom(configurations.include)
+    includedDeps.extendsFrom()
+//    test dependencies
 }
 
 tasks.register('mergeJar', Jar) {
@@ -32,6 +33,7 @@ tasks.register('mergeJar', Jar) {
             exclude "META-INF/**"
         }
     }
+
     // Make sure it doesn't conflict with remapJar output
     archiveClassifier = ""
 
@@ -57,24 +59,33 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    include(implementation "org.json:json:$json_version")
-    include(implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version")
-    include(implementation "org.eclipse.jetty:jetty-server:$jetty_server_version")
-    include(implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version")
+    includedDeps(implementation "org.json:json:$json_version")
+    includedDeps(implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version")
+    includedDeps(implementation "org.eclipse.jetty:jetty-server:$jetty_server_version")
+    includedDeps(implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version")
+    includedDeps(implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version")
+    includedDeps(implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version")
+    includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson_version")
+    includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version")
+    includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version")
 //    include(modImplementation( "net.kyori:adventure-api:4.19.0"))
 
-    include(modImplementation("net.kyori:adventure-platform-fabric:6.3.0"))
+    modImplementation include("net.kyori:adventure-platform-fabric:6.3.0")
 
+    namedElements(implementation(project(":core")))
+    namedElements(implementation(project(":common")))
+    namedElements(implementation(project(":bot")))
 
-    include(implementation(project(":core")))
-    include(implementation(project(":common")))
-    include(implementation(project(":bot")))
+//    implementation project(path: ":core"    ,   configuration: "namedElements"  )
+//    implementation project(path: ":common"  , configuration: "namedElements"    )
+//    implementation project(path: ":bot"     ,    configuration: "namedElements" )
 }
 
 modrinth {
 
     token = System.getenv("MODRINTH_TOKEN")
     def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+    changelog = log
     projectId = "${modrinth_id}"
     versionNumber = "${version}"
     versionType = "${build_status}"

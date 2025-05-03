@@ -30,7 +30,6 @@ public class NestedListManager<T extends TypeAdapter<E>, E extends Enum<E>> {
      */
     public NestedListManager<T, E> ofType(E type) {
         return new NestedListManager<>(objects.stream().filter(object -> object.type().equals(type)).toArray(TypeAdapter[]::new));
-//        return new ObjectManager(objects.stream().filter(object -> object.type().equals(type)).toArray(T[]::new));
     }
 
     /**
