@@ -1,6 +1,7 @@
 package com.quiptmc.core.data.registries;
 
 import com.quiptmc.core.logger.QuiptLogger;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,21 @@ public class Registries {
             registry.clear();
         }
         keys.clear();
+    }
+
+    public static JSONObject dump(){
+        JSONObject root = new JSONObject();
+        for (Map.Entry<String, RegistryKey> keyEntry : keys.entrySet()) {
+            String skey = keyEntry.getKey();
+            RegistryKey key = keyEntry.getValue();
+            Registry<?> registry = registries.get(key);
+            JSONObject json = new JSONObject();
+            registry.forEach((s, instance)->{
+                json.put(s, instance.toString());
+            });
+            root.put(skey, json);
+        }
+        return root;
     }
 
     public static void dump(QuiptLogger logger) {
