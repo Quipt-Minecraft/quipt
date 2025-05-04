@@ -1,1 +1,1 @@
-Fabric Integrations no longer crash on initialization due to "ClassNotFoundException".
+Fabric Block Entity Renderers now store color data per/blockEntity
