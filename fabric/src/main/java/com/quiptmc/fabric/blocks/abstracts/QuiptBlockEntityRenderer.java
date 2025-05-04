@@ -11,37 +11,21 @@ import org.joml.Matrix4f;
 import java.awt.*;
 
 public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
-    private final Identifier texture;
+
     private final RenderLayer renderLayer;
     private final Color color;
+    private final boolean renderInside;
 
-    public QuiptBlockEntityRenderer(Identifier texture, RenderLayer renderLayer, Color color) {
-        this.texture = texture;
+    public QuiptBlockEntityRenderer(RenderLayer renderLayer, boolean renderInside, Color color) {
         this.renderLayer = renderLayer;
+        this.renderInside = renderInside;
         this.color = color;
     }
 
-    public QuiptBlockEntityRenderer(String key, boolean translucent, RenderPhase.ShaderProgram program, Identifier texture, Color color) {
+    public QuiptBlockEntityRenderer(String key, boolean translucent, RenderPhase.ShaderProgram program, Identifier texture, boolean renderInside, Color color) {
         this.color = color;
-        this.texture = texture;
-        this.renderLayer = RenderLayer.of(
-                key,
-                VertexFormats.POSITION,
-                VertexFormat.DrawMode.QUADS,
-                1536,
-                false,
-                translucent,
-                RenderLayer.MultiPhaseParameters.builder()
-                        .program(program)
-                        .texture(
-                                RenderPhase.Textures
-                                        .create()
-                                        .add(
-                                                texture,
-                                                false,
-                                                false)
-                                        .build())
-                        .build(false));
+        this.renderInside = renderInside;
+        this.renderLayer = RenderLayer.of(key, VertexFormats.POSITION, VertexFormat.DrawMode.QUADS, 1536, false, translucent, RenderLayer.MultiPhaseParameters.builder().program(program).texture(RenderPhase.Textures.create().add(texture, false, false).build()).build(false));
     }
 
     @Override
@@ -95,11 +79,12 @@ public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements
                 vertexConsumer.vertex(matrix, maxX, depth, minY).color(red, green, blue, alpha).texture(u2, v1);
                 vertexConsumer.vertex(matrix, maxX, depth, maxY).color(red, green, blue, alpha).texture(u2, v2);
                 vertexConsumer.vertex(matrix, minX, depth, maxY).color(red, green, blue, alpha).texture(u1, v2);
-
-                vertexConsumer.vertex(matrix, minX, depth, minY).color(red, green, blue, alpha).texture(u1, v1);
-                vertexConsumer.vertex(matrix, minX, depth, maxY).color(red, green, blue, alpha).texture(u1, v2);
-                vertexConsumer.vertex(matrix, maxX, depth, maxY).color(red, green, blue, alpha).texture(u2, v2);
-                vertexConsumer.vertex(matrix, maxX, depth, minY).color(red, green, blue, alpha).texture(u2, v1);
+                if (renderInside) {
+                    vertexConsumer.vertex(matrix, minX, depth, minY).color(red, green, blue, alpha).texture(u1, v1);
+                    vertexConsumer.vertex(matrix, minX, depth, maxY).color(red, green, blue, alpha).texture(u1, v2);
+                    vertexConsumer.vertex(matrix, maxX, depth, maxY).color(red, green, blue, alpha).texture(u2, v2);
+                    vertexConsumer.vertex(matrix, maxX, depth, minY).color(red, green, blue, alpha).texture(u2, v1);
+                }
                 break;
             case UP:
                 // Top face - Y is constant
@@ -107,11 +92,12 @@ public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements
                 vertexConsumer.vertex(matrix, minX, depth, maxY).color(red, green, blue, alpha).texture(u1, v2);
                 vertexConsumer.vertex(matrix, maxX, depth, maxY).color(red, green, blue, alpha).texture(u2, v2);
                 vertexConsumer.vertex(matrix, maxX, depth, minY).color(red, green, blue, alpha).texture(u2, v1);
-
-                vertexConsumer.vertex(matrix, minX, depth, minY).color(red, green, blue, alpha).texture(u1, v1);
-                vertexConsumer.vertex(matrix, maxX, depth, minY).color(red, green, blue, alpha).texture(u2, v1);
-                vertexConsumer.vertex(matrix, maxX, depth, maxY).color(red, green, blue, alpha).texture(u2, v2);
-                vertexConsumer.vertex(matrix, minX, depth, maxY).color(red, green, blue, alpha).texture(u1, v2);
+                if (renderInside) {
+                    vertexConsumer.vertex(matrix, minX, depth, minY).color(red, green, blue, alpha).texture(u1, v1);
+                    vertexConsumer.vertex(matrix, maxX, depth, minY).color(red, green, blue, alpha).texture(u2, v1);
+                    vertexConsumer.vertex(matrix, maxX, depth, maxY).color(red, green, blue, alpha).texture(u2, v2);
+                    vertexConsumer.vertex(matrix, minX, depth, maxY).color(red, green, blue, alpha).texture(u1, v2);
+                }
                 break;
             case NORTH:
                 // North face - Z is constant
@@ -119,11 +105,12 @@ public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements
                 vertexConsumer.vertex(matrix, minX, maxY, depth).color(red, green, blue, alpha).texture(u1, v2);
                 vertexConsumer.vertex(matrix, maxX, maxY, depth).color(red, green, blue, alpha).texture(u2, v2);
                 vertexConsumer.vertex(matrix, maxX, minY, depth).color(red, green, blue, alpha).texture(u2, v1);
-
-                vertexConsumer.vertex(matrix, maxX, minY, depth).color(red, green, blue, alpha).texture(u2, v1);
-                vertexConsumer.vertex(matrix, maxX, maxY, depth).color(red, green, blue, alpha).texture(u2, v2);
-                vertexConsumer.vertex(matrix, minX, maxY, depth).color(red, green, blue, alpha).texture(u1, v2);
-                vertexConsumer.vertex(matrix, minX, minY, depth).color(red, green, blue, alpha).texture(u1, v1);
+                if (renderInside) {
+                    vertexConsumer.vertex(matrix, maxX, minY, depth).color(red, green, blue, alpha).texture(u2, v1);
+                    vertexConsumer.vertex(matrix, maxX, maxY, depth).color(red, green, blue, alpha).texture(u2, v2);
+                    vertexConsumer.vertex(matrix, minX, maxY, depth).color(red, green, blue, alpha).texture(u1, v2);
+                    vertexConsumer.vertex(matrix, minX, minY, depth).color(red, green, blue, alpha).texture(u1, v1);
+                }
                 break;
             case SOUTH:
                 // South face - Z is constant
@@ -131,11 +118,12 @@ public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements
                 vertexConsumer.vertex(matrix, maxX, maxY, depth).color(red, green, blue, alpha).texture(u2, v2);
                 vertexConsumer.vertex(matrix, minX, maxY, depth).color(red, green, blue, alpha).texture(u1, v2);
                 vertexConsumer.vertex(matrix, minX, minY, depth).color(red, green, blue, alpha).texture(u1, v1);
-
-                vertexConsumer.vertex(matrix, minX, minY, depth).color(red, green, blue, alpha).texture(u1, v1);
-                vertexConsumer.vertex(matrix, minX, maxY, depth).color(red, green, blue, alpha).texture(u1, v2);
-                vertexConsumer.vertex(matrix, maxX, maxY, depth).color(red, green, blue, alpha).texture(u2, v2);
-                vertexConsumer.vertex(matrix, maxX, minY, depth).color(red, green, blue, alpha).texture(u2, v1);
+                if (renderInside) {
+                    vertexConsumer.vertex(matrix, minX, minY, depth).color(red, green, blue, alpha).texture(u1, v1);
+                    vertexConsumer.vertex(matrix, minX, maxY, depth).color(red, green, blue, alpha).texture(u1, v2);
+                    vertexConsumer.vertex(matrix, maxX, maxY, depth).color(red, green, blue, alpha).texture(u2, v2);
+                    vertexConsumer.vertex(matrix, maxX, minY, depth).color(red, green, blue, alpha).texture(u2, v1);
+                }
                 break;
             case WEST:
                 // West face - X is constant
@@ -143,11 +131,12 @@ public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements
                 vertexConsumer.vertex(matrix, depth, minY, maxY).color(red, green, blue, alpha).texture(u2, v1);
                 vertexConsumer.vertex(matrix, depth, maxY, maxY).color(red, green, blue, alpha).texture(u2, v2);
                 vertexConsumer.vertex(matrix, depth, maxY, minY).color(red, green, blue, alpha).texture(u1, v2);
-
-                vertexConsumer.vertex(matrix, depth, minY, minX).color(red, green, blue, alpha).texture(u1, v1);
-                vertexConsumer.vertex(matrix, depth, maxY, minX).color(red, green, blue, alpha).texture(u1, v2);
-                vertexConsumer.vertex(matrix, depth, maxY, maxX).color(red, green, blue, alpha).texture(u2, v2);
-                vertexConsumer.vertex(matrix, depth, minY, maxX).color(red, green, blue, alpha).texture(u2, v1);
+                if (renderInside) {
+                    vertexConsumer.vertex(matrix, depth, minY, minX).color(red, green, blue, alpha).texture(u1, v1);
+                    vertexConsumer.vertex(matrix, depth, maxY, minX).color(red, green, blue, alpha).texture(u1, v2);
+                    vertexConsumer.vertex(matrix, depth, maxY, maxX).color(red, green, blue, alpha).texture(u2, v2);
+                    vertexConsumer.vertex(matrix, depth, minY, maxX).color(red, green, blue, alpha).texture(u2, v1);
+                }
                 break;
             case EAST:
                 // East face - X is constant
@@ -155,11 +144,12 @@ public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements
                 vertexConsumer.vertex(matrix, depth, maxY, minX).color(red, green, blue, alpha).texture(u1, v2);
                 vertexConsumer.vertex(matrix, depth, maxY, maxX).color(red, green, blue, alpha).texture(u2, v2);
                 vertexConsumer.vertex(matrix, depth, minY, maxX).color(red, green, blue, alpha).texture(u2, v1);
-
-                vertexConsumer.vertex(matrix, depth, minY, minY).color(red, green, blue, alpha).texture(u1, v1);
-                vertexConsumer.vertex(matrix, depth, minY, maxY).color(red, green, blue, alpha).texture(u2, v1);
-                vertexConsumer.vertex(matrix, depth, maxY, maxY).color(red, green, blue, alpha).texture(u2, v2);
-                vertexConsumer.vertex(matrix, depth, maxY, minY).color(red, green, blue, alpha).texture(u1, v2);
+                if (renderInside) {
+                    vertexConsumer.vertex(matrix, depth, minY, minY).color(red, green, blue, alpha).texture(u1, v1);
+                    vertexConsumer.vertex(matrix, depth, minY, maxY).color(red, green, blue, alpha).texture(u2, v1);
+                    vertexConsumer.vertex(matrix, depth, maxY, maxY).color(red, green, blue, alpha).texture(u2, v2);
+                    vertexConsumer.vertex(matrix, depth, maxY, minY).color(red, green, blue, alpha).texture(u1, v2);
+                }
                 break;
         }
     }
