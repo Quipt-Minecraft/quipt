@@ -4,10 +4,7 @@ import com.quiptmc.core.data.MapEntryConsumer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A generic registry for managing objects of type T.
