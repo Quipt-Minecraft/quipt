@@ -13,7 +13,7 @@ import java.awt.*;
 public abstract class QuiptBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     private final RenderLayer renderLayer;
-    private final Color color;
+    public Color color;
     private final boolean renderInside;
 
     public QuiptBlockEntityRenderer(RenderLayer renderLayer, boolean renderInside, Color color) {
