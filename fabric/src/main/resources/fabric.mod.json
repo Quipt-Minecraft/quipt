@@ -34,5 +34,24 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/EhfMJmjTXh",
+        "modmenu.website": "https://quiptmc.com",
+        "modmenu.modrinth": "https://modrinth.com/plugin/quipt",
+        "modmenu.issues": "https://github.com/Quipt-Minecraft/quipt/issues"
+      },
+      "badges": [
+        "client",
+        "library"
+      ],
+      "id": "quipt",
+      "name": "Quipt",
+      "description": "Quick's Universal Integrated Plugin Toolkit",
+      "icon": "assets/quipt/icon.png",
+      "update_checker": true
+    }
   }
 }
