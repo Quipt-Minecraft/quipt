@@ -40,10 +40,14 @@ public class NetworkUtils {
             conn.setRequestProperty("Accept-Charset", "UTF-8");
             conn.setRequestMethod("GET");
 
-            if (auth != null && auth.length >= 2) {
+            if (auth != null && auth.length == 2) {
                 String userCredentials = auth[0].trim() + ":" + auth[1].trim();
                 String basicAuth = "Basic " + Base64.getEncoder().encodeToString(userCredentials.getBytes());
                 conn.setRequestProperty("Authorization", basicAuth);
+            }
+            if (auth != null && auth.length == 1) {
+                String token = auth[0].trim();
+                conn.setRequestProperty("Authorization", "Bearer " + token);
             }
             return conn.getInputStream();
         } catch (Exception ex) {
