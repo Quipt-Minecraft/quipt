@@ -1,4 +1,4 @@
-# QUIPT [![Latest build status](https://ci.vanillaflux.com/job/quipt-paper/badge/icon)](https://ci.vanillaflux.com/job/quipt-paper)
+# QUIPT [![Quipt](https://github.com/Quipt-Minecraft/quipt/actions/workflows/gradle-publish.yml/badge.svg)](https://github.com/Quipt-Minecraft/quipt/actions/workflows/gradle-publish.yml)
 [![available on github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/github_vector.svg)](https://github.com/QuickScythe/QUIPT)
 [![available on Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://www.modrinth.com/plugin/QUIPT)
 [![discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-singular_vector.svg)](https://discord.gg/EhfMJmjTXh)
