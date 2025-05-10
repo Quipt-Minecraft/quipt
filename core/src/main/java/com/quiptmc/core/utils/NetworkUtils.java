@@ -1,5 +1,6 @@
 package com.quiptmc.core.utils;
 
+import com.quiptmc.core.exceptions.QuiptNetworkException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import java.util.Base64;
  * A utility class for network operations
  */
 public class NetworkUtils {
-    
+
     private static Logger logger = LoggerFactory.getLogger("NetworkUtils");
 
     private NetworkUtils() {
@@ -32,8 +33,8 @@ public class NetworkUtils {
         try {
             HttpURLConnection conn = (HttpURLConnection) new URI(url).toURL().openConnection();
             conn.setDoOutput(true);
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(3000);
+            conn.setConnectTimeout(3000);
             conn.setUseCaches(false);
             conn.setAllowUserInteraction(false);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -47,11 +48,16 @@ public class NetworkUtils {
             }
             if (auth != null && auth.length == 1) {
                 String token = auth[0].trim();
+                System.out.println("Using access token.");
                 conn.setRequestProperty("Authorization", "Bearer " + token);
             }
-            return conn.getInputStream();
+            System.out.println("Response code: " + conn.getResponseCode());
+            if (conn.getResponseCode() == 200)
+                return conn.getInputStream();
+            throw new QuiptNetworkException(conn.getResponseCode(), streamToString(conn.getErrorStream()));
         } catch (Exception ex) {
-           logger.info("An error occurred while downloading file from url: " + url);
+            logger.info("An error occurred while downloading file from url: " + url);
+            ex.printStackTrace();
         }
         return InputStream.nullInputStream();
     }
@@ -70,13 +76,13 @@ public class NetworkUtils {
                 out.write(buffer, 0, bytesRead);
             }
         } catch (IOException ex) {
-           logger.info("An error occurred while saving file");
+            logger.info("An error occurred while saving file");
         } finally {
             try {
                 in.close();
                 out.close();
             } catch (IOException e) {
-               logger.info("An error occurred while closing streams");
+                logger.info("An error occurred while closing streams");
             }
         }
     }
@@ -93,7 +99,7 @@ public class NetworkUtils {
             }
             return stringBuilder.toString();
         } catch (Exception ex) {
-           logger.info("An error occurred while converting InputStream to String");
+            logger.info("An error occurred while converting InputStream to String");
             ex.printStackTrace();
         }
         return null;
@@ -108,8 +114,8 @@ public class NetworkUtils {
             URL myUrl = new URI(url).toURL();
             HttpURLConnection conn = (HttpURLConnection) myUrl.openConnection();
             conn.setDoOutput(true);
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(3000);
+            conn.setConnectTimeout(3000);
             conn.setUseCaches(false);
             conn.setAllowUserInteraction(false);
             conn.setRequestProperty("Content-Type", "application/json");

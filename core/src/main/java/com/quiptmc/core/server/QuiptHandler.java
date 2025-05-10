@@ -44,6 +44,6 @@ public class QuiptHandler extends ServletContextHandler {
         path = path.startsWith("/") ? path.substring(1) : path;
         String url = server.config().address();
         addServlet(new ServletHolder(name, servlet), "/" + path);
-        server.integration().logger().log("Added servlet %s at: %s/%s", name, url, path);
+        server.integration().logger().log("Added servlet {} at: {}/{}", name, url, path);
     }
 }

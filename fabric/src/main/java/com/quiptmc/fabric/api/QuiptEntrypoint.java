@@ -1,5 +1,6 @@
 package com.quiptmc.fabric.api;
 
+import com.quiptmc.fabric.Initializer;
 import com.quiptmc.minecraft.utils.MinecraftIntegration;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -19,7 +20,7 @@ public abstract class QuiptEntrypoint {
 
     protected void run(ModContainer container){
         ModMetadata metadata = container.getMetadata();
-        integration = new FabricIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
+        integration = new Initializer.Quipt(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
         LOGGER.info("Initializing {} v{} ({})...", metadata.getName(), metadata.getVersion(), metadata.getId());
         onInitialize(metadata);
     }
