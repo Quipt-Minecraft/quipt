@@ -54,6 +54,10 @@ public class FabricIntegration extends MinecraftIntegration<ServerLoader<ModMeta
         return handler;
     }
 
+    public QuiptServer server() {
+        return server;
+    }
+
 
     @Override
     public void enable() {
