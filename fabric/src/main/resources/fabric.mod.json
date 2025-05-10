@@ -18,9 +18,6 @@
     ],
     "client": [
       "com.quiptmc.fabric.client.EntrypointClient"
-    ],
-    "quipt": [
-        "com.quiptmc.fabric.FabricLoaderEntrypoint"
     ]
   },
   "mixins": [
