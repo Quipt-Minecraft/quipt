@@ -1,6 +1,7 @@
 package com.quiptmc.fabric;
 
 import com.quiptmc.core.data.registries.Registry;
+import com.quiptmc.fabric.api.FabricIntegration;
 import com.quiptmc.fabric.api.QuiptEntrypoint;
 import com.quiptmc.fabric.listeners.ServerListener;
 import com.quiptmc.minecraft.CoreUtils;
@@ -10,15 +11,16 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
 public class Initializer extends QuiptEntrypoint implements ModInitializer   {
 
-
-
     @Override
     public void onInitialize() {
         //Load Quipt data
+        run(FabricLoader.getInstance().getModContainer("quipt").get());
         CoreUtils.init(this.integration());
         MinecraftMaterial.init();
         Registry<MinecraftMaterial> materialRegistry = MinecraftMaterial.registry().orElseThrow();

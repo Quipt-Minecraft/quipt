@@ -17,6 +17,13 @@ public abstract class QuiptEntrypoint {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private FabricIntegration integration = null;
 
+    protected void run(ModContainer container){
+        ModMetadata metadata = container.getMetadata();
+        integration = new FabricIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
+        LOGGER.info("Initializing {} v{} ({})...", metadata.getName(), metadata.getVersion(), metadata.getId());
+        onInitialize(metadata);
+    }
+
     public void run(EntrypointContainer<QuiptEntrypoint> entrypoint) {
         ModMetadata metadata = entrypoint.getProvider().getMetadata();
         integration = new FabricIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
