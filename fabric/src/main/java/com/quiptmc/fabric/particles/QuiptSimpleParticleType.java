@@ -15,9 +15,10 @@ public class QuiptSimpleParticleType extends QuiptParticleType<QuiptSimplePartic
     }
 
     @Override
-    public QuiptSimpleParticleType effect() {
+    public QuiptSimpleParticleType effect(QuiptSimpleParticleType parameters) {
         return this;
     }
+
 
     public QuiptSimpleParticleType getType() {
         return this;
