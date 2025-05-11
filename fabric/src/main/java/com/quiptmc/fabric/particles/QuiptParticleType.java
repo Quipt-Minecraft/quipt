@@ -80,4 +80,6 @@ public abstract class QuiptParticleType<T extends QuiptParticleEffect> extends P
     }
 
     public abstract T effect();
+
+    public abstract T effect(int color, float scale);
 }
