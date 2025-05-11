@@ -2,57 +2,58 @@ package com.quiptmc.fabric.api.properties;
 
 import net.minecraft.state.property.Property;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public final class StringProperty extends Property<String> {
 
-    public static final List<String> values = new ArrayList<>();
+    private final String[] values;
+    private final String defaultValue;
 
-    private StringProperty(String name) {
+    private StringProperty(String name, List<String> values, String defaultValue) {
         super(name, String.class);
-        values.add(name);
-        values.add("level1");
+        if (!values.contains(defaultValue)) {
+            throw new IllegalArgumentException("Value " + defaultValue + " is not in the list of values for " + name);
+        } else {
+            this.values = values.toArray(new String[0]);
+            this.defaultValue = defaultValue;
+        }
+    }
 
+    public static StringProperty of(String name, List<String> values, String defaultValue) {
+        return new StringProperty(name, values, defaultValue);
     }
 
     @Override
     public List<String> getValues() {
-        return values;
+        return List.of(values);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        } else {
+            return object instanceof StringProperty stringProperty && super.equals(object) ? this.values.equals(stringProperty.values) : false;
+        }
     }
 
     @Override
     public int computeHashCode() {
-        return 31 * super.computeHashCode() + getValues().hashCode();
-    }
-
-    /**
-     * Creates an integer property.
-     *
-     * <p>Note that this method computes all possible values.
-     *
-     * @throws IllegalArgumentException if {@code 0 <= min < max} is not
-     * satisfied
-     *
-     * @param name the name of the property; see {@linkplain Property
-     * name}
-     */
-    public static StringProperty of(String name) {
-        return new StringProperty(name);
+        return 31 * super.computeHashCode() + this.values.hashCode();
     }
 
     @Override
     public Optional<String> parse(String name) {
-        return Optional.ofNullable(name);
+        return getValues().contains(name) ? Optional.of(name) : Optional.empty();
     }
 
-    public String name(String key) {
-        return key;
+    public String name(String string) {
+        return string;
     }
 
     public int ordinal(String string) {
-        return 1;
+        return getValues().contains(string) ? getValues().indexOf(string) : -1;
     }
 }
 
