@@ -1,6 +1,5 @@
 package com.quiptmc.fabric.particles;
 
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -15,7 +14,7 @@ public class QuiptParticle {
     }
 
 
-    public static ParticleType<?> get(String key) {
+    public static <T extends ParticleEffect> ParticleType<T> get(String key) {
         return PARTICLE_TYPE_REGISTRY.get(key).orElseThrow();
     }
 
