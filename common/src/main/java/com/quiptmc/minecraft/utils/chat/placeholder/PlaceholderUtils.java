@@ -16,7 +16,7 @@ import static com.quiptmc.minecraft.utils.chat.MessageUtils.serialize;
 
 public class PlaceholderUtils {
 
-    private static final Registry<Placeholder> registry = Registries.register("placeholders", Placeholder.class);
+    private static final Registry<Placeholder> registry = Registries.register("placeholders", ()->null);
 
     public static void registerPlaceholders() {
         registerPlaceholder("name", player -> player.map(audience -> serialize(audience.get(Identity.DISPLAY_NAME).orElse(Component.text("Unknown")))).orElse("Unknown"));

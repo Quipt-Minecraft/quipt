@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 public class QuiptItems {
 
-    private static final com.quiptmc.core.data.registries.Registry<QuiptItem> items = com.quiptmc.core.data.registries.Registries.register("items", QuiptItem.class);
+    private static final com.quiptmc.core.data.registries.Registry<QuiptItem> items = com.quiptmc.core.data.registries.Registries.register("items", ()->null);
 
     public static QuiptItem get(String name) {
         return items.get(name).orElseThrow(() -> new IllegalArgumentException("Block " + name + " not found"));

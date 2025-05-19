@@ -19,35 +19,23 @@ public class Registry<T> {
     private final Map<String, T> registry = new HashMap<>();
 
 
+    /**
+     * The key associated with this registry.
+     */
     private final RegistryKey key;
 
     /**
-     * The class type of the objects managed by this registry.
-     */
-    private final Class<T> type;
-
-    /**
      * Constructs a new Registry for the specified type.
-     *
-     * @param type the class type of the objects to be managed by this registry
      */
-    public Registry(RegistryKey key, Class<T> type) {
+    public Registry(RegistryKey key) {
         this.key = key;
-        this.type = type;
+//        this.type = type;
     }
 
     public RegistryKey key() {
         return key;
     }
 
-    /**
-     * Returns the class type of the objects managed by this registry.
-     *
-     * @return the class type of the objects managed by this registry
-     */
-    public Class<T> type() {
-        return type;
-    }
 
     /**
      * Clears all entries from the registry.
@@ -141,16 +129,5 @@ public class Registry<T> {
 
     public T[] values() {
         return (T[]) registry.values().toArray();
-    }
-
-    public static class Keys {
-
-        public static RegistryKey generate(){
-            return new RegistryKey(UUID.randomUUID().toString());
-        }
-
-        public static RegistryKey generate(String name){
-            return new RegistryKey(name);
-        }
     }
 }

@@ -1,23 +1,22 @@
 package com.quiptmc.minecraft.utils.heartbeat.runnable;
 
-import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.utils.TaskScheduler;
+import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.minecraft.utils.heartbeat.Flutter;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.constant.Constable;
+import java.lang.constant.ConstantDesc;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Heartbeat implements Runnable {
 
-    QuiptIntegration plugin;
-
+    final List<FlutterTask> FLUTTERS_ADD = new ArrayList<>();
     private final Map<Integer, FlutterTask> FLUTTERS = new HashMap<>();
     private final List<Integer> FLUTTERS_REMOVE = new ArrayList<>();
-    final List<FlutterTask> FLUTTERS_ADD = new ArrayList<>();
+    QuiptIntegration plugin;
     private int last_id = 0;
 
     public Heartbeat(QuiptIntegration plugin) {

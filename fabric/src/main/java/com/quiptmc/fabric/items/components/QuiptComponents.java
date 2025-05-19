@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 
 public class QuiptComponents {
 
-    public static final Registry<ComponentType> registry = Registries.register("components", ComponentType.class);
+    public static final Registry<ComponentType<?>> registry = Registries.register("components", ()->null);
 
     public static <T> void register(String modId, String path, Codec<T> codec) {
         ComponentType<T> componentType = net.minecraft.registry.Registry.register(
@@ -20,7 +20,7 @@ public class QuiptComponents {
     }
 
     public static <T> ComponentType<T> get(String modId, String path, Class<T> type) {
-        return registry.get(modId + ":" + path).get();
+        return (ComponentType<T>) registry.get(modId + ":" + path).get();
     }
 
 
