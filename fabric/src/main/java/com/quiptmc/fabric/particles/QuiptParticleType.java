@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public abstract class QuiptParticleType<T extends QuiptParticleEffect> extends ParticleType<T> {
 
-    private final static com.quiptmc.core.data.registries.Registry<QuiptParticleType> PARTICLE_TYPE_REGISTRY = com.quiptmc.core.data.registries.Registries.register("particles", QuiptParticleType.class);
+    private final static com.quiptmc.core.data.registries.Registry<QuiptParticleType> PARTICLE_TYPE_REGISTRY = com.quiptmc.core.data.registries.Registries.register("particles", ()->null);
 
     protected QuiptParticleType(boolean alwaysShow) {
         super(alwaysShow);

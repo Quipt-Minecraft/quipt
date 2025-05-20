@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class FabricServer implements QuiptMinecraftServer {
 
-    public static final Registry<FabricServer> registry = Registries.register("servers", FabricServer.class);
+    public static final Registry<FabricServer> registry = Registries.register("servers", ()->null);
     private static final Map<String, FabricServer> playerMap = new HashMap<>();
 
     private final MinecraftServer server;

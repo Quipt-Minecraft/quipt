@@ -16,7 +16,7 @@ public class PaperPlayer implements MinecraftPlayer {
     private static Registry<PaperPlayer> registry;
 
     public static void init() {
-        Registries.register("players", PaperPlayer.class);
+        Registries.register("players", ()->null);
     }
 
     public static PaperPlayer of(Player player) {

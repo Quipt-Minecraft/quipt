@@ -32,7 +32,7 @@ public class DatagenTests {
 
     @Test
     public void testRegistries() {
-        Registry<Message> messages = Registries.register("messages", Message.class);
+        Registry<Message> messages = Registries.register("messages", ()->null);
         messages.register("test", new Message("Hello, World!"));
 
         if (messages.get("test").isPresent()) messages.get("test").get().send();

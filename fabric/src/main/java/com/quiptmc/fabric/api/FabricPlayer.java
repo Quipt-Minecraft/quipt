@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class FabricPlayer implements MinecraftPlayer {
 
-    public static final Registry<FabricPlayer> registry = Registries.register("players", FabricPlayer.class);
+    public static final Registry<FabricPlayer> registry = Registries.register("players", ()->null);
     private static final Map<UUID, FabricPlayer> playerMap = new HashMap<>();
 
     private final ServerPlayerEntity player;

@@ -3,6 +3,7 @@ package com.quiptmc.fabric.blocks;
 import com.quiptmc.core.annotations.Nullable;
 import com.quiptmc.fabric.blocks.abstracts.QuiptBlock;
 import com.quiptmc.fabric.blocks.abstracts.QuiptBlockWithEntity;
+import com.quiptmc.fabric.blocks.abstracts.properties.BlockProperty;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -15,8 +16,9 @@ import net.minecraft.util.Identifier;
 import java.util.function.Function;
 public class QuiptBlocks {
 
-    private static final com.quiptmc.core.data.registries.Registry<QuiptBlock> blocks = com.quiptmc.core.data.registries.Registries.register("blocks", QuiptBlock.class);
-    private static final com.quiptmc.core.data.registries.Registry<BlockEntityType> entityTypes = com.quiptmc.core.data.registries.Registries.register("block_entity", BlockEntityType.class);
+    private static final com.quiptmc.core.data.registries.Registry<QuiptBlock> blocks = com.quiptmc.core.data.registries.Registries.register("blocks", ()->null);
+    private static final com.quiptmc.core.data.registries.Registry<BlockEntityType> entityTypes = com.quiptmc.core.data.registries.Registries.register("block_entity", ()->null);
+//    private static final com.quiptmc.core.data.registries.Registry<BlockProperty<?>>
 
     public static QuiptBlock get(String name) {
         return blocks.get(name).orElseThrow(() -> new IllegalArgumentException("Block " + name + " not found"));

@@ -1,4 +1,4 @@
-package com.quiptmc.fabric.api.properties;
+package com.quiptmc.fabric.blocks.abstracts.properties;
 
 import net.minecraft.state.property.Property;
 
