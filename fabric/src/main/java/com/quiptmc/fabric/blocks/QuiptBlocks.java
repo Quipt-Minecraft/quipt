@@ -7,6 +7,7 @@ import com.quiptmc.fabric.blocks.abstracts.properties.BlockProperty;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -16,16 +17,16 @@ import net.minecraft.util.Identifier;
 import java.util.function.Function;
 public class QuiptBlocks {
 
-    private static final com.quiptmc.core.data.registries.Registry<QuiptBlock> blocks = com.quiptmc.core.data.registries.Registries.register("blocks", ()->null);
-    private static final com.quiptmc.core.data.registries.Registry<BlockEntityType> entityTypes = com.quiptmc.core.data.registries.Registries.register("block_entity", ()->null);
-//    private static final com.quiptmc.core.data.registries.Registry<BlockProperty<?>>
+    public static final com.quiptmc.core.data.registries.Registry<QuiptBlock> BLOCKS = com.quiptmc.core.data.registries.Registries.register("blocks", ()->null);
+    public static final com.quiptmc.core.data.registries.Registry<BlockEntityType<? extends BlockEntity>> ENTITY_TYPES = com.quiptmc.core.data.registries.Registries.register("block_entity", ()->null);
+    public static final com.quiptmc.core.data.registries.Registry<BlockProperty<?>> BLOCK_PROPERTIES = com.quiptmc.core.data.registries.Registries.register("block_properties", ()->null);
 
     public static QuiptBlock get(String name) {
-        return blocks.get(name).orElseThrow(() -> new IllegalArgumentException("Block " + name + " not found"));
+        return BLOCKS.get(name).orElseThrow(() -> new IllegalArgumentException("Block " + name + " not found"));
     }
 
-    public static BlockEntityType type(String name) {
-        return entityTypes.get(name).orElseThrow(() -> new IllegalArgumentException("BlockEntityType " + name + " not found"));
+    public static BlockEntityType<? extends BlockEntity> type(String name) {
+        return ENTITY_TYPES.get(name).orElseThrow(() -> new IllegalArgumentException("BlockEntityType " + name + " not found"));
     }
 
     public static QuiptBlock register(String name, Function<AbstractBlock.Settings, QuiptBlock> blockFactory, AbstractBlock.Settings settings, boolean shouldRegisterItem, @Nullable  FabricBlockEntityTypeBuilder.Factory<?> entityFactory) {
@@ -44,10 +45,10 @@ public class QuiptBlocks {
             BlockItem blockItem = new BlockItem(block.block(), new Item.Settings().registryKey(itemKey));
             Registry.register(Registries.ITEM, itemKey, blockItem);
         }
-        blocks.register(name, block);
+        BLOCKS.register(name, block);
         Registry.register(Registries.BLOCK, blockKey, block.block());
         if(block instanceof QuiptBlockWithEntity){
-            entityTypes.register(name, Registry.register(
+            ENTITY_TYPES.register(name, Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
                     Identifier.of("quipt", name),
                     FabricBlockEntityTypeBuilder.create(entityFactory, block.block()).build()
@@ -65,6 +66,6 @@ public class QuiptBlocks {
     }
 
     public static com.quiptmc.core.data.registries.Registry<QuiptBlock> blocks() {
-        return blocks;
+        return BLOCKS;
     }
 }

@@ -7,7 +7,13 @@ import java.util.Optional;
 
 public abstract class BlockProperty<T extends Comparable<T>> extends Property<T> {
 
-    protected BlockProperty(String name, Class<T> type) {
+    T defaultValue;
+    protected BlockProperty(String name, T defaultValue, Class<T> type) {
         super(name, type);
+        this.defaultValue = defaultValue;
+    }
+
+    public T defaultValue(){
+        return defaultValue;
     }
 }
