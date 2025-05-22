@@ -19,6 +19,7 @@ import com.quiptmc.discord.api.plugins.BotPlugin;
 import com.quiptmc.discord.api.plugins.BotPluginLoader;
 import com.quiptmc.fabric.api.FabricIntegration;
 import com.quiptmc.fabric.api.QuiptEntrypoint;
+import com.quiptmc.fabric.api.QuiptModMetadata;
 import com.quiptmc.fabric.listeners.ServerListener;
 import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.minecraft.api.MinecraftMaterial;
@@ -33,6 +34,7 @@ import com.quiptmc.minecraft.utils.sessions.SessionManager;
 import com.quiptmc.minecraft.web.CallbackHandler;
 import com.quiptmc.minecraft.web.HealthReportHandler;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
@@ -44,6 +46,7 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.io.File;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class Initializer extends QuiptEntrypoint implements ModInitializer {
@@ -64,7 +67,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
 
 
     @Override
-    public void onInitialize(ModMetadata metadata) {
+    public void onInitialize(QuiptModMetadata metadata) {
         //todo register materials?
         ServerListener mainListener = new ServerListener();
         ServerLifecycleEvents.SERVER_STOPPING.register(mainListener);
@@ -78,7 +81,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
     public static class Quipt extends FabricIntegration {
         private final EventHandler handler;
         private ResourcePackHandler packHandler;
-        private QuiptServer server;
+        private Optional<QuiptServer> server = Optional.empty();
         private CallbackHandler callbackHandler;
 
         public Quipt(String name, ServerLoader<ModMetadata> loader) {
@@ -91,7 +94,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
             return handler;
         }
 
-        public QuiptServer server() {
+        public Optional<QuiptServer> server() {
             return server;
         }
 
@@ -107,38 +110,46 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
             MessageUtils.start();
 
             ApiConfig apiConfig = ConfigManager.getConfig(this, ApiConfig.class);
-            WebConfig webConfig = ConfigManager.getConfig(this, WebConfig.class);
-            QuiptServer.ServerConfig serverConfig = new QuiptServer.ServerConfig(QuiptServer.ServerProtocol.HTTP, webConfig.host, webConfig.port);
-            DiscordConfig discordConfig = ConfigManager.getConfig(this, DiscordConfig.class);
             ResourceConfig resourceConfig = ConfigManager.getConfig(this, ResourceConfig.class);
 
-            server = new QuiptServer(this, serverConfig);
-            if (loader().type().equals(ServerLoader.Type.PAPER)) {
-                JSONObject paperProperties = ConfigManager.loadJson(new File("config/paper-global.yml"), ConfigTemplate.Extension.YAML);
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+                DiscordConfig discordConfig = ConfigManager.getConfig(this, DiscordConfig.class);
 
-                if (!paperProperties.getJSONObject("proxies").getBoolean("proxy-protocol")) {
-                    callbackHandler = new CallbackHandler(server);
-                    server.handler().handle("callback", callbackHandler, "callback/*");
+                WebConfig webConfig = ConfigManager.getConfig(this, WebConfig.class);
+                QuiptServer.ServerConfig serverConfig = new QuiptServer.ServerConfig(QuiptServer.ServerProtocol.HTTP, webConfig.host, webConfig.port);
+
+                server = Optional.of(new QuiptServer(this, serverConfig));
+                if (loader().type().equals(ServerLoader.Type.PAPER)) {
+                    JSONObject paperProperties = ConfigManager.loadJson(new File("config/paper-global.yml"), ConfigTemplate.Extension.YAML);
+
+                    if (!paperProperties.getJSONObject("proxies").getBoolean("proxy-protocol")) {
+                        callbackHandler = new CallbackHandler(server.get());
+                        server.get().handler().handle("callback", callbackHandler, "callback/*");
+                    }
                 }
+
+                if (webConfig.enable && webConfig.healthreport.enable)
+                    server.get().handler().handle("healthreport", new HealthReportHandler(server.get()), "healthreport/*");
+
+                if (!resourceConfig.repo_url.isEmpty()) {
+                    packHandler = new ResourcePackHandler(server.get());
+                    server.get().handler().handle("resources", packHandler, "resources/*");
+                    packHandler.setUrl(resourceConfig.repo_url);
+                }
+
+                if (discordConfig.enable_bot) launchBot(discordConfig);
+                try {
+                    server.get().start();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
             }
 
-            if (!resourceConfig.repo_url.isEmpty()) {
-                packHandler = new ResourcePackHandler(server);
-                server.handler().handle("resources", packHandler, "resources/*");
-                packHandler.setUrl(resourceConfig.repo_url);
-            }
 
-            if (discordConfig.enable_bot) launchBot(discordConfig);
 
-            if (webConfig.enable && webConfig.healthreport.enable)
-                server.handler().handle("healthreport", new HealthReportHandler(server), "healthreport/*");
 
-            try {
-//            LocationUtils.start(this);
-                server.start();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+
 
             HeartbeatUtils.heartbeat(this).addFlutter(new Flutter() {
                 private final long started = System.currentTimeMillis();
