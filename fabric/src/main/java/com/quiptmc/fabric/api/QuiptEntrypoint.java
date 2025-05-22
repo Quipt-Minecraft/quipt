@@ -22,14 +22,15 @@ public abstract class QuiptEntrypoint {
         ModMetadata metadata = container.getMetadata();
         integration = new Initializer.Quipt(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
         LOGGER.info("Initializing {} v{} ({})...", metadata.getName(), metadata.getVersion(), metadata.getId());
-        onInitialize(metadata);
+        onInitialize(new QuiptModMetadata(integration, metadata));
     }
 
     public void run(EntrypointContainer<QuiptEntrypoint> entrypoint) {
         ModMetadata metadata = entrypoint.getProvider().getMetadata();
         integration = new FabricIntegration(metadata.getName(), new ServerLoader<>(ServerLoader.Type.FABRIC, metadata));
         LOGGER.info("Initializing {} v{} ({})...", metadata.getName(), metadata.getVersion(), metadata.getId());
-        onInitialize(metadata);
+        onInitialize(new QuiptModMetadata(integration, metadata));
+
 
     }
 
@@ -37,5 +38,5 @@ public abstract class QuiptEntrypoint {
         return integration;
     }
 
-    public abstract void onInitialize(ModMetadata metadata);
+    public abstract void onInitialize(QuiptModMetadata metadata);
 }
