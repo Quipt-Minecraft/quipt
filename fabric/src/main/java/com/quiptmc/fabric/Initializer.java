@@ -122,14 +122,14 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
                 if (loader().type().equals(ServerLoader.Type.PAPER)) {
                     JSONObject paperProperties = ConfigManager.loadJson(new File("config/paper-global.yml"), ConfigTemplate.Extension.YAML);
 
-                    if (!paperProperties.getJSONObject("proxies").getBoolean("proxy-protocol")) {
-                        callbackHandler = new CallbackHandler(server.get());
-                        server.get().handler().handle("callback", callbackHandler, "callback/*");
-                    }
+//                    if (!paperProperties.getJSONObject("proxies").getBoolean("proxy-protocol")) {
+//                        callbackHandler = new CallbackHandler(server.get());
+//                        server.get().handler().handle("callback", callbackHandler, "callback/*");
+//                    }
                 }
 
-                if (webConfig.enable && webConfig.healthreport.enable)
-                    server.get().handler().handle("healthreport", new HealthReportHandler(server.get()), "healthreport/*");
+//                if (webConfig.enable && webConfig.healthreport.enable)
+//                    server.get().handler().handle("healthreport", new HealthReportHandler(server.get()), "healthreport/*");
 
                 if (!resourceConfig.repo_url.isEmpty()) {
                     packHandler = new ResourcePackHandler(server.get());

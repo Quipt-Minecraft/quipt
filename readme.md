@@ -3,6 +3,9 @@
 [![available on Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://www.modrinth.com/plugin/QUIPT)
 [![discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-singular_vector.svg)](https://discord.gg/EhfMJmjTXh)
 [![paper](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/paper_vector.svg)](https://papermc.io/downloads/paper)
+![bukkit](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/bukkit_vector.svg)
+![fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg)
+
 
 QUIPT is an ambitious project that aims to provide a handful of tools to both server owners and developers. Be sure to check out the [wiki](https://www.vanillaflux.com/quipt/) for a more in-depth description of how to use this plugin.
 

@@ -1,1 +1,1 @@
-Fabric Block Entity Renderers now store color data per/blockEntity
+Removed unnecessary server handlers.  
