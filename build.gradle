@@ -10,6 +10,7 @@ plugins {
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+//    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
 
 group = "com.quiptmc"
@@ -99,6 +100,7 @@ configure(subprojects.findAll {it.name == "fabric"}) {
 configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
     apply plugin: 'com.modrinth.minotaur'
     apply plugin: 'io.github.dexman545.outlet'
+//    apply plugin: 'com.matthewprenger.cursegradle'
 //    apply plugin: 'com.github.johnrengelman.shadow'
 
 
