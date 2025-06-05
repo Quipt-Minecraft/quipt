@@ -13,11 +13,14 @@ public class PaperIntegration extends MinecraftIntegration<ServerLoader<JavaPlug
 
     }
 
-
     @Override
     public void enable() {
         super.enable();
         HeartbeatUtils.init(this);
+    }
+
+    public JavaPlugin plugin(){
+        return (JavaPlugin) loader().instance();
     }
 
 }
