@@ -13,11 +13,7 @@ import org.bukkit.entity.Player;
 
 public class PaperPlayer implements MinecraftPlayer {
 
-    private static Registry<PaperPlayer> registry;
-
-    public static void init() {
-        Registries.register("players", ()->null);
-    }
+    private static Registry<PaperPlayer> registry = Registries.register("players", ()->null);
 
     public static PaperPlayer of(Player player) {
         return registry.get(player.getUniqueId().toString()).orElseGet(() -> {

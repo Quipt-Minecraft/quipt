@@ -1,10 +1,9 @@
-package com.quiptmc.minecraft.utils.heartbeat;
+package com.quiptmc.core.heartbeat;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.data.registries.Registries;
 import com.quiptmc.core.data.registries.Registry;
-import com.quiptmc.minecraft.utils.MinecraftIntegration;
-import com.quiptmc.minecraft.utils.heartbeat.runnable.Heartbeat;
+import com.quiptmc.core.heartbeat.runnable.Heartbeat;
 
 public class HeartbeatUtils {
 
@@ -16,7 +15,7 @@ public class HeartbeatUtils {
 //        return Bukkit.getScheduler().runTaskLater(plugin.plugin().get(), heartbeat, 30);
     }
 
-    public static Heartbeat heartbeat(MinecraftIntegration plugin) {
+    public static Heartbeat heartbeat(QuiptIntegration plugin) {
         return registry.getOrDefault(plugin.name(), null);
     }
 }

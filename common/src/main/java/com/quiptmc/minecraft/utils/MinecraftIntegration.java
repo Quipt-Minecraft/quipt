@@ -2,7 +2,7 @@ package com.quiptmc.minecraft.utils;
 
 import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.server.QuiptServer;
-import com.quiptmc.minecraft.utils.heartbeat.HeartbeatUtils;
+import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import com.quiptmc.minecraft.web.CallbackHandler;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
@@ -60,7 +60,7 @@ public class MinecraftIntegration<T> extends QuiptIntegration {
 
 
     @Override
-    public void destroy() throws IOException {
+    public void destroy() throws Exception {
         super.destroy();
         if (server != null) {
             try {

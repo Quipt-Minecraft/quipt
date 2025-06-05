@@ -6,7 +6,9 @@ import io.papermc.paper.plugin.loader.library.impl.JarLibrary;
 import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.Authentication;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.util.repository.AuthenticationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,15 +43,6 @@ public class Loader implements PluginLoader {
         central.addDependency(new Dependency(new DefaultArtifact("org.json:json:" + properties.getProperty("json_version")), null));
         central.addDependency(new Dependency(new DefaultArtifact("org.eclipse.jgit:org.eclipse.jgit:" + properties.getProperty("jgit_version")), null));
 
-
-        MavenLibraryResolver quipt = new MavenLibraryResolver();
-        quipt.addRepository(new RemoteRepository.Builder("quipt", "default", "https://repo.vanillaflux.com/repository/quipt/").build());
-        quipt.addDependency(new Dependency(new DefaultArtifact("com.quiptmc:quipt-bot:" + properties.getProperty("quipt_bot_version")), null));
-        quipt.addDependency(new Dependency(new DefaultArtifact("com.quiptmc:quipt-core:" + properties.getProperty("quipt_core_version")), null));
-        quipt.addDependency(new Dependency(new DefaultArtifact("com.quiptmc:quipt-minecraft-utility:" + properties.getProperty("quipt_minecraft_utility_version")), null));
-
-
         classpathBuilder.addLibrary(central);
-        classpathBuilder.addLibrary(quipt);
     }
 }

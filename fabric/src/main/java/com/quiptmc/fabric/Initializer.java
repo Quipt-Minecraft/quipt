@@ -27,12 +27,11 @@ import com.quiptmc.minecraft.api.events.EventHandler;
 import com.quiptmc.minecraft.listeners.QuiptPlayerListener;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import com.quiptmc.minecraft.utils.chat.placeholder.PlaceholderUtils;
-import com.quiptmc.minecraft.utils.heartbeat.Flutter;
-import com.quiptmc.minecraft.utils.heartbeat.HeartbeatUtils;
+import com.quiptmc.core.heartbeat.Flutter;
+import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import com.quiptmc.minecraft.utils.sessions.SessionManager;
 import com.quiptmc.minecraft.web.CallbackHandler;
-import com.quiptmc.minecraft.web.HealthReportHandler;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
@@ -101,9 +100,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
         @Override
         public void enable() {
             super.enable();
-
             events().register(new QuiptPlayerListener());
-
             registerConfigs();
             SessionManager.start(this);
             PlaceholderUtils.registerPlaceholders();
@@ -151,7 +148,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
 
 
 
-            HeartbeatUtils.heartbeat(this).addFlutter(new Flutter() {
+            HeartbeatUtils.heartbeat(this).flutter(new Flutter() {
                 private final long started = System.currentTimeMillis();
                 private long last = 0;
 

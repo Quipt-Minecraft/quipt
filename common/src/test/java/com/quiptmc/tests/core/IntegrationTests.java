@@ -25,7 +25,7 @@ public class IntegrationTests {
     void destroyIntegration(QuiptIntegration integration, String test) {
         try {
             integration.destroy();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

@@ -3,6 +3,10 @@ package com.quiptmc.core;
 import com.quiptmc.core.annotations.Nullable;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.config.files.ApiConfig;
+import com.quiptmc.core.data.registries.Registries;
+import com.quiptmc.core.data.registries.Registry;
+import com.quiptmc.core.heartbeat.Flutter;
+import com.quiptmc.core.heartbeat.runnable.Heartbeat;
 import com.quiptmc.core.logger.QuiptLogger;
 import com.quiptmc.core.utils.NetworkUtils;
 import org.json.JSONException;
@@ -13,42 +17,57 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
- * The main interface for the plugin
+ * The main integration interface for the Quipt plugin system.
+ * This abstract class provides core functionality for plugin management,
+ * logging, and API communication.
  */
 public abstract class QuiptIntegration {
 
+    /**
+     * Logger instance for this integration
+     */
     private final QuiptLogger logger = new QuiptLogger(this);
+
+    /**
+     * API manager instance for handling API communications
+     */
     private ApiManager apiManager = null;
 
 
-    public QuiptIntegration() {
+    private final Shutdown shutdown = new Shutdown(this);
 
+    /**
+     * Creates a new QuiptIntegration instance
+     */
+    public QuiptIntegration() {
     }
 
     /**
-     * Get the event handler for the plugin
+     * Gets or creates the API manager instance for this integration.
+     * The API manager handles all API-related communications.
      *
-     * @return The event handler
+     * @return The API manager instance
      */
-
     public final ApiManager api() {
         if (apiManager == null) apiManager = new ApiManager(this);
         return apiManager;
     }
 
-
     /**
-     * Enable the plugin
+     * Called when the plugin is enabled.
+     * Must be implemented by concrete classes to define initialization behavior.
      */
     public abstract void enable();
 
     /**
-     * Log a message to the console
+     * Logs a message to the console with a specific tag.
      *
-     * @param tag     The config that the message is from
+     * @param tag     The configuration section or component that the message is from
      * @param message The message to log
      */
     public void log(String tag, String message) {
@@ -56,61 +75,125 @@ public abstract class QuiptIntegration {
     }
 
     /**
-     * Get the data folder for the plugin
+     * Gets the plugin's data folder.
+     * Must be implemented by concrete classes to specify where plugin data should be stored.
      *
-     * @return The data folder
+     * @return The data folder for this plugin
      */
     public abstract File dataFolder();
 
     /**
-     * Get the name of the plugin
+     * Gets the plugin's name.
+     * Must be implemented by concrete classes to provide the plugin identifier.
      *
      * @return The name of the plugin
      */
     public abstract String name();
 
     /**
-     * Destroy the plugin
+     * Destroys the plugin instance and removes all associated data.
+     * This method will delete the plugin's data folder and all its contents.
      *
      * @throws IOException If an error occurs while deleting the data folder
      */
-    public void destroy() throws IOException {
+    public void destroy() throws Exception {
         if (dataFolder() != null && dataFolder().exists()) {
-            Files.walk(dataFolder().toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            try(Stream<Path> stream = Files.walk(dataFolder().toPath())) {
+                stream.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(file -> {
+                    log("%s".formatted(name()), "Deleting file: " + file.getAbsolutePath());
+                    try {
+                        Files.delete(file.toPath());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            } catch (IOException e) {
+                log(name(), "Failed to delete empty directories: " + e.getMessage());
+            }
             log(name(), "Folder deleted");
         }
     }
 
+    public Heartbeat.FlutterTask shutdown(Flutter task){
+        return shutdown.flutter(task);
+    }
+
+    public void shutdown(){
+        shutdown.run();
+    }
+
     /**
-     * Get the logger for the plugin
+     * Gets the logger instance for this integration.
      *
-     * @return The logger
+     * @return The QuiptLogger instance
      */
     public QuiptLogger logger() {
         return logger;
     }
 
     /**
-     * Get the version of the plugin
+     * Gets the plugin's version.
+     * Must be implemented by concrete classes to provide version information.
      *
-     * @return The version of the plugin
+     * @return The version string of the plugin
      */
     public abstract String version();
 
-    public class ApiManager {
 
-        private final QuiptIntegration integration;
+    private static class Shutdown extends Heartbeat {
+
+        public Shutdown(QuiptIntegration plugin) {
+            super(plugin);
+        }
+
+        @Override
+        public void run() {
+            for (FlutterTask task : queue())
+                flutters().put(task.id(), task);
+            queue().clear();
+            for (int id : disposal())
+                remove(id);
+            disposal().clear();
+
+            for (Map.Entry<Integer, FlutterTask> entry : flutters().entrySet()) {
+                if (!entry.getValue().flutter().run()) {
+                    disposal().add(entry.getKey());
+                    plugin().log("Shutdown Flutter " + entry.getKey(), "There was an error during this flutter. Removing from heartbeat.");
+                }
+            }
+        }
+    }
+
+    /**
+     * Inner class that manages API communications for the integration.
+     * Handles authentication, API requests, and maintains connection state.
+     */
+    public static class ApiManager {
+
         private final ApiConfig apiConfig;
         private UUID uuid = null;
         private boolean offline = false;
 
+        /**
+         * Creates a new ApiManager instance.
+         *
+         * @param integration The parent QuiptIntegration instance
+         */
         public ApiManager(QuiptIntegration integration) {
-            this.integration = integration;
             this.apiConfig = ConfigManager.registerConfig(integration, ApiConfig.class);
         }
 
+        /**
+         * Sends an API request to the specified endpoint.
+         *
+         * @param url  The API endpoint URL
+         * @param data The JSON data to send with the request
+         * @return An ApiResponse containing the result and raw response data
+         * @throws JSONException If there's an error processing JSON data
+         */
         public ApiResponse api(String url, JSONObject data) throws JSONException {
-            if(offline) return new ApiResponse(ApiResponse.RequestResult.NO_ACTION, new JSONObject("{\"error\":\"Offline\"}"));
+            if (offline)
+                return new ApiResponse(ApiResponse.RequestResult.NO_ACTION, new JSONObject("{\"error\":\"Offline\"}"));
             JSONObject secrets = new JSONObject();
             secrets.put("secret", apiConfig.secret);
             data.put("secrets", secrets);
@@ -121,6 +204,10 @@ public abstract class QuiptIntegration {
             return new ApiResponse(raw.optEnum(ApiResponse.RequestResult.class, "result", ApiResponse.RequestResult.NO_ACTION), raw);
         }
 
+        /**
+         * Initializes the API manager by generating or validating the UUID.
+         * Sets the offline status if the API is unreachable.
+         */
         public void initialize() {
             if (apiConfig.id.equals("default")) {
                 uuid = UUID.randomUUID();
@@ -131,11 +218,10 @@ public abstract class QuiptIntegration {
                         if (response.raw.has("error")) {
                             if (response.raw.getString("error").equals("No response")) {
                                 offline = true;
-                                break;
                             } else {
                                 exists = false;
-                                break;
                             }
+                            break;
                         }
                     }
                     uuid = UUID.randomUUID();
@@ -147,23 +233,38 @@ public abstract class QuiptIntegration {
             uuid = UUID.fromString(apiConfig.id);
         }
 
+        /**
+         * Updates the API manager state.
+         * Currently empty implementation.
+         */
         public void update() {
         }
 
+        /**
+         * Gets the UUID for this API manager instance.
+         * Initializes the manager if not already initialized.
+         *
+         * @return The UUID as a string
+         */
         public String uuid() {
             if (uuid == null) initialize();
             return uuid.toString();
         }
 
+        /**
+         * Record class representing an API response.
+         * Contains the request result and raw response data.
+         */
         public record ApiResponse(RequestResult result, JSONObject raw) {
 
+            /**
+             * Enum representing possible API request results
+             */
             public enum RequestResult {
                 SUCCESS,
                 FAILURE,
                 NO_ACTION
             }
-
         }
-
     }
 }

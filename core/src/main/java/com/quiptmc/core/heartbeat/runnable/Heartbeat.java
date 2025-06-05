@@ -1,42 +1,45 @@
-package com.quiptmc.minecraft.utils.heartbeat.runnable;
+package com.quiptmc.core.heartbeat.runnable;
 
 import com.quiptmc.core.QuiptIntegration;
+import com.quiptmc.core.heartbeat.Flutter;
 import com.quiptmc.core.utils.TaskScheduler;
-import com.quiptmc.minecraft.CoreUtils;
-import com.quiptmc.minecraft.utils.heartbeat.Flutter;
-import org.jetbrains.annotations.NotNull;
 
-import java.lang.constant.Constable;
-import java.lang.constant.ConstantDesc;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Heartbeat implements Runnable {
 
-    final List<FlutterTask> FLUTTERS_ADD = new ArrayList<>();
+    private final List<FlutterTask> FLUTTERS_ADD = new ArrayList<>();
     private final Map<Integer, FlutterTask> FLUTTERS = new HashMap<>();
     private final List<Integer> FLUTTERS_REMOVE = new ArrayList<>();
-    QuiptIntegration plugin;
+    private final QuiptIntegration plugin;
     private int last_id = 0;
 
     public Heartbeat(QuiptIntegration plugin) {
         this.plugin = plugin;
     }
 
+    public final QuiptIntegration plugin(){ return plugin;}
+
+    public final Map<Integer, FlutterTask> flutters() { return FLUTTERS;}
+
     @Override
     public void run() {
 
         for (FlutterTask task : FLUTTERS_ADD)
-            FLUTTERS.put(task.getId(), task);
+            FLUTTERS.put(task.id(), task);
         FLUTTERS_ADD.clear();
         for (int id : FLUTTERS_REMOVE)
             FLUTTERS.remove(id);
         FLUTTERS_REMOVE.clear();
 
         for (Map.Entry<Integer, FlutterTask> entry : FLUTTERS.entrySet()) {
-            if (!entry.getValue().getFlutter().run()) {
+            if (!entry.getValue().flutter().run()) {
                 FLUTTERS_REMOVE.add(entry.getKey());
-                CoreUtils.quipt().logger().log("Flutter " + entry.getKey(), "There was an error during this flutter. Removing from heartbeat.");
+                plugin.log("Flutter " + entry.getKey(), "There was an error during this flutter. Removing from heartbeat.");
             }
         }
 
@@ -44,23 +47,27 @@ public class Heartbeat implements Runnable {
 
     }
 
-    public FlutterTask addFlutter(Flutter flutter) {
+    public FlutterTask flutter(Flutter flutter) {
         last_id = last_id + 1;
         FlutterTask task = new FlutterTask(last_id, flutter);
         FLUTTERS_ADD.add(task);
         return task;
     }
 
-    public void removeFlutter(FlutterTask task) {
-        removeFlutter(task.getId());
+    public void remove(FlutterTask task) {
+        remove(task.id());
     }
 
-    public void removeFlutter(int id) {
+    public void remove(int id) {
         FLUTTERS_REMOVE.add(id);
     }
 
-    public Iterable<? extends FlutterTask> getAddQueue() {
+    public List<FlutterTask> queue() {
         return FLUTTERS_ADD;
+    }
+
+    public List<Integer> disposal(){
+        return FLUTTERS_REMOVE;
     }
 
     public static class FlutterTask {
@@ -73,11 +80,11 @@ public class Heartbeat implements Runnable {
             this.flutter = flutter;
         }
 
-        public int getId() {
+        public int id() {
             return id;
         }
 
-        public Flutter getFlutter() {
+        public Flutter flutter() {
             return flutter;
         }
     }

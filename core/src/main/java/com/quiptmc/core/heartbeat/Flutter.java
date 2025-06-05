@@ -1,4 +1,4 @@
-package com.quiptmc.minecraft.utils.heartbeat;
+package com.quiptmc.core.heartbeat;
 
 import java.net.UnknownHostException;
 

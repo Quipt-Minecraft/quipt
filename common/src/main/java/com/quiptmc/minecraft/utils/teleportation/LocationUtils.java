@@ -6,8 +6,8 @@ import com.quiptmc.minecraft.api.MinecraftPlayer;
 import com.quiptmc.core.config.files.TeleportationConfig;
 import com.quiptmc.minecraft.utils.MinecraftIntegration;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
-import com.quiptmc.minecraft.utils.heartbeat.Flutter;
-import com.quiptmc.minecraft.utils.heartbeat.HeartbeatUtils;
+import com.quiptmc.core.heartbeat.Flutter;
+import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import com.quiptmc.minecraft.utils.teleportation.points.TeleportationPoint;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class LocationUtils {
             });
             return true;
         };
-        HeartbeatUtils.heartbeat(integration).addFlutter(flutter);
+        HeartbeatUtils.heartbeat(integration).flutter(flutter);
     }
 
     public static void put(TeleportationPoint point) {

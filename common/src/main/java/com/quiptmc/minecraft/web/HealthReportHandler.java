@@ -5,8 +5,8 @@ import com.quiptmc.core.logger.QuiptLogger;
 import com.quiptmc.core.server.QuiptServer;
 import com.quiptmc.core.server.QuiptServlet;
 import com.quiptmc.minecraft.utils.chat.placeholder.PlaceholderUtils;
-import com.quiptmc.minecraft.utils.heartbeat.Flutter;
-import com.quiptmc.minecraft.utils.heartbeat.HeartbeatUtils;
+import com.quiptmc.core.heartbeat.Flutter;
+import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
@@ -44,7 +44,7 @@ public class HealthReportHandler extends QuiptServlet {
             }
         }
 
-        HeartbeatUtils.heartbeat(CoreUtils.quipt()).addFlutter(new Flutter() {
+        HeartbeatUtils.heartbeat(CoreUtils.quipt()).flutter(new Flutter() {
             long lastRan = 0;
             long delay = TimeUnit.MILLISECONDS.convert(5, TimeUnit.SECONDS);
 
