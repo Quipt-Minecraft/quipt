@@ -14,7 +14,7 @@ import com.quiptmc.discord.api.guild.QuiptGuild;
 import com.quiptmc.discord.api.guild.channel.QuiptTextChannel;
 import com.quiptmc.core.config.files.DiscordConfig;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
-import com.quiptmc.minecraft.utils.sessions.SessionManager;
+import com.quiptmc.minecraft.utils.sessions.SessionManager2;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +35,7 @@ public class QuiptPlayerListener implements Listener.QuiptPlayerJoinListener, Li
                 }
             }
         }
-        SessionManager.startSession(player);
+        SessionManager2.startSession(player);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class QuiptPlayerListener implements Listener.QuiptPlayerJoinListener, Li
                 }
             }
         }
-        SessionManager.finishSession(e.player());
+        SessionManager2.finishSession(e.player());
     }
 
     @Override

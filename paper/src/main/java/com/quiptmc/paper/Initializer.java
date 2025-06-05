@@ -25,7 +25,7 @@ import com.quiptmc.minecraft.utils.chat.placeholder.PlaceholderUtils;
 import com.quiptmc.core.heartbeat.Flutter;
 import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
-import com.quiptmc.minecraft.utils.sessions.SessionManager;
+import com.quiptmc.minecraft.utils.sessions.SessionManager2;
 import com.quiptmc.minecraft.web.CallbackHandler;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
 import com.quiptmc.paper.api.PaperIntegration;
@@ -95,7 +95,7 @@ public final class Initializer extends JavaPlugin {
             super.enable();
             events().register(new QuiptPlayerListener());
             registerConfigs();
-            SessionManager.start(this);
+            SessionManager2.start(this);
             PlaceholderUtils.registerPlaceholders();
             MessageUtils.start();
 

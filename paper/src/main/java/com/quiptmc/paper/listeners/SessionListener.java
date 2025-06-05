@@ -1,10 +1,8 @@
 package com.quiptmc.paper.listeners;
 
-import com.quiptmc.minecraft.utils.sessions.SessionManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SessionListener implements Listener {
