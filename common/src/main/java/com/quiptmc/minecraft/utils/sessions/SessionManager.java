@@ -13,7 +13,7 @@ public class SessionManager {
         return sessions.get(sessionId).orElseThrow(() -> new IllegalArgumentException("Session " + sessionId + " not found"));
     }
 
-    public Session register(Session.Data sessionData) {
+    public static Session register(Session.Data sessionData) {
         UUID id = UUID.randomUUID();
         while(sessions.get(id.toString()).isPresent()) {
             id = UUID.randomUUID(); // Ensure unique session ID
