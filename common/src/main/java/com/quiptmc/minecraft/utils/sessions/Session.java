@@ -2,6 +2,7 @@ package com.quiptmc.minecraft.utils.sessions;
 
 import com.quiptmc.core.annotations.Nullable;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
+import org.json.JSONObject;
 
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ public class Session {
     private final UUID id;
     @Nullable
     private final MinecraftPlayer player;
+    private final JSONObject data = new JSONObject();
 
     public Session(UUID id) {
         this.id = id;
@@ -22,6 +24,10 @@ public class Session {
         this.id = id;
         this.type = Type.PLAYER;
         this.player = player;
+    }
+
+    public final JSONObject data() {
+        return data;
     }
 
     public Type type() {
