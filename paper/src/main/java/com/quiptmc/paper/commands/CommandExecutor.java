@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
+import com.quiptmc.paper.api.PaperIntegration;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
@@ -20,11 +21,11 @@ import java.util.List;
 import static net.kyori.adventure.text.Component.text;
 
 public abstract class CommandExecutor {
-    private final JavaPlugin plugin;
+    private final PaperIntegration integration;
     private final String cmd;
 
-    public CommandExecutor(JavaPlugin plugin, String cmd) {
-        this.plugin = plugin;
+    public CommandExecutor(PaperIntegration integration, String cmd) {
+        this.integration = integration;
         this.cmd = cmd;
     }
 
@@ -32,8 +33,8 @@ public abstract class CommandExecutor {
         return cmd;
     }
 
-    public JavaPlugin plugin() {
-        return plugin;
+    public PaperIntegration integration() {
+        return integration;
     }
 
     public abstract LiteralCommandNode<CommandSourceStack> execute();
@@ -88,7 +89,7 @@ public abstract class CommandExecutor {
         }
 
         public void register() {
-            @NotNull LifecycleEventManager<Plugin> manager = cmd.plugin().getLifecycleManager();
+            @NotNull LifecycleEventManager<Plugin> manager = cmd.integration.plugin().getLifecycleManager();
             manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
                 final Commands commands = event.registrar();
                 commands.register(cmd.execute(), desc, List.of(aliases));
