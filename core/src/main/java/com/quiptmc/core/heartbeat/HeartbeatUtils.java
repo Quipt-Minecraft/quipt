@@ -10,6 +10,9 @@ public class HeartbeatUtils {
     private static final Registry<Heartbeat> registry = Registries.register("heartbeat", ()->null);
 
     public static void init(QuiptIntegration plugin) {
+        if(registry.get(plugin.name()).isPresent()) {
+            throw new IllegalStateException("Heartbeat for " + plugin.name() + " is already initialized.");
+        }
         Heartbeat heartbeat = new Heartbeat(plugin);
         registry.register(plugin.name(), heartbeat);
 //        return Bukkit.getScheduler().runTaskLater(plugin.plugin().get(), heartbeat, 30);

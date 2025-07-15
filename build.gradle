@@ -8,8 +8,10 @@ plugins {
     id 'maven-publish'
     id 'fabric-loom' version '1.10-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
-    id 'com.modrinth.minotaur' version '2.+' apply false
+    id "com.modrinth.minotaur" version "2.+" apply false
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id("xyz.jpenilla.run-paper") version "2.3.1" apply false
+
 //    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
 
@@ -81,6 +83,37 @@ subprojects {
         implementation "org.json:json:$json_version"
         implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
     }
+}
+
+configure(subprojects.findAll {it.name == "paper"}) {
+    apply plugin: 'com.modrinth.minotaur'
+    apply plugin: 'io.github.dexman545.outlet'
+
+    apply plugin: "xyz.jpenilla.run-paper"
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    tasks {
+        runServer {
+            minecraftVersion("${minecraft_version}")
+        }
+
+    }
+
+    modrinth {
+
+        token = System.getenv("MODRINTH_TOKEN")
+        def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+        projectId = "${modrinth_id}"
+        versionNumber = "${version}"
+        versionType = "${build_status}"
+        gameVersions = outlet.mcVersions()
+        uploadFile = jar
+        loaders = [project.name]
+        syncBodyFrom = rootProject.file("readme.md").text
+        dependencies {}
+    }
+
+
 }
 
 

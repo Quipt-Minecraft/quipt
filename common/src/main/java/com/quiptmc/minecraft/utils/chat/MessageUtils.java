@@ -1,10 +1,10 @@
 package com.quiptmc.minecraft.utils.chat;
 
-import com.quiptmc.minecraft.CoreUtils;
 import com.quiptmc.core.config.ConfigManager;
+import com.quiptmc.core.config.files.MessagesConfig;
 import com.quiptmc.core.data.registries.Registries;
 import com.quiptmc.core.data.registries.Registry;
-import com.quiptmc.core.config.files.MessagesConfig;
+import com.quiptmc.minecraft.CoreUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -18,7 +18,7 @@ import static net.kyori.adventure.text.Component.translatable;
 
 public class MessageUtils {
 
-    private static final Registry<Component> registry = Registries.register("messages", ()->null);
+    private static final Registry<Component> registry = Registries.register("messages", () -> null);
 
     private static MessagesConfig config;
 
@@ -51,12 +51,47 @@ public class MessageUtils {
         register("cmd.session.end", "{\"text\":\"Session ended\",\"color\":\"green\"}");
         register("cmd.session.reward", "{\"text\":\"You have been rewarded with [0]\",\"color\":\"green\"}");
         register("cmd.session.task", "{\"text\":\"You have been assigned the task [0]\",\"color\":\"green\"}");
-        register("quipt.tpr.sent.requester", text().append(text("Teleport request sent to ", TextColor.color(325234))).append(text("[0]", TextColor.color(0x6695FA))).append(text(".", TextColor.color(325234))).build());
-        register("quipt.tpr.sent.target", text().append(text("You have a teleport request from ", TextColor.color(325234))).append(text("[0]", TextColor.color(23434234))).append(text(". You have ", TextColor.color(325234)).append(text("30", NamedTextColor.RED).append(text(" seconds to respond.", TextColor.color(325234))))).build());
-        register("quipt.tpr.accepted.requester", text().append(text("Teleport request accepted from ", TextColor.color(325234))).append(text("[0]", TextColor.color(23434234))).append(text(".", TextColor.color(325234))).build());
-        register("quipt.tpr.accepted.target", text().append(text("Teleport request accepted from ", TextColor.color(325234))).append(text("[0]", TextColor.color(23434234))).append(text(".", TextColor.color(325234))).build());
-        register("quipt.tpr.denied.requester", text().append(text("Teleport request denied or timed-out from ", TextColor.color(325234))).append(text("[0]", TextColor.color(23434234))).append(text(".", TextColor.color(325234))).build());
-        register("quipt.tpr.denied.target", text().append(text("Teleport request denied or timed-out from ", TextColor.color(325234))).append(text("[0]", TextColor.color(23434234))).append(text(".", TextColor.color(325234))).build());
+        register("quipt.tpr.sent.requester", text()
+                .append(text("Teleport request sent to ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(0x6695FA)))
+                .append(text(".", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.sent.target", text()
+                .append(text("You have a teleport request from ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(". You have ", TextColor.color(0xF6F363)))
+                .append(text("[1]", NamedTextColor.RED))
+                .append(text(" seconds to respond.", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.accepted.requester", text()
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(" accepted ", TextColor.color(325234)))
+                .append(text("your teleport request.", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.accepted.target", text()
+                .append(text("Teleport request", TextColor.color(0xF6F363)))
+                .append(text(" accepted ", TextColor.color(325234)))
+                .append(text("from ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(".", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.denied.requester", text()
+                .append(text("Teleport request to ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(" was ", TextColor.color(0xF6F363)))
+                .append(text("denied", NamedTextColor.RED))
+                .append(text(".", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.denied.target", text()
+                .append(text("Denied ", NamedTextColor.RED))
+                .append(text("teleport request from ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(".", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.timeout.requester", text()
+                .append(text("Teleport request to ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(" timed out", TextColor.color(0xF68D19)))
+                .append(text(".", TextColor.color(0xF6F363))).build());
+        register("quipt.tpr.timeout.target", text()
+                .append(text("Teleport request from ", TextColor.color(0xF6F363)))
+                .append(text("[0]", TextColor.color(23434234)))
+                .append(text(" timed out", TextColor.color(0xF68D19)))
+                .append(text(".", TextColor.color(0xF6F363))).build());
     }
 
     public static Component deserialize(JSONObject json) {

@@ -9,9 +9,11 @@
 package com.quiptmc.paper.commands.executors;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.quiptmc.paper.api.PaperIntegration;
 import com.quiptmc.paper.commands.CommandExecutor;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
+import com.quiptmc.paper.data.PaperPlayer;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
@@ -23,8 +25,8 @@ import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class TeleportRequestCommand extends CommandExecutor {
 
-    public TeleportRequestCommand(JavaPlugin plugin) {
-        super(plugin, "teleportrequest");
+    public TeleportRequestCommand(PaperIntegration integration) {
+        super(integration, "teleportrequest");
     }
 
     @Override
@@ -35,7 +37,7 @@ public class TeleportRequestCommand extends CommandExecutor {
                             if(!(context.getSource().getSender() instanceof Player player)) return logError(context, MessageUtils.get("cmd.error.player_only"));
                             PlayerSelectorArgumentResolver targetSelector = context.getArgument("player", PlayerSelectorArgumentResolver.class);
                             targetSelector.resolve(context.getSource()).forEach(target -> {
-//                                LocationUtils.request(player, target);
+                                LocationUtils.request(PaperPlayer.of(player), PaperPlayer.of(target));
                             });
 //                            target.sendMessage(text("test"));
                             return 1;

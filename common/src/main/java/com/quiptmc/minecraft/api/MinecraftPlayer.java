@@ -16,7 +16,11 @@ public interface MinecraftPlayer extends Audience {
     void teleport(MinecraftPlayer target);
 
     default Component name(){
-        return get(Identity.DISPLAY_NAME).orElseThrow();
+        return get(Identity.DISPLAY_NAME).orElse(Component.text(getName()));
+    }
+
+    default String getName() {
+        return null;
     }
 
     default UUID uuid(){

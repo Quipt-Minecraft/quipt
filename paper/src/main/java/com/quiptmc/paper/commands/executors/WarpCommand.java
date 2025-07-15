@@ -9,6 +9,7 @@
 package com.quiptmc.paper.commands.executors;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.quiptmc.paper.api.PaperIntegration;
 import com.quiptmc.paper.commands.CommandExecutor;
 import com.quiptmc.paper.commands.executors.arguments.WarpArgumentType;
 import com.quiptmc.minecraft.utils.teleportation.points.TeleportationPoint;
@@ -19,8 +20,8 @@ import static io.papermc.paper.command.brigadier.Commands.argument;
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class WarpCommand extends CommandExecutor {
-    public WarpCommand(JavaPlugin plugin) {
-        super(plugin, "warp");
+    public WarpCommand(PaperIntegration integration) {
+        super(integration, "warp");
     }
 
     @Override

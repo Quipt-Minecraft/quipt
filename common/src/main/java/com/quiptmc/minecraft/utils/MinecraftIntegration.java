@@ -4,13 +4,14 @@ import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.server.QuiptServer;
 import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
+import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
 import com.quiptmc.minecraft.web.CallbackHandler;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
 
 import java.io.File;
 import java.io.IOException;
 
-public class MinecraftIntegration<T> extends QuiptIntegration {
+public class MinecraftIntegration<T extends ServerLoader<?>> extends QuiptIntegration {
 
     public final String NAME;
     private final File dataFolder;
@@ -31,6 +32,8 @@ public class MinecraftIntegration<T> extends QuiptIntegration {
         if (!dataFolder.exists())
             log("Initializer", "Attempting to create data folder (" + dataFolder.getPath() + "): " + dataFolder.mkdirs());
         HeartbeatUtils.init(this);
+        LocationUtils.start(this);
+
 
     }
 
