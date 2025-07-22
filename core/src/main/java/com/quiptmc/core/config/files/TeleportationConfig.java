@@ -20,6 +20,9 @@ import java.io.File;
 public class TeleportationConfig extends Config {
 
     @ConfigValue
+    public int request_timeout = 60; // in seconds
+
+    @ConfigValue
     public JSONObject locations = new JSONObject();
 
     public TeleportationConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {

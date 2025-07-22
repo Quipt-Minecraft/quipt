@@ -7,23 +7,8 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 
 public class FabricIntegration extends MinecraftIntegration<ServerLoader<ModMetadata>> {
 
-
-
-
-
-
     public FabricIntegration(String name, ServerLoader<ModMetadata> loader) {
         super(name, loader);
-    }
-
-
-
-    @Override
-    public void enable() {
-        super.enable();
-        HeartbeatUtils.init(this);
-
-
     }
 
 }

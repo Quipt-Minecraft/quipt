@@ -1,6 +1,7 @@
 package com.quiptmc.paper.commands.executors;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.quiptmc.paper.api.PaperIntegration;
 import com.quiptmc.paper.commands.CommandExecutor;
 import com.quiptmc.paper.commands.executors.arguments.CommandBuilderArgument;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -15,8 +16,8 @@ import static io.papermc.paper.command.brigadier.Commands.argument;
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class SudoCommand extends CommandExecutor {
-    public SudoCommand(JavaPlugin plugin) {
-        super(plugin, "sudo");
+    public SudoCommand(PaperIntegration integration) {
+        super(integration, "sudo");
     }
 
     @Override

@@ -23,7 +23,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) throws IOException, NoSuchAlgorithmException {
 
-        LocationUtils.request(PaperPlayer.of(e.getPlayer()), PaperPlayer.of(e.getPlayer()));
+//        LocationUtils.request(PaperPlayer.of(e.getPlayer()), PaperPlayer.of(e.getPlayer()));
 
 
 //        QuiptPlayerJoinEvent joinEvent = new QuiptPlayerJoinEvent(QuiptConversionUtils.convertPlayer(e.getPlayer()), MessageUtils.plainText(e.joinMessage()));

@@ -26,6 +26,7 @@ import com.quiptmc.core.heartbeat.Flutter;
 import com.quiptmc.core.heartbeat.HeartbeatUtils;
 import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import com.quiptmc.minecraft.utils.sessions.SessionManager2;
+import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
 import com.quiptmc.minecraft.web.CallbackHandler;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
 import com.quiptmc.paper.api.PaperIntegration;
@@ -52,11 +53,10 @@ public final class Initializer extends JavaPlugin {
             if (bukkitMat.isLegacy()) continue;
             materialRegistry.register(bukkitMat.name(), new MinecraftMaterial(bukkitMat.translationKey(), bukkitMat.name(), bukkitMat.getMaxStackSize(), bukkitMat.isBlock(), bukkitMat.isItem(), bukkitMat.isAir()));
         }
+        PaperIntegration quipt = new Quipt("Quipt", new ServerLoader<>(ServerLoader.Type.PAPER, this));
+        CoreUtils.init(quipt);
 
-
-        CoreUtils.init(new Quipt("Quipt", new ServerLoader<>(ServerLoader.Type.PAPER, this)));
-
-        CommandManager.init(this);
+        CommandManager.init(quipt);
 
         new PlayerListener(this);
         new EventListener(this);
@@ -93,6 +93,7 @@ public final class Initializer extends JavaPlugin {
         @Override
         public void enable() {
             super.enable();
+
             events().register(new QuiptPlayerListener());
             registerConfigs();
             SessionManager2.start(this);

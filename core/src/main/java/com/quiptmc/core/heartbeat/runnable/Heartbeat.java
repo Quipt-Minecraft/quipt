@@ -20,6 +20,7 @@ public class Heartbeat implements Runnable {
 
     public Heartbeat(QuiptIntegration plugin) {
         this.plugin = plugin;
+        run();
     }
 
     public final QuiptIntegration plugin(){ return plugin;}

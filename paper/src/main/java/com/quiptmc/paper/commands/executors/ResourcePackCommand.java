@@ -2,6 +2,7 @@ package com.quiptmc.paper.commands.executors;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc.minecraft.CoreUtils;
+import com.quiptmc.paper.api.PaperIntegration;
 import com.quiptmc.paper.commands.CommandExecutor;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -16,8 +17,8 @@ import static net.kyori.adventure.text.Component.text;
 
 public class ResourcePackCommand extends CommandExecutor {
 
-    public ResourcePackCommand(JavaPlugin plugin) {
-        super(plugin, "resourcepack");
+    public ResourcePackCommand(PaperIntegration integration) {
+        super(integration, "resourcepack");
     }
 
     // /rp update [url]
@@ -29,7 +30,6 @@ public class ResourcePackCommand extends CommandExecutor {
             return 1;
         })).then(literal("reload").executes(context -> {
             CommandSender sender = context.getSource().getSender();
-
             if (!(sender instanceof Player player))
                 return logError(sender, MessageUtils.get("cmd.error.player_only"));
 //            try {

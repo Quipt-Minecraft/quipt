@@ -39,9 +39,13 @@ public class Loader implements PluginLoader {
         }
         System.out.println(properties);
         MavenLibraryResolver central = new MavenLibraryResolver();
-        central.addRepository(new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2/").build());
+
+        central.addRepository(new RemoteRepository.Builder("central", "default", MavenLibraryResolver.MAVEN_CENTRAL_DEFAULT_MIRROR).build());
         central.addDependency(new Dependency(new DefaultArtifact("org.json:json:" + properties.getProperty("json_version")), null));
         central.addDependency(new Dependency(new DefaultArtifact("org.eclipse.jgit:org.eclipse.jgit:" + properties.getProperty("jgit_version")), null));
+
+        central.addDependency(new Dependency(new DefaultArtifact("net.kyori:adventure-api:" + properties.getProperty("adventure_api_version")), null));
+
 
         classpathBuilder.addLibrary(central);
     }

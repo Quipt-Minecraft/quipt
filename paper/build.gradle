@@ -1,7 +1,5 @@
 plugins {
     id 'java'
-    id "io.papermc.paperweight.userdev" version "2.0.0-beta.16"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 
@@ -23,14 +21,17 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter"
     testImplementation "ch.qos.logback:logback-classic:$logback_version"
 
-
-    paperweight.paperDevBundle("${minecraft_version}-${paperweight_build}")
+    compileOnly("io.papermc.paper:paper-api:${minecraft_version}-${paperweight_build}")
+//    paperweight.paperDevBundle("${minecraft_version}-${paperweight_build}")
 
 
     implementation "org.json:json:$json_version"
     implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
     implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
     implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
+
+    implementation("net.kyori:adventure-api:$adventure_api_version")
+
 
     implementation project(":common")
     implementation project(":core")
@@ -39,34 +40,16 @@ dependencies {
 }
 
 
-modrinth {
 
-    token = System.getenv("MODRINTH_TOKEN")
-    def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
-    projectId = "${modrinth_id}"
-    versionNumber = "${version}"
-    versionType = "${build_status}"
-    gameVersions = outlet.mcVersions()
-    uploadFile = jar
-    loaders = [project.name]
-    syncBodyFrom = rootProject.file("readme.md").text
-    dependencies {}
-}
 
 test {
     useJUnitPlatform()
 }
 
-tasks {
-    runServer {
-        minecraftVersion("${minecraft_version}")
-    }
 
-}
-
-tasks.assemble {
-    dependsOn(tasks.reobfJar)
-}
+//tasks.assemble {
+//    dependsOn(tasks.reobfJar)
+//}
 
 processResources {
     def pluginProperties = [minecraft_version: minecraft_version, author: author, name: rootProject.name, project_version: project_version]
@@ -112,6 +95,6 @@ tasks.build {
 //    dependsOn(tasks.reobfJar)
 }
 
-tasks.reobfJar {
-    dependsOn("mergeJar")
-}
+//tasks.reobfJar {
+//    dependsOn("mergeJar")
+//}

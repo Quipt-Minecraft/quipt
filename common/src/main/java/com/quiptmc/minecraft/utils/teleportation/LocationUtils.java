@@ -8,11 +8,13 @@ import com.quiptmc.minecraft.utils.MinecraftIntegration;
 import com.quiptmc.minecraft.utils.chat.MessageUtils;
 import com.quiptmc.core.heartbeat.Flutter;
 import com.quiptmc.core.heartbeat.HeartbeatUtils;
+import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import com.quiptmc.minecraft.utils.teleportation.points.TeleportationPoint;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class LocationUtils {
 
@@ -21,17 +23,23 @@ public class LocationUtils {
     private static final List<TeleportRequest> requestsRemoveQueue = new ArrayList<>();
     static TeleportationConfig config;
 
-    public static void start(MinecraftIntegration integration) {
+    public static void start(MinecraftIntegration<? extends ServerLoader<?>> integration) {
         config = ConfigManager.registerConfig(CoreUtils.quipt(), TeleportationConfig.class);
         Flutter flutter = () -> {
-            requests.addAll(requestsAddQueue);
-            requestsAddQueue.clear();
-            requests.removeAll(requestsRemoveQueue);
-            requestsRemoveQueue.clear();
+            if(!requestsAddQueue.isEmpty()) {
+                requests.addAll(requestsAddQueue);
+                requestsAddQueue.clear();
+            }
+            if(!requestsRemoveQueue.isEmpty()) {
+                requests.removeAll(requestsRemoveQueue);
+                requestsRemoveQueue.clear();
+            }
+
             requests.forEach(request -> {
-                if (System.currentTimeMillis() - request.created() > 30000) {
-                    request.deny();
+                if (System.currentTimeMillis() - request.created() > TimeUnit.SECONDS.toMillis(config.request_timeout)) {
                     requestsRemoveQueue.add(request);
+                    request.requester.sendMessage(MessageUtils.get("quipt.tpr.timeout.requester", MessageUtils.plainText(request.target().name())));
+                    request.target.sendMessage(MessageUtils.get("quipt.tpr.timeout.target", MessageUtils.plainText(request.requester().name())));
                 }
             });
             return true;
@@ -73,6 +81,7 @@ public class LocationUtils {
     }
 
     public static TeleportRequest request(MinecraftPlayer requester, MinecraftPlayer target) {
+        System.out.println("Teleport request from " + requester.name() + " to " + target.name());
         TeleportRequest request = new TeleportRequest(requester, target);
         request.send();
         requestsAddQueue.add(request);
@@ -80,7 +89,7 @@ public class LocationUtils {
     }
 
     public static List<TeleportRequest> requests() {
-        return requests;
+        return new ArrayList<>(requests);
     }
 
     public static class TeleportRequest {
@@ -110,7 +119,7 @@ public class LocationUtils {
 
         public void send() {
             requester.sendMessage(MessageUtils.get("quipt.tpr.sent.requester", MessageUtils.plainText(target.name())));
-            target.sendMessage(MessageUtils.get("quipt.tpr.sent.target", MessageUtils.plainText(requester.name())));
+            target.sendMessage(MessageUtils.get("quipt.tpr.sent.target", MessageUtils.plainText(requester.name()), config.request_timeout));
         }
 
         public void accept() {
