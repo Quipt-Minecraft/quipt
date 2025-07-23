@@ -91,4 +91,4 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           DISCORD_CHANNEL: ${{ secrets.DISCORD_CHANNEL }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          SNAPSHOT: true
+          SNAPSHOT: "true"
