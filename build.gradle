@@ -93,7 +93,7 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: "xyz.jpenilla.run-paper"
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    if (project.hasProperty('version')) {
+    if (branch != '') {
         println "Detected custom version '${project.version}', skipping Modrinth upload."
 
         // Disable Minotaur tasks
@@ -171,9 +171,12 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
     tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 
-
-    task discord {
+    tasks.register('discord') {
         doLast {
+            if(branch != '') {
+                println "Detected custom version '${project.version}', skipping Discord upload."
+                return
+            }
             try {
                 var channel = System.getenv("DISCORD_CHANNEL")
                 var token = System.getenv("DISCORD_TOKEN")
@@ -192,9 +195,9 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
                 def engine = new SimpleTemplateEngine()
                 def template = engine.createTemplate(jsonTemplate)
                 def binding = [
-                        project: project,
+                        project    : project,
                         rootProject: rootProject,
-                        version: version,
+                        version    : version,
                         modrinth_id: modrinth_id
                 ]
 
