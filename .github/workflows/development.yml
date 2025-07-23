@@ -83,8 +83,7 @@ jobs:
         run: chmod -c 777 gradlew
       - name: Publish to Github Packages
         run: |
-          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
-          ./gradlew publish -Pversion=-${{ env.BRANCH_NAME }}
+          ./gradlew publish -Pversion=dev
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
