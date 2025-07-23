@@ -96,7 +96,7 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: "xyz.jpenilla.run-paper"
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    if (branch != '') {
+    if (snapshot) {
         println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
 
         // Disable Minotaur tasks
