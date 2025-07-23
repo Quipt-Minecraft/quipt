@@ -83,6 +83,7 @@ jobs:
         run: chmod -c 777 gradlew
       - name: Publish to Github Packages
         run: |
+          echo "BRANCH_NAME is $BRANCH_NAME"
           ./gradlew publish -PisSnapshot=true
         env:
           GITHUB_ACTOR: ${{ github.actor }}
