@@ -16,7 +16,8 @@ plugins {
 }
 
 group = "com.quiptmc"
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+String branch = project.hasProperty('branch') ? project.property('branch') : ''
+version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}${branch}"
 
 repositories {
     mavenCentral()
@@ -91,6 +92,15 @@ configure(subprojects.findAll {it.name == "paper"}) {
 
     apply plugin: "xyz.jpenilla.run-paper"
     apply plugin: 'com.github.johnrengelman.shadow'
+
+    if (project.hasProperty('version')) {
+        println "Detected custom version '${project.version}', skipping Modrinth upload."
+
+        // Disable Minotaur tasks
+        tasks.matching { it.name.contains("modrinth") }.configureEach {
+            enabled = false
+        }
+    }
 
     tasks {
         runServer {
