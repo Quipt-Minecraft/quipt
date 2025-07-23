@@ -81,11 +81,9 @@ dependencies {
 //    implementation project(path: ":bot"     ,    configuration: "namedElements" )
 }
 
-String branch = project.hasProperty('version') ? '-SNAPSHOT' : ''
 
-
-if (branch != '') {
-    println "Detected custom version '${version}', (${branch}) skipping Modrinth upload."
+if (snapshot) {
+    println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
 
     // Disable Minotaur tasks
     tasks.matching { it.name.contains("modrinth") }.configureEach {

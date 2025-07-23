@@ -16,10 +16,10 @@ plugins {
 }
 
 group = "com.quiptmc"
-String branch = project.hasProperty('snapshot') ? '-SNAPSHOT' : ''
-System.out.println("Branch: ${branch}")
+if(project.hasProperty('snapshot')) snapshot = project.property('snapshot')
+System.out.println("Snapshot: ${snapshot}")
 System.out.println("Build status: ${build_status}")
-version = "${project_version}-MC${minecraft_version}-${build_number}" + branch
+version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot ? "-SNAPSHOT" : "")
 System.out.println("Full version: ${version}")
 
 repositories {
@@ -97,7 +97,7 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     if (branch != '') {
-        println "Detected custom version '${version}', (${branch}) skipping Modrinth upload."
+        println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
 
         // Disable Minotaur tasks
         tasks.matching { it.name.contains("modrinth") }.configureEach {
@@ -176,8 +176,8 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 
     tasks.register('discord') {
         doLast {
-            if(branch != '') {
-                println "Detected custom version '${version}', (${branch}) skipping Discord upload."
+            if(snapshot) {
+                println "Detected custom version '${version}', (${snapshot}) skipping Discord upload."
                 return
             }
             try {
