@@ -94,7 +94,10 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: "xyz.jpenilla.run-paper"
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    if (snapshot) {
+    snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
+    version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+
+    if (snapshot == true) {
         println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
 
         // Disable Minotaur tasks
@@ -153,7 +156,8 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 //    apply plugin: 'com.github.johnrengelman.shadow'
 
 
-
+    snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
+    version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
 
     outlet {

@@ -81,6 +81,8 @@ dependencies {
 //    implementation project(path: ":bot"     ,    configuration: "namedElements" )
 }
 
+snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
+version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
 if (snapshot) {
     println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
