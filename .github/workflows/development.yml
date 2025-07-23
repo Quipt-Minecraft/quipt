@@ -87,6 +87,7 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ github.ref_name }}
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           DISCORD_CHANNEL: ${{ secrets.DISCORD_CHANNEL }}
