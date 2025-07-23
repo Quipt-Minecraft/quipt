@@ -16,14 +16,8 @@ plugins {
 }
 
 group = "com.quiptmc"
-System.out.println("Branch name: ${System.getenv("BRANCH_NAME")}")
-snapshot = System.getenv("BRANCH_NAME") == null ? snapshot : true;
-System.out.println("Snapshot: ${snapshot}")
-System.out.println("Build status: ${build_status}")
+snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
 version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
-System.out.println("Full version: ${version}")
-
-System.out.println("Snapshot 2: ${snapshot}")
 
 repositories {
     mavenCentral()
@@ -41,7 +35,8 @@ test {
 
 allprojects {
     group = "com.quiptmc"
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+    snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
+    version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
     repositories {
         mavenCentral()

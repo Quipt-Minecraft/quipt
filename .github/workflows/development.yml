@@ -52,7 +52,7 @@ jobs:
         if: always()
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -PisSnapshot=true
         env:
           BRANCH_NAME: ${{ github.ref_name }}
 
