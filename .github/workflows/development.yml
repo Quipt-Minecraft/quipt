@@ -83,7 +83,7 @@ jobs:
         run: chmod -c 777 gradlew
       - name: Publish to Github Packages
         run: |
-          ./gradlew publish -Psnapshot=true
+          ./gradlew publish -PisSnapshot=true
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

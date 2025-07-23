@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "com.quiptmc"
-if(project.hasProperty('snapshot')) snapshot = project.property('snapshot')
+if(project.hasProperty('isSnapshot')) snapshot = project.property('isSnapshot')
 System.out.println("Snapshot: ${snapshot}")
 System.out.println("Build status: ${build_status}")
 version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot ? "-SNAPSHOT" : "")
