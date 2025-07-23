@@ -17,7 +17,7 @@ plugins {
 
 group = "com.quiptmc"
 String branch = project.hasProperty('version') ? '-SNAPSHOT' : ''
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + project.hasProperty('version') ? "-SNAPSHOT" : ""
+version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (project.hasProperty('version') ? "-SNAPSHOT" : "")
 
 repositories {
     mavenCentral()
