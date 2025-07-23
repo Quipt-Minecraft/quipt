@@ -17,7 +17,7 @@ plugins {
 
 group = "com.quiptmc"
 snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
 repositories {
     mavenCentral()
@@ -36,7 +36,7 @@ test {
 allprojects {
     group = "com.quiptmc"
     snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-    version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
     repositories {
         mavenCentral()
@@ -95,7 +95,7 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-    version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
     if (snapshot == true) {
         println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
@@ -157,7 +157,7 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 
 
     snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-    version = "${project_version}-MC${minecraft_version}-${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
 
 
     outlet {
