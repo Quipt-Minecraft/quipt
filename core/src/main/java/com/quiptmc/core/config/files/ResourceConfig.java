@@ -12,8 +12,7 @@ import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.ConfigValue;
-import com.quiptmc.core.config.files.resource.AuthNestedConfig;
-import com.quiptmc.core.config.files.resource.HashesNestedConfig;
+import com.quiptmc.core.data.JsonSerializable;
 
 import java.io.File;
 
@@ -27,13 +26,30 @@ public class ResourceConfig extends Config {
     public String repo_branch = "main";
 
     @ConfigValue
-    public AuthNestedConfig<ResourceConfig> auth = null;
+    public Auth auth = new Auth();
 
     @ConfigValue
-    public HashesNestedConfig<ResourceConfig> hashes = null;
+    public Hashes hashes = new Hashes();
 
 
     public ResourceConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
+    }
+
+    public static class Auth implements JsonSerializable {
+
+        public boolean isPrivate = false;
+
+        public String username = "username";
+
+        public String password = "password";
+    }
+
+
+    public static class Hashes implements JsonSerializable {
+
+        public String encrypted_zip_hash = "";
+
+        public String commit_hash = "";
     }
 }

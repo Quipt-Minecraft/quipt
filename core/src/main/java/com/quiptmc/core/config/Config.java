@@ -15,6 +15,7 @@ import com.fasterxml.jackson.dataformat.toml.TomlMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.quiptmc.core.QuiptIntegration;
+import com.quiptmc.core.data.JsonSerializable;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -119,7 +120,7 @@ public abstract class Config {
         for (Field field : getContentValues()) {
             try {
                 Object value = field.get(this);
-                if (value instanceof NestedConfig) value = ((NestedConfig) value).json();
+                if(value instanceof JsonSerializable serializable) value = serializable.json();
                 data.put(field.getName(), value);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

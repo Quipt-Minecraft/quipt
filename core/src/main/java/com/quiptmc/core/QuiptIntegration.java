@@ -140,6 +140,7 @@ public abstract class QuiptIntegration {
     public abstract String version();
 
 
+
     private static class Shutdown extends Heartbeat {
 
         public Shutdown(QuiptIntegration plugin) {

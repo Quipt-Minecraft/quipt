@@ -14,6 +14,7 @@ import com.fasterxml.jackson.dataformat.toml.TomlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.quiptmc.core.QuiptIntegration;
+import com.quiptmc.core.data.JsonSerializable;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -52,10 +53,6 @@ public class ConfigManager {
 
             if (template.isAnnotationPresent(ConfigTemplate.class)) {
                 ConfigTemplate cf = template.getAnnotation(ConfigTemplate.class);
-                if (NestedConfig.class.isAssignableFrom(template)) {
-                    throw new IllegalArgumentException("NestedConfig is not supported");
-                }
-
                 integration.log("QuiptConfig", "Registering config file \"" + cf.name() + "\".");
                 if (!integration.dataFolder().exists()) integration.dataFolder().mkdirs();
                 File file = new File(integration.dataFolder(), cf.name() + "." + cf.ext().extension());
@@ -88,19 +85,27 @@ public class ConfigManager {
             try {
                 if (writtenData.has(configField.getName())) {
                     Object writtenValue = writtenData.get(configField.getName());
-                    Arrays.stream(incompatibleTypes).filter(type -> type.isAssignableFrom(configField.getType())).forEach(type -> {
-                        throw new IllegalArgumentException("Type " + type.getName() + " is not supported in config files");
-                    });
+                    Arrays.stream(incompatibleTypes)
+                            .filter(type -> type.isAssignableFrom(configField.getType()))
+                            .forEach(type -> {
+                                throw new IllegalArgumentException("Type " + type.getName() + " is not supported in config files");
+                            });
                     if (configField.getType().isEnum()) {
                         writtenValue = Enum.valueOf((Class<Enum>) configField.getType(), (String) writtenValue);
                     }
                     if (writtenValue instanceof JSONObject json) {
-                        if (NestedConfig.class.isAssignableFrom(configField.getType())) {
-                            NestedConfig nestedConfig = (NestedConfig) configField.getType().getConstructor(Config.class, String.class, QuiptIntegration.class).newInstance(content, configField.getName(), content.integration());
-                            assignFieldsFromJson(nestedConfig, json);
-                            writtenValue = nestedConfig;
+                        if (JsonSerializable.class.isAssignableFrom(configField.getType())) {
+                            System.out.println("Deserializing " + configField.getType().getName() + " from JSON");
+                            JsonSerializable serializable = (JsonSerializable) configField.getType()
+                                    .getDeclaredConstructor().newInstance();
+                            System.out.println("Data: " + writtenData);
+                            System.out.println("Value: " + writtenValue);
+                            serializable.fromJson(json);
+                            writtenValue = serializable;
                         }
                     }
+
+                    System.out.println("Setting field " + configField.getName() + " to " + writtenValue + (writtenValue.getClass()));
                     configField.set(content, writtenValue);
                 }
             } catch (IllegalAccessException e) {
@@ -135,28 +140,6 @@ public class ConfigManager {
      */
     public static Config getConfig(String name) {
         return data.get(name);
-    }
-
-    public static <E extends Config, D extends NestedConfig<E>> D getNestedConfig(E parent, Class<D> nestedTemplate, String name) {
-        JSONObject parentData = parent.json();
-
-
-        JSONObject data;
-
-        if (parentData.has(name)) {
-            data = parentData.getJSONObject(name);
-        } else {
-            data = new JSONObject();
-        }
-        try {
-            D nestedConfig = nestedTemplate.getConstructor(Config.class, String.class, QuiptIntegration.class).newInstance(parent, name, parent.integration());
-            assignFieldsFromJson(nestedConfig, data);
-            return nestedConfig;
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
-                 IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public static JSONObject loadJson(File file, ConfigTemplate.Extension extension) {

@@ -12,8 +12,7 @@ import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.ConfigValue;
-import com.quiptmc.core.config.files.discord.AnnouncementsNestedConfig;
-import com.quiptmc.core.config.files.discord.ChannelsNestedConfig;
+import com.quiptmc.core.data.JsonSerializable;
 
 import java.io.File;
 
@@ -27,12 +26,32 @@ public class DiscordConfig extends Config {
     public String bot_token = "<token_here>";
 
     @ConfigValue
-    public AnnouncementsNestedConfig<?> announcements = null;
+    public Announcements announcements = new Announcements();
 
     @ConfigValue
-    public ChannelsNestedConfig<?> channels = null;
+    public Channels channels = new Channels();
 
     public DiscordConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
+    }
+
+    public static class Announcements implements JsonSerializable {
+
+        public boolean join = false;
+
+        public boolean leave = false;
+
+        public boolean death = false;
+
+        public boolean chat = false;
+
+        public boolean server_start = false;
+    }
+
+    public static class Channels implements JsonSerializable {
+
+        public String player_status = "";
+
+        public String server_status = "";
     }
 }

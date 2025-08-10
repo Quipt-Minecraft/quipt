@@ -4,7 +4,7 @@ import com.quiptmc.core.QuiptIntegration;
 import com.quiptmc.core.config.Config;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.ConfigValue;
-import com.quiptmc.core.config.files.web.HealthReportNestedConfig;
+import com.quiptmc.core.data.JsonSerializable;
 
 import java.io.File;
 
@@ -24,14 +24,14 @@ public class WebConfig extends Config {
     public String webRoot = "web";
 
     @ConfigValue
-    public HealthReportNestedConfig<WebConfig> healthreport = null;
+    public HealthReportConfig healthReport = new HealthReportConfig();
 
     public WebConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
     }
 
-    /**
-     * @param file The file to save to
-     * @param name The name of the config
-     */
+    public static class HealthReportConfig implements JsonSerializable {
+
+        public boolean enable = true;
+    }
 }

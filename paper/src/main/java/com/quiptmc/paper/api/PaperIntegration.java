@@ -13,7 +13,7 @@ public class PaperIntegration extends MinecraftIntegration<ServerLoader<JavaPlug
         super(name, loader);
     }
 
-    public JavaPlugin plugin(){
+    public JavaPlugin plugin() {
         return (JavaPlugin) loader().instance();
     }
 

@@ -4,7 +4,6 @@ import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.files.*;
 import com.quiptmc.core.config.files.discord.AnnouncementsNestedConfig;
-import com.quiptmc.core.config.files.discord.ChannelsNestedConfig;
 import com.quiptmc.core.config.files.resource.AuthNestedConfig;
 import com.quiptmc.core.config.files.resource.HashesNestedConfig;
 import com.quiptmc.core.config.files.web.HealthReportNestedConfig;
@@ -175,7 +174,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
             discordConfig.announcements = ConfigManager.getNestedConfig(discordConfig, AnnouncementsNestedConfig.class, "announcements");
             discordConfig.channels = ConfigManager.getNestedConfig(discordConfig, ChannelsNestedConfig.class, "channels");
             WebConfig webConfig = ConfigManager.registerConfig(this, WebConfig.class);
-            webConfig.healthreport = ConfigManager.getNestedConfig(webConfig, HealthReportNestedConfig.class, "healthreport");
+            webConfig.healthReport = ConfigManager.getNestedConfig(webConfig, HealthReportNestedConfig.class, "healthreport");
             webConfig.save();
             ConfigManager.registerConfig(this, MessagesConfig.class);
             ConfigManager.registerConfig(this, ApiConfig.class);
