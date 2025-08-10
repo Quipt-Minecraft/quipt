@@ -15,13 +15,13 @@ public class MinecraftIntegration<T extends ServerLoader<?>> extends QuiptIntegr
 
     public final String NAME;
     private final File dataFolder;
-    private final ServerLoader<T> loader;
+    private final T loader;
 
     private ResourcePackHandler packHandler;
     private QuiptServer server;
     private CallbackHandler callbackHandler;
 
-    public MinecraftIntegration(String name, ServerLoader<T> loader) {
+    public MinecraftIntegration(String name, T loader) {
         this.NAME = name;
         this.loader = loader;
         this.dataFolder = new File("plugins/" + name());
