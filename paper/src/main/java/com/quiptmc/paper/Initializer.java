@@ -2,10 +2,6 @@ package com.quiptmc.paper;
 
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.config.files.*;
-import com.quiptmc.core.config.files.discord.AnnouncementsNestedConfig;
-import com.quiptmc.core.config.files.resource.AuthNestedConfig;
-import com.quiptmc.core.config.files.resource.HashesNestedConfig;
-import com.quiptmc.core.config.files.web.HealthReportNestedConfig;
 import com.quiptmc.core.data.registries.Registry;
 import com.quiptmc.core.discord.embed.Embed;
 import com.quiptmc.core.server.QuiptServer;
@@ -144,15 +140,10 @@ public final class Initializer extends JavaPlugin {
 
         private void registerConfigs() {
             ResourceConfig resourceConfig = ConfigManager.registerConfig(this, ResourceConfig.class);
-            resourceConfig.auth = ConfigManager.getNestedConfig(resourceConfig, AuthNestedConfig.class, "auth");
-            resourceConfig.hashes = ConfigManager.getNestedConfig(resourceConfig, HashesNestedConfig.class, "hashes");
             resourceConfig.save();
             ConfigManager.registerConfig(this, JenkinsConfig.class);
             DiscordConfig discordConfig = ConfigManager.registerConfig(this, DiscordConfig.class);
-            discordConfig.announcements = ConfigManager.getNestedConfig(discordConfig, AnnouncementsNestedConfig.class, "announcements");
-            discordConfig.channels = ConfigManager.getNestedConfig(discordConfig, ChannelsNestedConfig.class, "channels");
             WebConfig webConfig = ConfigManager.registerConfig(this, WebConfig.class);
-            webConfig.healthReport = ConfigManager.getNestedConfig(webConfig, HealthReportNestedConfig.class, "healthreport");
             webConfig.save();
             ConfigManager.registerConfig(this, MessagesConfig.class);
             ConfigManager.registerConfig(this, ApiConfig.class);

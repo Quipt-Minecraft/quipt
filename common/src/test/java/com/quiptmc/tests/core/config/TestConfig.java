@@ -33,8 +33,6 @@ public class TestConfig extends Config {
     @ConfigValue
     public JSONArray testArray = new JSONArray().put(1).put("me/quickscythe/quipt/test");
 
-    @ConfigValue
-    public TestNestedConfig<?> testConfig = null;
 
     /**
      * Creates a new config file

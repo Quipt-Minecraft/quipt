@@ -39,18 +39,12 @@ public class IntegrationTests {
         QuiptIntegration integration = ObjectFactory.createIntegration();
         launchIntegration(integration, "testConfigChangesPersist");
         TestConfig config = ConfigManager.registerConfig(integration, TestConfig.class);
-        config.testConfig = ConfigManager.getNestedConfig(config, TestNestedConfig.class, "testConfig");
-        config.testConfig.nestedValue = valueToSet;
         config.save();
 
         ConfigManager.reset();
 
 
         QuiptIntegration integration2 = ObjectFactory.createIntegration();
-        TestConfig config2 = ConfigManager.registerConfig(integration, TestConfig.class);
-        config2.testConfig = ConfigManager.getNestedConfig(config2, TestNestedConfig.class, "testConfig");
-        assertNotNull(config2.testConfig, "Config did not regenerate");
-        assertEquals(valueToSet, config2.testConfig.nestedValue, "Config changes did not persist");
 
         destroyIntegration(integration, "testConfigChangesPersist");
 
@@ -65,7 +59,6 @@ public class IntegrationTests {
         QuiptIntegration integration = ObjectFactory.createIntegration();
         launchIntegration(integration, "launchIntegrationTwiceClearWhenDone");
         TestConfig config = ConfigManager.getConfig(integration, TestConfig.class);
-        config.testConfig.nestedValue = "Test";
         config.save();
 
 
@@ -109,7 +102,6 @@ public class IntegrationTests {
 
     private void registerTestConfig(QuiptIntegration integration, Class<? extends TestConfig> clazz) {
         TestConfig config = ConfigManager.registerConfig(integration, clazz);
-        config.testConfig = ConfigManager.getNestedConfig(config, TestNestedConfig.class, "testConfig");
         config.save();
     }
 

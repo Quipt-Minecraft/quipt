@@ -29,7 +29,6 @@ public class ObjectFactory {
                     log("TestIntegration", "Data folder does not exist. Creating... " + (file.mkdirs() ? "Success" : "Failed"));
 
                 TestConfig config = ConfigManager.registerConfig(this, TestConfig.class);
-                config.testConfig = ConfigManager.getNestedConfig(config, TestNestedConfig.class, "testConfig");
                 config.save();
                 log("TestIntegration", "Enabled");
 
