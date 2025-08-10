@@ -2,10 +2,12 @@ package com.quiptmc.minecraft;
 
 
 import com.quiptmc.minecraft.utils.MinecraftIntegration;
+import com.quiptmc.minecraft.utils.loaders.ServerLoader;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
 import com.sun.management.OperatingSystemMXBean;
 
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +27,14 @@ public class CoreUtils {
         }
         integrations.put(integration.name(), integration);
         integration.enable();
+    }
+
+    public static <T extends ServerLoader<R>, R, C extends MinecraftIntegration<T>> C loadIntegration(String name, ServerLoader.Type type, R initializer, Class<C> integrationClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        C integration = integrationClass.getConstructor(String.class, ServerLoader.class).newInstance(name, new ServerLoader<>(type, initializer));
+        integrations.put(name, integration);
+        integration.log("Initializer", "Loading integration: " + name);
+        integration.enable();
+        return integration;
     }
 
 

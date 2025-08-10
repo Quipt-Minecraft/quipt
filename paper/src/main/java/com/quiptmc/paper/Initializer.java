@@ -35,10 +35,13 @@ import com.quiptmc.paper.listeners.EventListener;
 import com.quiptmc.paper.listeners.PlayerListener;
 import com.quiptmc.paper.listeners.SessionListener;
 import org.bukkit.Material;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +64,7 @@ public final class Initializer extends JavaPlugin {
         new PlayerListener(this);
         new EventListener(this);
         new SessionListener(this);
+
 
     }
 
