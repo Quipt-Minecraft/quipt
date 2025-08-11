@@ -28,15 +28,22 @@ import java.util.*;
  */
 public class ConfigManager {
 
+    private static final Map<String, ConfigObject.Factory<?>> FACTORIES = new HashMap<>();
+
     private static final Map<String, Config> data = new HashMap<>();
 
     private static final Class[] incompatibleTypes = {short.class, char.class, Short.class, Character.class, ArrayList.class};
+
 
     /**
      * Private constructor to prevent instantiation
      */
     private ConfigManager() {
         throw new IllegalStateException("Utility class");
+    }
+
+    public static Map<String, ConfigObject.Factory<?>> factories() {
+        return FACTORIES;
     }
 
     /**
@@ -80,6 +87,9 @@ public class ConfigManager {
         }
     }
 
+    public static void registerFactory(ConfigObject.Factory<?> factory) {
+        FACTORIES.put(factory.getClassName(), factory);
+    }
     private static <T extends Config> void assignFieldsFromJson(T content, JSONObject writtenData) {
         for (Field configField : content.getContentValues()) {
             try {
@@ -93,6 +103,8 @@ public class ConfigManager {
                     if (configField.getType().isEnum()) {
                         writtenValue = Enum.valueOf((Class<Enum>) configField.getType(), (String) writtenValue);
                     }
+                    System.out.println("Config field " + configField.getName() + " has a type of " + configField.getType().getName());
+//                    if
                     if (writtenValue instanceof JSONObject json) {
                         if (JsonSerializable.class.isAssignableFrom(configField.getType())) {
                             System.out.println("Deserializing " + configField.getType().getName() + " from JSON");

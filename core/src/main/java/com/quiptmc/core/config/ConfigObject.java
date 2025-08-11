@@ -1,6 +1,7 @@
 package com.quiptmc.core.config;
 
 import com.quiptmc.core.data.JsonSerializable;
+import org.json.JSONObject;
 
 public class ConfigObject implements JsonSerializable {
 
@@ -9,5 +10,11 @@ public class ConfigObject implements JsonSerializable {
 
     public ConfigObject() {
         this.className = this.getClass().getName();
+    }
+
+
+    public interface Factory<T extends ConfigObject> {
+        String getClassName();
+        T createFromJson(JSONObject json);
     }
 }

@@ -10,6 +10,7 @@ public class JsonTest extends ConfigObject {
     public String name;
     public int age;
 
+
     public JsonTest() {
     }
 
