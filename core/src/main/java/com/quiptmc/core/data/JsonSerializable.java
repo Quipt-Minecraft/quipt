@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Locale;
 
-public interface JsonSerializable extends com.fasterxml.jackson.databind.JsonSerializable {
+public interface JsonSerializable {
 
     default JSONObject json() {
         JSONObject json = new JSONObject();
@@ -96,26 +96,5 @@ public interface JsonSerializable extends com.fasterxml.jackson.databind.JsonSer
         return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));
     }
 
-    @Override
-    default void serialize(JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeStartObject();
-        for (java.lang.reflect.Field field : this.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                Object value = field.get(this);
-                jsonGenerator.writeObjectField(field.getName(), value);
-            } catch (IllegalAccessException e) {
-                throw new IOException("Failed to serialize field: " + field.getName(), e);
-            }
-        }
-        jsonGenerator.writeEndObject();
-    }
-
-    @Override
-    default void serializeWithType(JsonGenerator jsonGenerator, SerializerProvider serializerProvider, TypeSerializer typeSerializer) throws IOException {
-        typeSerializer.writeTypePrefixForObject(this, jsonGenerator);
-        serialize(jsonGenerator, serializerProvider);
-        typeSerializer.writeTypeSuffixForObject(this, jsonGenerator);
-    }
 
 }
