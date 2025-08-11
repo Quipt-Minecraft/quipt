@@ -9,7 +9,7 @@ import java.io.File;
 public class TestConfig extends Config {
 
     @ConfigValue
-    public JsonTest jsonTest = new JsonTest("test",3);
+    public ConfigMap<JsonTest> map = new ConfigMap<>();
 
     /**
      * Creates a new config file

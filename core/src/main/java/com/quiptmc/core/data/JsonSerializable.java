@@ -65,15 +65,15 @@ public interface JsonSerializable {
         }
     }
 
-    default Object get(String fieldName) {
-        try {
-            var field = this.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return field.get(this);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to get field: " + fieldName, e);
-        }
-    }
+//    default Object get(String fieldName) {
+//        try {
+//            var field = this.getClass().getDeclaredField(fieldName);
+//            field.setAccessible(true);
+//            return field.get(this);
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            throw new RuntimeException("Failed to get field: " + fieldName, e);
+//        }
+//    }
 
     default void setField(Field field, Object target, Object value) throws IllegalAccessException {
         if (field.getType().isEnum() && value instanceof String) {

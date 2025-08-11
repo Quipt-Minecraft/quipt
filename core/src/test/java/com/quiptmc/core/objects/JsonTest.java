@@ -1,10 +1,11 @@
 package com.quiptmc.core.objects;
 
 
+import com.quiptmc.core.config.ConfigObject;
 import com.quiptmc.core.data.JsonSerializable;
 import org.json.JSONObject;
 
-public class JsonTest implements JsonSerializable {
+public class JsonTest extends ConfigObject {
 
     public String name;
     public int age;
@@ -12,7 +13,8 @@ public class JsonTest implements JsonSerializable {
     public JsonTest() {
     }
 
-    public JsonTest(String name, int age) {
+    public JsonTest(String id, String name, int age) {
+        this.id = id;
         this.name = name;
         this.age = age;
     }

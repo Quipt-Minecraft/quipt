@@ -118,9 +118,11 @@ public abstract class Config {
     public JSONObject json() {
         JSONObject data = new JSONObject();
         for (Field field : getContentValues()) {
+
             try {
                 Object value = field.get(this);
                 if(value instanceof JsonSerializable serializable) value = serializable.json();
+
                 data.put(field.getName(), value);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
