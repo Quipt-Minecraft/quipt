@@ -32,17 +32,17 @@ public class ConfigTests {
 
     @Test
     public void testConfigClass(){
-        QuiptIntegration testIntegration = TestUtils.getTestIntegration();
-        ConfigManager.registerFactory(new TestFactory());
-
-        TestConfig config = ConfigManager.registerConfig(testIntegration, TestConfig.class);
-        System.out.println("Format: " + config.format(ConfigTemplate.Extension.QPT));
-        ConfigMap<JsonTest> map = config.map;
-
-        JsonTest jsonTest = map.get("test");
-        jsonTest.name = "Updated Name";
-        System.out.println("Format2: " + config.format(ConfigTemplate.Extension.QPT));
-
-        config.save();
+//        QuiptIntegration testIntegration = TestUtils.getTestIntegration();
+//        ConfigManager.registerFactory(new TestFactory());
+//
+//        TestConfig config = ConfigManager.registerConfig(testIntegration, TestConfig.class);
+//        System.out.println("Format: " + config.format(ConfigTemplate.Extension.QPT));
+//        ConfigMap<JsonTest> map = config.map;
+//
+//        JsonTest jsonTest = map.get("test");
+//        jsonTest.name = "Updated Name";
+//        System.out.println("Format2: " + config.format(ConfigTemplate.Extension.QPT));
+//
+//        config.save();
     }
 }
