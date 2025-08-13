@@ -29,7 +29,7 @@ public class Heartbeat implements Runnable {
 
     @Override
     public void run() {
-        plugin.logger().log("Heartbeat test");
+//        plugin.logger().log("Heartbeat test");
         for (FlutterTask task : FLUTTERS_ADD)
             FLUTTERS.put(task.id(), task);
         FLUTTERS_ADD.clear();
