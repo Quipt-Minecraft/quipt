@@ -103,21 +103,16 @@ public class ConfigManager {
                     if (configField.getType().isEnum()) {
                         writtenValue = Enum.valueOf((Class<Enum>) configField.getType(), (String) writtenValue);
                     }
-                    System.out.println("Config field " + configField.getName() + " has a type of " + configField.getType().getName());
 //                    if
                     if (writtenValue instanceof JSONObject json) {
                         if (JsonSerializable.class.isAssignableFrom(configField.getType())) {
-                            System.out.println("Deserializing " + configField.getType().getName() + " from JSON");
                             JsonSerializable serializable = (JsonSerializable) configField.getType()
                                     .getDeclaredConstructor().newInstance();
-                            System.out.println("Data: " + writtenData);
-                            System.out.println("Value: " + writtenValue);
                             serializable.fromJson(json);
                             writtenValue = serializable;
                         }
                     }
 
-                    System.out.println("Setting field " + configField.getName() + " to " + writtenValue + (writtenValue.getClass()));
                     configField.set(content, writtenValue);
                 }
             } catch (IllegalAccessException e) {

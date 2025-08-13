@@ -26,7 +26,6 @@ public class ConfigMap<T extends ConfigObject> implements JsonSerializable {
                         continue;
                     }
 
-                    System.out.println(obj.toString(2));
                     T t = factory.createFromJson(obj);
                     this.configMap.put(key, t);
                 } catch (Exception ex) {

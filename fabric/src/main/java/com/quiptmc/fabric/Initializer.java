@@ -101,6 +101,7 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
             PlaceholderUtils.registerPlaceholders();
             MessageUtils.start();
 
+
             ApiConfig apiConfig = ConfigManager.getConfig(this, ApiConfig.class);
             ResourceConfig resourceConfig = ConfigManager.getConfig(this, ResourceConfig.class);
 
