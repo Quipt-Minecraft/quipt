@@ -149,5 +149,9 @@ public abstract class Config {
         return json().toString();
     }
 
+    public void reload(){
+        ConfigManager.reloadConfig(integration, getClass());
+    }
+
 
 }

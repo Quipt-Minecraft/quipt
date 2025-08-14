@@ -210,4 +210,10 @@ public class ConfigManager {
     public static void reset() {
         data.clear();
     }
+
+    public static void reloadConfig(QuiptIntegration integration, Class<? extends Config> template) {
+        ConfigTemplate cf = template.getAnnotation(ConfigTemplate.class);
+        data.remove(integration.name() + "/" + cf.name());
+        registerConfig(integration, template);
+    }
 }

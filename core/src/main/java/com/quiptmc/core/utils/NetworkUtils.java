@@ -9,6 +9,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Base64;
 
 /**
@@ -16,10 +20,32 @@ import java.util.Base64;
  */
 public class NetworkUtils {
 
+    private static final HttpClient http = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+    public static Get GET = Get.DEFAULTS;
     private static Logger logger = LoggerFactory.getLogger("NetworkUtils");
 
     private NetworkUtils() {
         throw new IllegalStateException("Utility class");
+    }
+
+
+    public static HttpResponse<String> get(Get config, String url) {
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .timeout(config.connectTimeout)
+                .GET();
+
+        if (config.header != null && !config.header.isBlank()) {
+            builder.header("If-None-Match", config.header);
+        }
+
+        try {
+            return http.send(builder.build(), HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -134,5 +160,36 @@ public class NetworkUtils {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public record Get(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction,
+                      String contentType, String acceptCharset, String header) {
+
+        public static final Get DEFAULTS = new Get(
+                        Duration.ofSeconds(10),
+                        3000,
+                        false,
+                        false,
+                        "application/json",
+                        "UTF-8",
+                        null);
+
+
+        public Get config(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction, String contentType, String acceptCharset, String header) {
+            return new Get(connectTimeout, readTimeout, useCaches, allowUserInteraction, contentType, acceptCharset, header);
+        }
+
+        public Get defaults(String header) {
+            return new Get(
+                    DEFAULTS.connectTimeout,
+                    DEFAULTS.readTimeout,
+                    DEFAULTS.useCaches,
+                    DEFAULTS.allowUserInteraction,
+                    DEFAULTS.contentType,
+                    DEFAULTS.acceptCharset,
+                    header
+            );
+        }
+
     }
 }
