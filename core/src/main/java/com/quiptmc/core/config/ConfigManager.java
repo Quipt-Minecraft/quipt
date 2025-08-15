@@ -32,7 +32,7 @@ public class ConfigManager {
 
     private static final Map<String, Config> data = new HashMap<>();
 
-    private static final Class[] incompatibleTypes = {short.class, char.class, Short.class, Character.class, ArrayList.class};
+    private static final Class<?>[] incompatibleTypes = {short.class, char.class, Short.class, Character.class, ArrayList.class};
 
 
     /**
@@ -215,5 +215,9 @@ public class ConfigManager {
         ConfigTemplate cf = template.getAnnotation(ConfigTemplate.class);
         data.remove(integration.name() + "/" + cf.name());
         registerConfig(integration, template);
+    }
+
+    public static List<String> getAll(){
+        return new ArrayList<>(data.keySet());
     }
 }

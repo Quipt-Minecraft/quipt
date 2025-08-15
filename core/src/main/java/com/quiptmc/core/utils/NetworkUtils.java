@@ -175,11 +175,11 @@ public class NetworkUtils {
                         null);
 
 
-        public Get config(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction, String contentType, String acceptCharset, String header) {
+        public static Get config(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction, String contentType, String acceptCharset, String header) {
             return new Get(connectTimeout, readTimeout, useCaches, allowUserInteraction, contentType, acceptCharset, header);
         }
 
-        public Get defaults(String header) {
+        public static Get defaults(String header) {
             return new Get(
                     DEFAULTS.connectTimeout,
                     DEFAULTS.readTimeout,
