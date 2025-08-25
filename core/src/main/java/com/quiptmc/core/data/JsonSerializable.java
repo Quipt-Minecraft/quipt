@@ -53,7 +53,8 @@ public interface JsonSerializable {
                         Object value = json.get(field.getName());
                         Class<?> fieldType = field.getType();
                         if (JsonSerializable.class.isAssignableFrom(fieldType) && value instanceof JSONObject obj) {
-                            value = fieldType.getDeclaredConstructor(JSONObject.class).newInstance(obj);
+                            value = fieldType.getDeclaredConstructor().newInstance();
+                            ((JsonSerializable) value).fromJson(obj);
                         }
                         if(fieldType.isAnonymousClass()){
                             System.out.println("Anonymous class detected for field: " + field.getName() + ", value: " + value);

@@ -1,9 +1,10 @@
 package com.quiptmc.paper.commands.executors;
 
-import com.mojang.brigadier.tree.LiteralCommandNode;
+
 import com.quiptmc.paper.api.PaperIntegration;
 import com.quiptmc.paper.commands.CommandExecutor;
 import com.quiptmc.paper.commands.executors.arguments.CommandBuilderArgument;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
