@@ -5,12 +5,17 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigMap<T extends ConfigObject> implements JsonSerializable {
 
     Map<String, T> configMap = new HashMap<>();
+
+    public Collection<T> values() {
+        return configMap.values();
+    }
 
 
     public void fromJson(JSONObject json) {
