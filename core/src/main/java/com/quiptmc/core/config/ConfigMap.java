@@ -17,6 +17,10 @@ public class ConfigMap<T extends ConfigObject> implements JsonSerializable {
         return configMap.values();
     }
 
+    public int size() {
+        return configMap.size();
+    }
+
 
     public void fromJson(JSONObject json) {
         for(String key : json.keySet()) {
