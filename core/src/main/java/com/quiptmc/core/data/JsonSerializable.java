@@ -94,6 +94,12 @@ public interface JsonSerializable {
             } else {
                 field.set(target, value);
             }
+        } else if (field.getType() == double.class || field.getType() == Double.class){
+            if (value instanceof String string) {
+                field.set(target, Double.parseDouble(string));
+            } else {
+                field.set(target, value);
+            }
         } else {
             field.set(target, value);
         }
