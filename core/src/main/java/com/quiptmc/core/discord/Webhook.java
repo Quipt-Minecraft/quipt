@@ -10,6 +10,7 @@ package com.quiptmc.core.discord;
 
 import com.quiptmc.core.config.ConfigObject;
 import com.quiptmc.core.data.JsonSerializable;
+import org.json.JSONObject;
 
 
 public class Webhook extends ConfigObject {
@@ -34,6 +35,12 @@ public class Webhook extends ConfigObject {
 
     public String name(){
         return id();
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        json.put("className", this.getClass().getName());
+        super.fromJson(json);
     }
 
     public String token(){
