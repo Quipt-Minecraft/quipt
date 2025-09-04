@@ -37,6 +37,10 @@ public class Webhook extends ConfigObject {
         return id();
     }
 
+    public String uuid(){
+        return uuid;
+    }
+
     @Override
     public void fromJson(JSONObject json) {
         json.put("className", this.getClass().getName());
@@ -52,6 +56,6 @@ public class Webhook extends ConfigObject {
      * @return The URL of the webhook
      */
     public String url() {
-        return "https://discord.com/api/webhooks/" + id() + "/" + token();
+        return "https://discord.com/api/webhooks/" + uuid() + "/" + token();
     }
 }
