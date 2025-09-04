@@ -15,18 +15,25 @@ import com.quiptmc.core.data.JsonSerializable;
 public class Webhook extends ConfigObject {
 
     public String token;
+
+    public String uuid;
     /**
      * A simple webhook object
      *
      * @param id    The ID of the webhook
      * @param token The token of the webhook
      */
-    public Webhook(String id, String token){
-        super.id = id;
+    public Webhook(String name, String id, String token){
+        super.id = name;
         this.token = token;
+        this.uuid = id;
     }
 
     public Webhook() {
+    }
+
+    public String name(){
+        return id();
     }
 
     public String token(){

@@ -44,9 +44,18 @@ public class WebhookManager {
      * @return The webhook
      */
     public static Webhook add(String name, String id, String token) {
-        Webhook hook = new Webhook(id, token);
+        Webhook hook = new Webhook(name, id, token);
         WEBHOOKS.put(name, hook);
         return hook;
+    }
+
+    /**
+     * Add a webhook to the manager
+     *
+     * @param hook The webhook to add
+     */
+    public static void add(Webhook hook) {
+        WEBHOOKS.put(hook.name(), hook);
     }
 
     /**
