@@ -8,14 +8,30 @@
 
 package com.quiptmc.core.discord;
 
-/**
- * A simple webhook object
- *
- * @param id    The ID of the webhook
- * @param token The token of the webhook
- */
-public record Webhook(String id, String token) {
+import com.quiptmc.core.config.ConfigObject;
+import com.quiptmc.core.data.JsonSerializable;
 
+
+public class Webhook extends ConfigObject {
+
+    public String token;
+    /**
+     * A simple webhook object
+     *
+     * @param id    The ID of the webhook
+     * @param token The token of the webhook
+     */
+    public Webhook(String id, String token){
+        super.id = id;
+        this.token = token;
+    }
+
+    public Webhook() {
+    }
+
+    public String token(){
+        return token;
+    }
     /**
      * Get the URL of the webhook
      *

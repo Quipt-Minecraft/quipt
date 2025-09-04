@@ -13,6 +13,11 @@ public class ConfigObject implements JsonSerializable {
     }
 
 
+    public String id() {
+        return id;
+    }
+
+
     public interface Factory<T extends ConfigObject> {
         String getClassName();
         T createFromJson(JSONObject json);

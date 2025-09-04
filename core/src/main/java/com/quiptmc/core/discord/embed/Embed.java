@@ -1,6 +1,7 @@
 package com.quiptmc.core.discord.embed;
 
 
+import com.quiptmc.core.data.JsonSerializable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +13,7 @@ import java.util.TimeZone;
 /**
  * Represents a discord embed
  */
-public class Embed {
+public class Embed implements JsonSerializable {
 
     private final JSONObject data = new JSONObject();
 
