@@ -169,11 +169,11 @@ public final class Initializer extends JavaPlugin {
             for (QuiptGuild guild : Bot.qda().getGuilds()) {
                 for (QuiptTextChannel channel : guild.getTextChannels()) {
                     if (channel.getName().equalsIgnoreCase(discordConfig.channels.server_status) || channel.getId().equalsIgnoreCase(discordConfig.channels.server_status)) {
-                        Embed embed = new Embed();
+                        Embed.Builder embed = Embed.builder();
                         embed.title("Server Status");
                         embed.description("Server has started.");
                         embed.color(Color.GREEN.getRGB());
-                        channel.sendMessage(embed);
+                        channel.sendMessage(embed.build());
                     }
                 }
             }

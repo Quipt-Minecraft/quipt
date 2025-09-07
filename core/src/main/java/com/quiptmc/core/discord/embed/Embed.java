@@ -22,6 +22,10 @@ public class Embed implements JsonSerializable {
         this.raw = raw;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Field {
         public String name;
         public String value;
@@ -33,9 +37,7 @@ public class Embed implements JsonSerializable {
             this.inline = inline;
         }
 
-        public static Builder builder() {
-            return new Builder();
-        }
+
     }
 
     public static class Builder {

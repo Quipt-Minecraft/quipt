@@ -32,7 +32,6 @@ dependencies {
 
     implementation("net.kyori:adventure-api:$adventure_api_version")
 
-
     implementation project(":common")
     implementation project(":core")
     implementation project(":bot")
