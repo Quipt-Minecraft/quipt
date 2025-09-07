@@ -22,6 +22,11 @@ public class Embed implements JsonSerializable {
         this.raw = raw;
     }
 
+    @Override
+    public JSONObject json() {
+        return new JSONObject(raw);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
