@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -196,10 +197,10 @@ public abstract class QuiptIntegration {
             JSONObject secrets = new JSONObject();
             secrets.put("secret", apiConfig.secret);
             data.put("secrets", secrets);
-            @Nullable String payload = NetworkUtils.post(apiConfig.endpoint + url, data);
+            @Nullable HttpResponse<String> payload = NetworkUtils.post(NetworkUtils.DEFAULT, apiConfig.endpoint + url, data);
             if (payload == null)
                 return new ApiResponse(ApiResponse.RequestResult.NO_ACTION, new JSONObject("{\"error\":\"No response\"}"));
-            JSONObject raw = new JSONObject(payload);
+            JSONObject raw = new JSONObject(payload.body());
             return new ApiResponse(raw.optEnum(ApiResponse.RequestResult.class, "result", ApiResponse.RequestResult.NO_ACTION), raw);
         }
 
