@@ -36,6 +36,11 @@ public class NetworkUtils {
                 .uri(URI.create(url))
                 .timeout(config.connectTimeout)
                 .GET();
+        if(config.headers != null) {
+            for (HttpHeader header : config.headers) {
+                builder.header(header.name, header.value);
+            }
+        }
 
 //        if (config.header != null && !config.header.isBlank()) {
 //            builder.header("If-None-Match", config.header);

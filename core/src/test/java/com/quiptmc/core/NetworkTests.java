@@ -11,6 +11,22 @@ public class NetworkTests {
 
 
 
+    @Test
+    public void destroyWhenDone(){
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMzgwMjEzYTRlYjQ2NWRlODYwZjdlY2VkZTJkYTBiOSIsIm5iZiI6MTc1ODY3MzM5Ni4zMDksInN1YiI6IjY4ZDMzOWY0MjE4ZDgyN2UyMTJlYzIzMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.uojistGgBlTW_85XqMM_aHEHYeRY1WfHhHFTby5biJ0";
+        String url = "https://api.themoviedb.org/3/person/25451?append_to_response=combined_credits";
+
+        NetworkUtils.Get get = NetworkUtils.Get.config(
+                Duration.ofSeconds(10),
+                3000,
+                true,
+                false,
+                "application/json",
+                "UTF-8",
+                HttpHeaders.AUTHORIZATION_BEARER(token));
+        HttpResponse<String> response = NetworkUtils.get(get, url);
+        System.out.println(response.body());
+    }
 
 
     @Test
