@@ -68,6 +68,30 @@ public class HttpHeaders {
         return new HttpHeader("Accept-Language", value);
     }
 
+    public static HttpHeader ACCEPT_RANGES(String value) {
+        return new HttpHeader("Accept-Ranges", value);
+    }
+
+    public static HttpHeader ETAG(String value) {
+        return new HttpHeader("ETag", value);
+    }
+
+    public static HttpHeader EXPECTATION_ID(String value) {
+        return new HttpHeader("Expectation-Id", value);
+    }
+
+    public static HttpHeader LAST_MODIFIED(String value) {
+        return new HttpHeader("Last-Modified", value);
+    }
+
+    public static HttpHeader LOCATION(String value) {
+        return new HttpHeader("Location", value);
+    }
+
+    public static HttpHeader PROXY_AUTHENTICATE(String value) {
+        return new HttpHeader("Proxy-Authenticate", value);
+    }
+
     public static HttpHeader AUTHORIZATION_BASIC(String username, String password) {
         String auth = username + ":" + password;
         String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());

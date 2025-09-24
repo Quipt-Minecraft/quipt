@@ -1,5 +1,6 @@
 package com.quiptmc.core;
 
+import com.quiptmc.core.utils.net.HttpHeaders;
 import com.quiptmc.core.utils.net.NetworkUtils;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ public class NetworkTests {
                 false,
                 "application/json",
                 "UTF-8",
-                etag);
+                HttpHeaders.ETAG(etag));
         HttpResponse<String> response = NetworkUtils.get(get, "https://www.extra-life.org/api/teams/69005");
             String newEtag = response.headers().firstValue("etag").orElse(null);
             if (newEtag != null && !newEtag.isBlank()) {
