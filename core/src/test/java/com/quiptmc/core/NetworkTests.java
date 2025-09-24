@@ -1,11 +1,8 @@
 package com.quiptmc.core;
 
-import com.quiptmc.core.discord.WebhookManager;
-import com.quiptmc.core.discord.embed.Embed;
-import com.quiptmc.core.utils.NetworkUtils;
+import com.quiptmc.core.utils.net.NetworkUtils;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 

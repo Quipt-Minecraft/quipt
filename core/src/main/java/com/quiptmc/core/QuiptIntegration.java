@@ -3,12 +3,10 @@ package com.quiptmc.core;
 import com.quiptmc.core.annotations.Nullable;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.config.files.ApiConfig;
-import com.quiptmc.core.data.registries.Registries;
-import com.quiptmc.core.data.registries.Registry;
 import com.quiptmc.core.heartbeat.Flutter;
 import com.quiptmc.core.heartbeat.runnable.Heartbeat;
 import com.quiptmc.core.logger.QuiptLogger;
-import com.quiptmc.core.utils.NetworkUtils;
+import com.quiptmc.core.utils.net.NetworkUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 

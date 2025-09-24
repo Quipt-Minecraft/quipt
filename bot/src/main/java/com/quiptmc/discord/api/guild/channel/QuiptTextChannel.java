@@ -10,7 +10,7 @@ package com.quiptmc.discord.api.guild.channel;
 
 import com.quiptmc.discord.logger.LoggerUtils;
 import com.quiptmc.core.discord.embed.Embed;
-import com.quiptmc.core.utils.NetworkUtils;
+import com.quiptmc.core.utils.net.NetworkUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Webhook;

@@ -1,4 +1,4 @@
-package com.quiptmc.core.utils;
+package com.quiptmc.core.utils.net;
 
 import com.quiptmc.core.exceptions.QuiptNetworkException;
 import org.json.JSONObject;
@@ -37,9 +37,9 @@ public class NetworkUtils {
                 .timeout(config.connectTimeout)
                 .GET();
 
-        if (config.header != null && !config.header.isBlank()) {
-            builder.header("If-None-Match", config.header);
-        }
+//        if (config.header != null && !config.header.isBlank()) {
+//            builder.header("If-None-Match", config.header);
+//        }
 
         try {
             return http.send(builder.build(), HttpResponse.BodyHandlers.ofString());
@@ -162,8 +162,12 @@ public class NetworkUtils {
         return null;
     }
 
+
+    /**
+     * A record for GET request configuration
+     */
     public record Get(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction,
-                      String contentType, String acceptCharset, String header) {
+                      String contentType, String acceptCharset, HttpHeader... headers) {
 
         public static final Get DEFAULTS = new Get(
                         Duration.ofSeconds(10),
@@ -171,15 +175,25 @@ public class NetworkUtils {
                         false,
                         false,
                         "application/json",
-                        "UTF-8",
-                        null);
+                        "UTF-8");
 
 
-        public static Get config(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction, String contentType, String acceptCharset, String header) {
-            return new Get(connectTimeout, readTimeout, useCaches, allowUserInteraction, contentType, acceptCharset, header);
+        public static Get config(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction, String contentType, String acceptCharset, HttpHeader... headers) {
+            return new Get(connectTimeout, readTimeout, useCaches, allowUserInteraction, contentType, acceptCharset, headers);
         }
 
-        public static Get defaults(String header) {
+        public static Get defaults(){
+            return new Get(
+                    DEFAULTS.connectTimeout,
+                    DEFAULTS.readTimeout,
+                    DEFAULTS.useCaches,
+                    DEFAULTS.allowUserInteraction,
+                    DEFAULTS.contentType,
+                    DEFAULTS.acceptCharset
+            );
+        }
+
+        public static Get defaults(HttpHeader... headers) {
             return new Get(
                     DEFAULTS.connectTimeout,
                     DEFAULTS.readTimeout,
@@ -187,7 +201,7 @@ public class NetworkUtils {
                     DEFAULTS.allowUserInteraction,
                     DEFAULTS.contentType,
                     DEFAULTS.acceptCharset,
-                    header
+                    headers
             );
         }
 
