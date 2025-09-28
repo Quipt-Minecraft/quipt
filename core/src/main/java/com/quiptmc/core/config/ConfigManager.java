@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -44,6 +45,54 @@ public class ConfigManager {
 
     public static Map<String, ConfigObject.Factory<?>> factories() {
         return FACTORIES;
+    }
+
+
+    /**
+     * Registers a config file for an integration.
+     *
+     * @param integration   The plugin to register the config file for
+     * @param templateClass The class of the config file
+     * @param <T>           The type of the config file
+     * @return An instance of the config file registered under the integration
+     */
+    public static <T extends Config> T register(QuiptIntegration integration, Class<T> templateClass) {
+        if (!templateClass.isAnnotationPresent(ConfigTemplate.class))
+            throw new IllegalStateException("The ConfigTemplate class " + templateClass.getName() + " must have @ConfigFile annotation present, however none are detected.");
+        ConfigTemplate templateData = templateClass.getAnnotation(ConfigTemplate.class);
+        integration.log("QuiptConfig", "Registering config file \"" + templateData.name() + "\" for integration: " + integration.name() + ".");
+        File file;
+        T content;
+        try {
+            file = getConfigFile(integration, templateData);
+            content = templateClass.getConstructor(File.class, String.class, ConfigTemplate.Extension.class, QuiptIntegration.class).newInstance(file, templateData.name(), templateData.ext(), integration);
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException |
+                 InstantiationException e) {
+            integration.logger().warn("Could not register config file: {} for {}.", templateClass.getName(), integration.name());
+            return null;
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not create config file: " + templateClass.getName() + " for " + integration.name() + ".", e);
+        }
+
+
+        //Variables set. Now time to load the file or default values
+        JSONObject writtenData = loadJson(file, templateData.ext());
+
+        assignFieldsFromJson(content, writtenData);
+
+//        data.put(integration.name() + "/" + cf.name(), content);
+        content.save();
+        return content;
+    }
+
+    private static File getConfigFile(QuiptIntegration integration, ConfigTemplate templateData) throws IOException {
+        File file = new File(integration.dataFolder(), templateData.name() + "." + templateData.ext().extension());
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+        if (!file.exists()) {
+            integration.log("QuiptConfig", "Config file \"" + templateData.name() + "\" does not exist. Creating...");
+            integration.log("QuiptConfig", file.createNewFile() ? "Success" : "Failure");
+        }
+        return file;
     }
 
     /**
@@ -90,38 +139,35 @@ public class ConfigManager {
     public static void registerFactory(ConfigObject.Factory<?> factory) {
         FACTORIES.put(factory.getClassName(), factory);
     }
+
     private static <T extends Config> void assignFieldsFromJson(T content, JSONObject writtenData) {
         for (Field configField : content.getContentValues()) {
             try {
                 if (writtenData.has(configField.getName())) {
                     Object writtenValue = writtenData.get(configField.getName());
-                    Arrays.stream(incompatibleTypes)
-                            .filter(type -> type.isAssignableFrom(configField.getType()))
-                            .forEach(type -> {
-                                throw new IllegalArgumentException("Type " + type.getName() + " is not supported in config files");
-                            });
+                    Arrays.stream(incompatibleTypes).filter(type -> type.isAssignableFrom(configField.getType())).forEach(type -> {
+                        throw new IllegalArgumentException("Type " + type.getName() + " is not supported in config files");
+                    });
                     if (configField.getType().isEnum()) {
                         writtenValue = Enum.valueOf((Class<Enum>) configField.getType(), (String) writtenValue);
                     }
 //                    if
                     if (writtenValue instanceof JSONObject json) {
                         if (JsonSerializable.class.isAssignableFrom(configField.getType())) {
-                            JsonSerializable serializable = (JsonSerializable) configField.getType()
-                                    .getDeclaredConstructor().newInstance();
+                            JsonSerializable serializable = (JsonSerializable) configField.getType().getDeclaredConstructor().newInstance();
                             serializable.fromJson(json);
                             writtenValue = serializable;
                         }
                     }
-
+                    if (writtenValue instanceof BigDecimal) {
+                        if (double.class.isAssignableFrom(configField.getType()) || Double.class.isAssignableFrom(configField.getType())) {
+                            writtenValue = ((BigDecimal) writtenValue).doubleValue();
+                        }
+                    }
                     configField.set(content, writtenValue);
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | InvocationTargetException | InstantiationException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -217,7 +263,7 @@ public class ConfigManager {
         registerConfig(integration, template);
     }
 
-    public static List<String> getAll(){
+    public static List<String> getAll() {
         return new ArrayList<>(data.keySet());
     }
 }
