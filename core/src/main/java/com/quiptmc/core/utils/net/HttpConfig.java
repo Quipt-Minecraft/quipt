@@ -2,6 +2,16 @@ package com.quiptmc.core.utils.net;
 
 import java.time.Duration;
 
+/**
+ * Immutable HTTP client configuration used by NetworkUtils and related helpers.
+ * - connectTimeout: Max time allowed to establish a TCP connection.
+ * - readTimeout: Max time in milliseconds to wait for data after connection.
+ * - useCaches: Whether protocol caches may be used by underlying connection.
+ * - allowUserInteraction: Whether the user may be interacted with for authentication.
+ * - contentType: Default Content-Type header for requests (e.g., application/json).
+ * - acceptCharset: Default Accept-Charset header (e.g., UTF-8).
+ * - headers: Additional headers to send with each request.
+ */
 public record HttpConfig(Duration connectTimeout, int readTimeout, boolean useCaches, boolean allowUserInteraction,
                          String contentType, String acceptCharset, HttpHeader... headers) {
 

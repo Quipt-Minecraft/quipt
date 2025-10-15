@@ -37,8 +37,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Bukkit/Paper plugin bootstrap for Quipt.
+ * <p>Registers materials, listeners, commands, and starts platform-specific services.
+ * Uses the inner Quipt class to bridge core functionality with the Paper runtime.</p>
+ */
 public final class Initializer extends JavaPlugin {
 
+    /**
+     * Entry point invoked by Paper when the plugin is enabled.
+     * Initializes material registry, core integration, commands, and listeners.
+     */
     @Override
     public void onEnable() {
         MinecraftMaterial.init();
@@ -59,11 +68,20 @@ public final class Initializer extends JavaPlugin {
 
     }
 
+    /**
+     * Invoked by Paper when the plugin is disabled.
+     * Ensures all configs are saved gracefully.
+     */
     @Override
     public void onDisable() {
         ConfigManager.saveAll();
     }
 
+    /**
+     * Paper-specific implementation of the Quipt integration layer.
+     * <p>Bridges Quipt core to the Paper runtime: registers configs, listeners,
+     * sessions, optional web server and Discord bot, and periodic heartbeats.</p>
+     */
     public static class Quipt extends PaperIntegration {
 
         private final EventHandler handler;
@@ -71,20 +89,38 @@ public final class Initializer extends JavaPlugin {
         private Optional<QuiptServer> server = Optional.empty();
         private CallbackHandler callbackHandler;
 
+        /**
+         * Constructs the Paper integration wrapper.
+         * @param name plugin name identifier
+         * @param loader server loader used to access the Paper runtime
+         */
         public Quipt(String name, ServerLoader<JavaPlugin> loader) {
             super(name, loader);
             handler = new EventHandler(this);
 
         }
 
+        /**
+         * Gets the Paper event handler bound to this integration.
+         * @return the event handler
+         */
         public final EventHandler events() {
             return handler;
         }
 
+        /**
+         * Returns the optional embedded QuiptServer instance if web services are enabled.
+         * @return optional server instance
+         */
         public Optional<QuiptServer> server() {
             return server;
         }
 
+        /**
+         * Called when the integration is enabled by the core.
+         * Sets up listeners, configs, sessions, placeholders, messages,
+         * web server handlers, and optionally the Discord bot.
+         */
         @Override
         public void enable() {
             super.enable();
@@ -138,6 +174,9 @@ public final class Initializer extends JavaPlugin {
         }
 
 
+        /**
+         * Registers and saves all plugin configuration files used by the Paper integration.
+         */
         private void registerConfigs() {
             ResourceConfig resourceConfig = ConfigManager.registerConfig(this, ResourceConfig.class);
             resourceConfig.save();
@@ -149,11 +188,21 @@ public final class Initializer extends JavaPlugin {
             ConfigManager.registerConfig(this, ApiConfig.class);
         }
 
+        /**
+         * Schedules asynchronous startup for the Discord bot using configuration values.
+         * @param discordConfig the Discord configuration
+         */
         private void launchBot(DiscordConfig discordConfig) {
             logger().log("Initializer", "Starting discord bot");
             TaskScheduler.scheduleAsyncTask(() -> asyncBotLaunchThread(discordConfig), 1, TimeUnit.SECONDS);
         }
 
+        /**
+         * Performs the Discord bot startup and optional plugin loading on a background thread.
+         * Connects to Discord, loads jar-based bot plugins, and posts a server status embed
+         * to the configured channel if available.
+         * @param discordConfig the Discord configuration to use
+         */
         private void asyncBotLaunchThread(DiscordConfig discordConfig) {
 
             Bot.start(discordConfig.json());

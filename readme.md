@@ -6,23 +6,50 @@
 ![bukkit](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/bukkit_vector.svg)
 ![fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg)
 
+QUIPT is a multi-module toolkit for Minecraft servers and developers. It provides:
+- Paper and Fabric integration layers
+- An embedded HTTP server (Jetty) for callbacks/resources
+- Resource pack auto-updates via webhooks
+- A Discord bot integration with plugin loading
+- Developer APIs for events, registries, messaging, placeholders, and ephemeral advancements
 
-QUIPT is an ambitious project that aims to provide a handful of tools to both server owners and developers. Be sure to check out the [wiki](https://www.vanillaflux.com/quipt/) for a more in-depth description of how to use this plugin.
+Quick Links
+- Overview: docs/OVERVIEW.md
+- Installation: docs/INSTALLATION.md
+- Configuration Reference: docs/CONFIGURATION.md
+- Modules: docs/MODULES.md
+- Developer Guide: docs/DEVELOPER.md
+- Contributing: docs/CONTRIBUTING.md
 
-## Server Owner Features
-QUIPT was created with developers in mind, however, also provides some features for server owners to use "out of the box"
+Getting Started (Paper)
+1) Download a release from Modrinth or GitHub and place the JAR in plugins/.
+2) Start your server once to generate default configs.
+3) Edit configs under plugins/quipt-paper/ (see docs/CONFIGURATION.md).
+4) Restart the server. QUIPT will start the embedded web server and Discord bot if enabled.
 
-### Resource Pack Management
-QUIPT comes with an automatic resourcepack manager. Fill out the `plugins/quipt-paper/resources.json` file with the GitHub repository information that contains your server resourcepack, and make sure to set `serverIp` to the IP your server is being hosted on. You can manually trigger a pack update by typing `/resourcepack update`, or you can set up GitHub to send a webhook to`<your-ip>:<resource-pack-port>/update/` to automatically update the pack every time the repository receives a new push.
+Server Owner Features
+- Resource Pack Management: Configure resources.json with your pack repo and server IP. Trigger updates via /resourcepack update or a webhook to http://<host>:<port>/resources/update/.
+- Teleportation Management: Simple P2P teleports and configurable warps/homes.
 
-### Teleportation Management
-QUIPT provides a simple way to manage teleportation requests. This applies to simple player-to-player teleports, but can also be configured to work as spawn points, warps, or homes.
+Developer Features
+- Events and Listeners: Ready-to-use listeners and an event system to hook into.
+- Ephemeral Advancements: Send toast-like updates to players using Bukkit advancements under the hood.
+- Embedded Web Server: Mount your own handlers at custom routes.
+- Discord Integration: Post server status and extend via bot plugins.
 
-#### Teleport Requests
-Players can send teleport requests to other players by typing `/tpr <player>`. The receiving player can then accept or deny the request by typing `/tpaccept` or `/tpdeny`.
+Building From Source
+- Requirements: Java 21, Git
+- Windows PowerShell: .\gradlew.bat build
+- Other platforms: ./gradlew build
+- Artifacts are available under each module's build/libs directory.
 
-## Developer Features
-QUIPT was designed to give Paper plugin developers a simple-to-use and lightweight library focused on providing features that _should_ be easier to implement in the base API.
+Support and Community
+- Discord: https://discord.gg/EhfMJmjTXh
+- Issues: https://github.com/Quipt-Minecraft/quipt/issues
 
-### EphemeralAdvancements
-EphemeralAdvancements are QUIPT's way of sending custom toasts to the clients. Since paper doesn't have any method of sending custom toasts, we hook into the Bukkit advancement API and load the EphemeralAdvancements at the same time you create a new instance for it, then is deleted from the server once it's been sent to a player. This means once you send an EphemeralAdvancement to a player, you must kill the instance before you accidentally send it to another player.
+Versioning
+- See gradle.properties for project_version and supported_minecraft_versions.
+
+License
+- Copyright © QuickScythe.
+- See repository license file for details.
