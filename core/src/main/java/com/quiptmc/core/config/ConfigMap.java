@@ -21,6 +21,34 @@ public class ConfigMap<T extends ConfigObject> implements JsonSerializable {
         return configMap.size();
     }
 
+    public boolean isEmpty() {
+        return configMap.isEmpty();
+    }
+
+    public T get(String id) {
+        return configMap.getOrDefault(id, null);
+    }
+
+    public void remove(String id) {
+        configMap.remove(id);
+    }
+
+    public void remove(T configObject) {
+        configMap.remove(configObject.id);
+    }
+
+    public void put(T configObject) {
+        configMap.put(configObject.id, configObject);
+    }
+
+    public boolean contains(String id) {
+        return get(id) != null;
+    }
+
+    public boolean contains(T configObject) {
+        return configMap.containsValue(configObject);
+    }
+
 
     public void fromJson(JSONObject json) {
         for(String key : json.keySet()) {
@@ -54,23 +82,5 @@ public class ConfigMap<T extends ConfigObject> implements JsonSerializable {
         return json;
     }
 
-    public T get(String id) {
-        return configMap.getOrDefault(id, null);
-    }
 
-    public void remove(String id) {
-        configMap.remove(id);
-    }
-
-    public void remove(T configObject) {
-        configMap.remove(configObject.id);
-    }
-
-    public void put(T configObject) {
-        configMap.put(configObject.id, configObject);
-    }
-
-    public boolean contains(String id) {
-        return get(id) != null;
-    }
 }

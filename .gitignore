@@ -47,3 +47,5 @@ bin/
 /fabric/server/
 /fabric/client/
 /fabric/src/main/generated/
+/logs/
+/core/tests/
