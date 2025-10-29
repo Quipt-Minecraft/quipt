@@ -49,6 +49,15 @@ public class ConfigMap<T extends ConfigObject> implements JsonSerializable {
         return configMap.containsValue(configObject);
     }
 
+    public boolean containsAll(T[] configObjects) {
+        for (T obj : configObjects) {
+            if (!contains(obj)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public void fromJson(JSONObject json) {
         for(String key : json.keySet()) {
