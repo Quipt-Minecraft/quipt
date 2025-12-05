@@ -58,7 +58,7 @@ public class FabricPlayer implements MinecraftPlayer {
         if (!(target instanceof FabricPlayer)) throw new IllegalArgumentException("Target must be a FabricPlayer");
         FabricPlayer serverTarget = (FabricPlayer) target;
         ServerPlayerEntity targetPlayer = serverTarget.getMinecraftPlayer();
-        ServerWorld serverWorld = targetPlayer.getWorld();
+        ServerWorld serverWorld = targetPlayer.getEntityWorld();
         double x = targetPlayer.getX();
         double y = targetPlayer.getY();
         double z = targetPlayer.getZ();
@@ -71,7 +71,7 @@ public class FabricPlayer implements MinecraftPlayer {
 
     @Override
     public Component name() {
-        return Component.text(player.getGameProfile().getName());
+        return Component.text(player.getGameProfile().name());
     }
 
     @Override
