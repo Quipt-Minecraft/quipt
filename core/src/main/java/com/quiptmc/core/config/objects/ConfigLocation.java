@@ -1,4 +1,4 @@
-package com.dragon.lastlife.config.object;
+package com.quiptmc.core.config.objects;
 
 import com.quiptmc.core.annotations.NotNull;
 import com.quiptmc.core.config.ConfigObject;
