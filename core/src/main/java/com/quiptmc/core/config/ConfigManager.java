@@ -86,6 +86,10 @@ public class ConfigManager {
     }
 
     private static File getConfigFile(QuiptIntegration integration, ConfigTemplate templateData) throws IOException {
+        return config(integration, templateData);
+    }
+
+    private static File config(QuiptIntegration integration, ConfigTemplate templateData) throws IOException {
         File file = new File(integration.dataFolder(), templateData.name() + "." + templateData.ext().extension());
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) {
@@ -111,12 +115,7 @@ public class ConfigManager {
                 ConfigTemplate cf = template.getAnnotation(ConfigTemplate.class);
                 integration.log("QuiptConfig", "Registering config file \"" + cf.name() + "\".");
                 if (!integration.dataFolder().exists()) integration.dataFolder().mkdirs();
-                File file = new File(integration.dataFolder(), cf.name() + "." + cf.ext().extension());
-                if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
-                if (!file.exists()) {
-                    integration.log("QuiptConfig", "Config file \"" + cf.name() + "\" does not exist. Creating...");
-                    integration.log("QuiptConfig", file.createNewFile() ? "Success" : "Failure");
-                }
+                File file = config(integration, cf);
                 T content = template.getConstructor(File.class, String.class, ConfigTemplate.Extension.class, QuiptIntegration.class).newInstance(file, cf.name(), cf.ext(), integration);
 
                 //Variables set. Now time to load the file or default values

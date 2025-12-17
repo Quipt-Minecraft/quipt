@@ -21,6 +21,7 @@ public class ConfigString extends ConfigObject {
 
     @Override
     public String toString() {
+
         return value();
     }
 }

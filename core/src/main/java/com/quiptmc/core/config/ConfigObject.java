@@ -11,7 +11,11 @@ public class ConfigObject implements JsonSerializable {
     public String className;
 
     public ConfigObject() {
-        this.className = this.getClass().getName();
+        this.className = getClass().getName();
+    }
+
+    public ConfigObject(JSONObject json) {
+        fromJson(json);
     }
 
 
