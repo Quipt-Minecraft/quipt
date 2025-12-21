@@ -1,8 +1,10 @@
-package com.quiptmc.core.config.objects;
+package com.quiptmc.minecraft.config.objects;
 
 import com.quiptmc.core.annotations.NotNull;
 import com.quiptmc.core.config.ConfigObject;
 import com.quiptmc.core.data.JsonSerializable;
+import com.quiptmc.minecraft.utils.teleportation.Location;
+import org.json.JSONObject;
 
 public class ConfigLocation extends ConfigObject implements JsonSerializable {
 
@@ -10,6 +12,20 @@ public class ConfigLocation extends ConfigObject implements JsonSerializable {
     public double x, y, z;
     public float yaw, pitch;
     public String world;
+
+    public ConfigLocation(String id, Location location) {
+        super.id = id;
+        this.x = location.x();
+        this.y = location.y();
+        this.z = location.z();
+        this.yaw = location.yaw();
+        this.pitch = location.pitch();
+        this.world = location.world();
+    }
+
+    public ConfigLocation(JSONObject json) {
+        fromJson(json);
+    }
 
     public ConfigLocation(String id) {
         super.id = id;
