@@ -81,17 +81,8 @@ dependencies {
 //    implementation project(path: ":bot"     ,    configuration: "namedElements" )
 }
 
-snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
-if (snapshot) {
-    println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
-
-    // Disable Minotaur tasks
-    tasks.matching { it.name.contains("modrinth") }.configureEach {
-        enabled = false
-    }
-}
 
 modrinth {
 
