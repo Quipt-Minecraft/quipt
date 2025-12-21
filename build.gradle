@@ -94,14 +94,7 @@ configure(subprojects.findAll {it.name == "paper"}) {
 
     version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
-//    if (snapshot == true) {
-//        println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
-//
-//        // Disable Minotaur tasks
-//        tasks.matching { it.name.contains("modrinth") }.configureEach {
-//            enabled = false
-//        }
-//    }
+
 
     tasks {
         runServer {
@@ -174,10 +167,6 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 
     tasks.register('discord') {
         doLast {
-            if(snapshot) {
-                println "Detected custom version '${version}', (${snapshot}) skipping Discord upload."
-                return
-            }
             try {
                 var channel = System.getenv("DISCORD_CHANNEL")
                 var token = System.getenv("DISCORD_TOKEN")

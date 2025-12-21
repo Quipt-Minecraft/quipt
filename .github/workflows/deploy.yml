@@ -101,7 +101,7 @@ jobs:
 
       - name: Setup Permissions
         run: chmod -c 777 gradlew
-      - name: Publish to Github Packages
+      - name: Publish to Modrinth
         run: |
           ./gradlew modrinth
         env:
