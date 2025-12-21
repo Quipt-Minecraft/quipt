@@ -2,8 +2,9 @@ package com.quiptmc.core.config.objects;
 
 import com.quiptmc.core.annotations.NotNull;
 import com.quiptmc.core.config.ConfigObject;
+import com.quiptmc.core.data.JsonSerializable;
 
-public class ConfigLocation extends ConfigObject {
+public class ConfigLocation extends ConfigObject implements JsonSerializable {
 
 
     public double x, y, z;
