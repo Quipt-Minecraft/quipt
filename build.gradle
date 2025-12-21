@@ -16,8 +16,7 @@ plugins {
 }
 
 group = "com.quiptmc"
-snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
 repositories {
     mavenCentral()
@@ -35,8 +34,7 @@ test {
 
 allprojects {
     group = "com.quiptmc"
-    snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
     repositories {
         mavenCentral()
@@ -94,17 +92,16 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: "xyz.jpenilla.run-paper"
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
-    if (snapshot == true) {
-        println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
-
-        // Disable Minotaur tasks
-        tasks.matching { it.name.contains("modrinth") }.configureEach {
-            enabled = false
-        }
-    }
+//    if (snapshot == true) {
+//        println "Detected custom version '${version}', (${snapshot}) skipping Modrinth upload."
+//
+//        // Disable Minotaur tasks
+//        tasks.matching { it.name.contains("modrinth") }.configureEach {
+//            enabled = false
+//        }
+//    }
 
     tasks {
         runServer {
@@ -156,8 +153,7 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 //    apply plugin: 'com.github.johnrengelman.shadow'
 
 
-    snapshot = project.hasProperty("isSnapshot") ? project.property("isSnapshot") : snapshot
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}" + (snapshot == true ? "-SNAPSHOT" : "")
+    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
 
 
     outlet {
@@ -222,10 +218,6 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
         }
     }
     tasks.modrinth.dependsOn discord
-
-    tasks.named('publish').configure {
-        finalizedBy tasks.modrinth
-    }
 
 }
 
