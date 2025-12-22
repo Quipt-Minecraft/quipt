@@ -45,7 +45,7 @@ public class Heartbeat implements Runnable {
                 }
             }catch (Exception e) {
                 plugin.log("Flutter " + entry.getKey(), "There was an exception during this flutter. Removing from heartbeat.");
-                e.printStackTrace();
+                plugin.logger().error("Exception during flutter " + entry.getKey(), e);
                 FLUTTERS_REMOVE.add(entry.getKey());
             }
         }
