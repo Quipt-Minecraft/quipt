@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.util.Locale;
 
 public interface JsonSerializable {
@@ -100,6 +101,8 @@ public interface JsonSerializable {
             } else {
                 field.set(target, value);
             }
+        } else if (value instanceof BigDecimal) {
+            field.set(target, ((BigDecimal) value).doubleValue());
         } else {
             field.set(target, value);
         }
