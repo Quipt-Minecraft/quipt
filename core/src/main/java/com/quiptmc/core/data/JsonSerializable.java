@@ -101,8 +101,8 @@ public interface JsonSerializable {
             } else {
                 field.set(target, value);
             }
-        } else if (value instanceof BigDecimal) {
-            field.set(target, ((BigDecimal) value).doubleValue());
+        } else if (field.getType() == BigDecimal.class) {
+            field.set(target, BigDecimal.valueOf(Double.parseDouble(value.toString())));
         } else {
             field.set(target, value);
         }
