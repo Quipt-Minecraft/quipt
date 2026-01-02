@@ -158,10 +158,8 @@ public class ConfigManager {
                             writtenValue = serializable;
                         }
                     }
-                    if (writtenValue instanceof BigDecimal) {
-                        if (double.class.isAssignableFrom(configField.getType()) || Double.class.isAssignableFrom(configField.getType())) {
-                            writtenValue = ((BigDecimal) writtenValue).doubleValue();
-                        }
+                    if (configField.getType() == BigDecimal.class) {
+                        writtenValue = ((BigDecimal) writtenValue).doubleValue();
                     }
                     configField.set(content, writtenValue);
                 }
