@@ -159,7 +159,7 @@ public class ConfigManager {
                         }
                     }
                     if (configField.getType() == BigDecimal.class) {
-                        writtenValue = ((BigDecimal) writtenValue).doubleValue();
+                        writtenValue = BigDecimal.valueOf(Double.parseDouble(writtenValue.toString()));
                     }
                     configField.set(content, writtenValue);
                 }
