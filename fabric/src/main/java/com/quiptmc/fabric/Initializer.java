@@ -125,9 +125,9 @@ public class Initializer extends QuiptEntrypoint implements ModInitializer {
 //                    server.get().handler().handle("healthreport", new HealthReportHandler(server.get()), "healthreport/*");
 
                 if (!resourceConfig.repo_url.isEmpty()) {
-                    packHandler = new ResourcePackHandler(server.get());
-                    server.get().handler().handle("resources", packHandler, "resources/*");
-                    packHandler.setUrl(resourceConfig.repo_url);
+//                    packHandler = new ResourcePackHandler(server.get());
+//                    server.get().handler().handle("resources", packHandler, "resources/*");
+//                    packHandler.setUrl(resourceConfig.repo_url);
                 }
 
                 if (discordConfig.enable_bot) launchBot(discordConfig);

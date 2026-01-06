@@ -144,8 +144,8 @@ public final class Initializer extends JavaPlugin {
 //                    server.get().handler().handle("healthreport", new HealthReportHandler(server.get()), "healthreport/*");
 
             if (!resourceConfig.repo_url.isEmpty()) {
-                packHandler = new ResourcePackHandler(server.get());
-                server.get().handler().handle("resources", packHandler, "resources/*");
+//                packHandler = new ResourcePackHandler(server.get());
+//                server.get().handler().handle("resources", packHandler, "resources/*");
                 packHandler.setUrl(resourceConfig.repo_url);
             }
 

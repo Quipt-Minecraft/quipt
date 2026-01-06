@@ -20,6 +20,8 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson_version"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version"
+
+    implementation "ch.qos.logback:logback-classic:$logback_version"
 }
 
 test {

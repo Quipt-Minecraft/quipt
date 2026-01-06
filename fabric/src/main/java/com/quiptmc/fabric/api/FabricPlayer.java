@@ -55,8 +55,7 @@ public class FabricPlayer implements MinecraftPlayer {
 
     @Override
     public void teleport(MinecraftPlayer target) {
-        if (!(target instanceof FabricPlayer)) throw new IllegalArgumentException("Target must be a FabricPlayer");
-        FabricPlayer serverTarget = (FabricPlayer) target;
+        if (!(target instanceof FabricPlayer serverTarget)) throw new IllegalArgumentException("Target must be a FabricPlayer");
         ServerPlayerEntity targetPlayer = serverTarget.getMinecraftPlayer();
         ServerWorld serverWorld = targetPlayer.getEntityWorld();
         double x = targetPlayer.getX();

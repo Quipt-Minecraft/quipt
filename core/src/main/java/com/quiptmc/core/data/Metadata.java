@@ -26,6 +26,15 @@ public class Metadata {
     }
 
     /**
+     * Creates an empty Metadata instance.
+     *
+     * @return an empty Metadata instance
+     */
+    public static Metadata empty() {
+        return new Metadata(new JSONObject());
+    }
+
+    /**
      * Creates a Metadata instance from the specified JSON data.
      *
      * @param data the JSON data

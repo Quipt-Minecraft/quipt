@@ -1,6 +1,6 @@
 package com.quiptmc.core;
 
-import com.quiptmc.core.annotations.Nullable;
+import com.quiptmc2.core.data.annotations.Nullable;
 import com.quiptmc.core.config.ConfigManager;
 import com.quiptmc.core.config.files.ApiConfig;
 import com.quiptmc.core.heartbeat.Flutter;

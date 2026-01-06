@@ -1,6 +1,6 @@
 package com.quiptmc.minecraft.utils.loaders;
 
-import com.quiptmc.core.annotations.Nullable;
+import com.quiptmc2.core.data.annotations.Nullable;
 
 public class ServerLoader<T> {
 

@@ -22,7 +22,4 @@ public record MinecraftMaterial(String id, String name, int maxStackSize, boolea
         return registry.values();
     }
 
-    public String name() {
-        return "";
-    }
 }

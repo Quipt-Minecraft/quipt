@@ -1,11 +1,6 @@
 package com.quiptmc.fabric.items;
 
-import com.quiptmc.core.annotations.Nullable;
-import com.quiptmc.fabric.blocks.abstracts.QuiptBlock;
 import com.quiptmc.fabric.items.abstracts.QuiptItem;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

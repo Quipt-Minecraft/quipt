@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "com.quiptmc"
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+version = "${project_version}-${build_status}.${build_number}"
 
 repositories {
     mavenCentral()
@@ -34,7 +34,7 @@ test {
 
 allprojects {
     group = "com.quiptmc"
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+    version = "${project_version}-${build_status}.${build_number}"
 
     repositories {
         mavenCentral()
@@ -85,6 +85,10 @@ subprojects {
     }
 }
 
+configure(subprojects.findAll {it.name == "common"}) {
+    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
+}
+
 configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: 'com.modrinth.minotaur'
     apply plugin: 'io.github.dexman545.outlet'
@@ -92,7 +96,7 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: "xyz.jpenilla.run-paper"
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 
 
 
@@ -130,6 +134,8 @@ configure(subprojects.findAll {it.name == "fabric"}) {
 
     apply plugin: 'fabric-loom'
 
+    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
+
     dependencies {
         minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
@@ -146,7 +152,7 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
 //    apply plugin: 'com.github.johnrengelman.shadow'
 
 
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 
 
     outlet {

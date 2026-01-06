@@ -1,4 +1,4 @@
-package com.quiptmc.minecraft.utils;
+package com.quiptmc2.core.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

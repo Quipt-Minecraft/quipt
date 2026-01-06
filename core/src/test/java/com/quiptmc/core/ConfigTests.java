@@ -5,9 +5,7 @@ import com.quiptmc.core.config.ConfigMap;
 import com.quiptmc.core.config.ConfigTemplate;
 import com.quiptmc.core.config.TestConfig;
 import com.quiptmc.core.objects.JsonTest;
-import com.quiptmc.core.objects.factories.TestFactory;
 import com.quiptmc.core.utils.TestUtils;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 public class ConfigTests {

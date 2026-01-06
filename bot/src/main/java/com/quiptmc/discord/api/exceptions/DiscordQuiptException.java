@@ -9,7 +9,7 @@
 package com.quiptmc.discord.api.exceptions;
 
 
-import com.quiptmc.core.exceptions.SimpleQuiptException;
+import com.quiptmc2.core.data.exceptions.SimpleQuiptException;
 
 public class DiscordQuiptException extends SimpleQuiptException {
     public DiscordQuiptException(String message) {

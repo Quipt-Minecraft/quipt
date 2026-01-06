@@ -1,6 +1,6 @@
 package com.quiptmc.fabric.blocks;
 
-import com.quiptmc.core.annotations.Nullable;
+import com.quiptmc2.core.data.annotations.Nullable;
 import com.quiptmc.fabric.blocks.abstracts.QuiptBlock;
 import com.quiptmc.fabric.blocks.abstracts.QuiptBlockWithEntity;
 import com.quiptmc.fabric.blocks.abstracts.properties.BlockProperty;
