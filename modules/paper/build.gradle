@@ -32,9 +32,9 @@ dependencies {
 
     implementation("net.kyori:adventure-api:$adventure_api_version")
 
-    implementation project(":common")
-    implementation project(":core")
-    implementation project(":bot")
+    implementation project(":modules:common")
+    implementation project(":modules:core")
+    implementation project(":modules:bot")
 
 }
 
@@ -76,9 +76,9 @@ tasks.register('mergeJar', Jar) {
 
     from(sourceSets.main.output) // Include fabric classes
 
-    from(project(':core').sourceSets.main.output)
+    from(project(':modules:core').sourceSets.main.output)
 
-    from(project(':common').sourceSets.main.output)
+    from(project(':modules:common').sourceSets.main.output)
 
 }
 

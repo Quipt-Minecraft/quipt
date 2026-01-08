@@ -58,6 +58,7 @@ subprojects {
 //        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 //    }
 
+    System.out.println(it.name);
 
 
     publishing {

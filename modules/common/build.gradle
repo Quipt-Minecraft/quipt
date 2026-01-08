@@ -3,8 +3,8 @@ repositories {
 }
 
 jar{
-    dependsOn(":core:jar")
-    dependsOn(":bot:jar")
+    dependsOn(":modules:core:jar")
+    dependsOn(":modules:bot:jar")
 }
 
 java {
@@ -23,8 +23,8 @@ dependencies {
     implementation "net.kyori:adventure-api:4.19.0"
     implementation "net.kyori:adventure-text-serializer-gson:$adventure_api_version"
     implementation "net.kyori:adventure-text-serializer-plain:$adventure_api_version"
-    implementation project(":core")
-    implementation project(":bot")
+    implementation project(":modules:core")
+    implementation project(":modules:bot")
 }
 
 test {

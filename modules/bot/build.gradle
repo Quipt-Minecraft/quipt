@@ -27,7 +27,7 @@ dependencies {
     implementation "mysql:mysql-connector-java:$sql_version"
     implementation "org.jfree:jfreechart:$jfree_version"
     implementation "org.json:json:$json_version"
-    implementation project(":core")
+    implementation project(":modules:core")
 //    api group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 }
 

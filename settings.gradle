@@ -11,9 +11,9 @@ pluginManagement {
 
 
 rootProject.name = 'quipt'
-include 'common'
-include 'paper'
-include 'fabric'
-include 'bot'
-include 'core'
+include ':modules:common'
+include ':modules:paper'
+include ':modules:fabric'
+include ':modules:bot'
+include ':modules:core'
 

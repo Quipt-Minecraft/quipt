@@ -24,9 +24,9 @@ configurations {
 
 tasks.register('mergeJar', Jar) {
     from(sourceSets.main.output) // Include fabric classes
-    from(project(':core').sourceSets.main.output)
-    from(project(':common').sourceSets.main.output)
-    from(project(":bot").sourceSets.main.output)
+    from(project.project(':modules:core').sourceSets.main.output)
+    from(project.project(':modules:common').sourceSets.main.output)
+    from(project.project(":modules:bot").sourceSets.main.output)
 
     configurations.includedDeps.each { dep ->
         from(zipTree(dep)) {
@@ -72,16 +72,17 @@ dependencies {
 
     modImplementation include("net.kyori:adventure-platform-fabric:6.3.0")
 
-    namedElements(implementation(project(":core")))
-    namedElements(implementation(project(":common")))
-    namedElements(implementation(project(":bot")))
+
+    namedElements(implementation project.project(":modules:core") )
+    namedElements(implementation(project.project(":modules:common")))
+    namedElements(implementation(project.project(":modules:bot")))
 
 //    implementation project(path: ":core"    ,   configuration: "namedElements"  )
 //    implementation project(path: ":common"  , configuration: "namedElements"    )
 //    implementation project(path: ":bot"     ,    configuration: "namedElements" )
 }
 
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 
 
 modrinth {
