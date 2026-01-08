@@ -12,9 +12,9 @@ java {
 }
 
 dependencies {
-
     testImplementation platform("org.junit:junit-bom:$junit_version")
     testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "ch.qos.logback:logback-classic:$logback_version"
 
     implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
