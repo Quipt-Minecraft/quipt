@@ -9,7 +9,7 @@ plugins {
     id 'fabric-loom' version '1.14-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
     id "com.modrinth.minotaur" version "2.+" apply false
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'com.gradleup.shadow' version '8.3.5' apply false
     id("xyz.jpenilla.run-paper") version "2.3.1" apply false
 
 //    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
@@ -73,9 +73,19 @@ configure(subprojects.findAll {it.name == "paper"}) {
     apply plugin: 'io.github.dexman545.outlet'
 
     apply plugin: "xyz.jpenilla.run-paper"
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.gradleup.shadow'
 
     version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
+
+    shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        mergeServiceFiles()
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+        append 'META-INF/LICENSE'
+        append 'META-INF/NOTICE'
+    }
 
 
 

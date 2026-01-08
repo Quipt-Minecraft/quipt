@@ -53,7 +53,7 @@ public class ConfigManager {
      * @param factory The factory instance used to create ConfigObject instances.
      */
     public void factory(ConfigObject.Factory<?> factory) {
-        integration.logger().log(integration.name() + "-QuiptConfig", "Registering factory for class: " + factory.getClassName());
+        integration.logger().log(integration.name() + "-Config Manager", "Registering factory for class: " + factory.getClassName());
         factories.put(factory.getClassName(), factory);
     }
 
@@ -69,7 +69,7 @@ public class ConfigManager {
         if (!templateClass.isAnnotationPresent(ConfigTemplate.class))
             throw new IllegalStateException("The ConfigTemplate class " + templateClass.getName() + " must have @ConfigFile annotation present, however none are detected.");
         ConfigTemplate templateData = templateClass.getAnnotation(ConfigTemplate.class);
-        integration.logger().log("QuiptConfig", "Registering config file \"" + templateData.name() + "\" for integration: " + integration.name() + ".");
+        integration.logger().log(integration.name() + "-Config Manager", "Registering config file \"" + templateData.name() + "\" for integration: " + integration.name() + ".");
         File file;
         T content;
         try {
@@ -91,7 +91,7 @@ public class ConfigManager {
 
         configs.put(templateData.name(), content);
         integration.logger().log(
-                integration.name() + "-ConfigManager",
+                integration.name() + "-Config Manager",
                 content.write()
                         ? "Registered {} config file"
                         : "Failed to register {} config file",
@@ -104,8 +104,8 @@ public class ConfigManager {
         File file = new File(integration.folder(), templateData.name() + "." + templateData.ext().extension());
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) {
-            integration.logger().log("QuiptConfig", "Config file \"" + templateData.name() + "\" does not exist. Creating...");
-            integration.logger().log("QuiptConfig", file.createNewFile() ? "Success" : "Failure");
+            integration.logger().log(integration.name() + "-Config Manager", "Config file \"" + templateData.name() + "\" does not exist. Creating...");
+            integration.logger().log(integration.name() + "-Config Manager", file.createNewFile() ? "Success" : "Failure");
         }
         return file;
     }
@@ -220,7 +220,7 @@ public class ConfigManager {
      * @return The config file
      */
     public <T extends Config> T config(Class<T> clazz) {
-        return (T) configs.get(clazz.getAnnotation(ConfigTemplate.class).name());
+        return (T) configs.getOrDefault(clazz.getAnnotation(ConfigTemplate.class).name(), register(clazz));
     }
 
     /**
