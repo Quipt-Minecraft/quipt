@@ -19,6 +19,8 @@ dependencies {
 
     implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
     implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
+    implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
+
 
     implementation "net.kyori:adventure-api:4.19.0"
     implementation "net.kyori:adventure-text-serializer-gson:$adventure_api_version"
@@ -33,8 +35,8 @@ test {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.release = 17
+    options.release = JavaLanguageVersion.of("$java_version").asInt()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaLanguageVersion.of("$java_version")
+    targetCompatibility = JavaLanguageVersion.of("$java_version")
 }

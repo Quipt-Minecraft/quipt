@@ -6,7 +6,7 @@ import org.gradle.api.artifacts.component.ProjectComponentSelector
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom' version '1.11-SNAPSHOT' apply false
+    id 'fabric-loom' version '1.14-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
     id "com.modrinth.minotaur" version "2.+" apply false
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
@@ -43,22 +43,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
-
-//    jar {
-//        // Include the content of the 'include' configuration in the JAR
-//        from {
-//            sourceSets.main.output
-//        }
-//
-//        exclude {
-//            it.file in configurations.runtimeClasspath.files
-//        }
-//
-//        // Avoid duplicate files when merging JARs
-//        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    }
-
-    System.out.println(it.name);
 
 
     publishing {

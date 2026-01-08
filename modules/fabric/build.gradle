@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'fabric-loom' version '1.14-SNAPSHOT'
 }
 
 
@@ -70,7 +70,8 @@ dependencies {
     includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version")
 //    include(modImplementation( "net.kyori:adventure-api:4.19.0"))
 
-    modImplementation include("net.kyori:adventure-platform-fabric:6.3.0")
+    //This one is the proper one
+    modImplementation include("net.kyori:adventure-platform-fabric:6.8.0")
 
 
     namedElements(implementation project.project(":modules:core") )
@@ -131,11 +132,10 @@ processResources {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.release = 21 // or 17
+    options.release = JavaLanguageVersion.of("$java_version").asInt()
 
-    // Force Java version for all modules
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaLanguageVersion.of("$java_version")
+    targetCompatibility = JavaLanguageVersion.of("$java_version")
 }
 
 

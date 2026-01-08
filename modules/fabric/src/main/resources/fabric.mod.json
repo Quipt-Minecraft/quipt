@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "quipt",
   "version": "${version}",
-  "name": "quipt",
+  "name": "Quipt",
   "description": "",
   "authors": [],
   "contact": {},
@@ -14,7 +14,7 @@
       "com.quiptmc.fabric.client.datagen.EntrypointDataGenerator"
     ],
     "main": [
-      "com.quiptmc.fabric.Initializer"
+      "com.quiptmc2.fabric.Quipt"
     ],
     "client": [
       "com.quiptmc.fabric.client.EntrypointClient"
