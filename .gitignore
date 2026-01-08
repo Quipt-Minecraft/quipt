@@ -49,3 +49,8 @@ bin/
 /fabric/src/main/generated/
 /logs/
 /core/tests/
+/modules/core/quipt-test/
+/modules/fabric/run/
+/modules/paper/run/
+/modules/paper/src/main/resources/gradle.properties
+/modules/core/tests/
