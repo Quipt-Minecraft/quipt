@@ -104,6 +104,7 @@ modrinth {
 
 test {
     useJUnitPlatform()
+    failOnNoDiscoveredTests = false
 }
 
 
