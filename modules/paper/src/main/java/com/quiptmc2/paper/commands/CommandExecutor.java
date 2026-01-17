@@ -1,67 +1,36 @@
 package com.quiptmc2.paper.commands;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.context.CommandContext;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc2.paper.QuiptPlugin;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.Component;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static net.kyori.adventure.text.Component.text;
+public abstract class CommandExecutor extends Command {
 
-public abstract class CommandExecutor {
-    private final QuiptPlugin.PaperIntegration integration;
-    private final String cmd;
 
-    public CommandExecutor(QuiptPlugin.PaperIntegration integration, String cmd) {
-        this.integration = integration;
-        this.cmd = cmd;
-    }
-
-    public String name() {
-        return cmd;
-    }
-
-    public QuiptPlugin.PaperIntegration integration() {
-        return integration;
-    }
-
-    public abstract LiteralCommandNode<CommandSourceStack> execute();
-
-    public int logError(CommandContext<CommandSourceStack> context, String message) {
-        return logError(context.getSource().getSender(), message);
-    }
-
-    public int logError(CommandContext<CommandSourceStack> context, Component message) {
-        return logError(context.getSource().getSender(), message);
-    }
-
-    public int logError(CommandSender sender, String message) {
-        return logError(sender, text(message));
-    }
-
-    public int logError(CommandSender sender, Component message) {
-        sender.sendMessage(message);
-        return Command.SINGLE_SUCCESS;
-    }
-
-    public int showUsage(CommandSender sender, String perm) {
-        return logError(sender, (perm.equalsIgnoreCase("") || sender.hasPermission(perm)) ? integration.messages().get("cmd." + name() + ".usage") : integration.messages().get("cmd.error.no_perm", perm));
+    public CommandExecutor(QuiptPlugin plugin, String cmd) {
+        super(plugin, cmd);
 
     }
 
-    public int showUsage(CommandContext<CommandSourceStack> context, String perm) {
-        return showUsage(context.getSource().getSender(), perm);
+
+
+    public LiteralCommandNode<CommandSourceStack> execute(){
+        return arguments().build();
     }
+
+    public abstract LiteralArgumentBuilder<CommandSourceStack> arguments();
+
+
 
     public static class Builder {
         CommandExecutor cmd;
@@ -87,7 +56,7 @@ public abstract class CommandExecutor {
         }
 
         public void register() {
-            @NotNull LifecycleEventManager<@NotNull Plugin> manager = cmd.integration.plugin().getLifecycleManager();
+            @NotNull LifecycleEventManager<@NotNull Plugin> manager = cmd.plugin().getLifecycleManager();
             manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
                 final Commands commands = event.registrar();
                 commands.register(cmd.execute(), desc, List.of(aliases));

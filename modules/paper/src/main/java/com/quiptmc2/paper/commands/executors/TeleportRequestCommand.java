@@ -8,6 +8,7 @@
 
 package com.quiptmc2.paper.commands.executors;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
 import com.quiptmc.paper.data.PaperPlayer;
@@ -23,22 +24,22 @@ import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class TeleportRequestCommand extends CommandExecutor {
 
-    public TeleportRequestCommand(QuiptPlugin.PaperIntegration integration) {
+    public TeleportRequestCommand(QuiptPlugin integration) {
         super(integration, "teleportrequest");
     }
 
     @Override
-    public LiteralCommandNode<CommandSourceStack> execute() {
+    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name()).executes(context -> showUsage(context, "quipt.cmd.teleportrequest"))
                 .then(argument("player", ArgumentTypes.player())
                         .executes(context -> {
-                            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, integration().messages().get("cmd.error.player_only"));
+                            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, plugin().integration().messages().get("cmd.error.player_only"));
                             PlayerSelectorArgumentResolver targetSelector = context.getArgument("player", PlayerSelectorArgumentResolver.class);
                             targetSelector.resolve(context.getSource()).forEach(target -> {
                                 LocationUtils.request(PaperPlayer.of(player), PaperPlayer.of(target));
                             });
 //                            target.sendMessage(text("test"));
                             return 1;
-                        })).build();
+                        }));
     }
 }

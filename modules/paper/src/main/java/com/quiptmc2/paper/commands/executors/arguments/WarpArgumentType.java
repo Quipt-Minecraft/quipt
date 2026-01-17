@@ -15,12 +15,18 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
 import com.quiptmc.minecraft.utils.teleportation.points.TeleportationPoint;
+import com.quiptmc2.paper.QuiptPlugin;
+import com.quiptmc2.paper.commands.Command;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public class WarpArgumentType implements CustomArgumentType.Converted<TeleportationPoint, String> {
+public class WarpArgumentType extends CustomArgumentConverter<TeleportationPoint, String> {
+
+    public WarpArgumentType(QuiptPlugin plugin, String cmd) {
+        super(plugin, cmd);
+    }
 
     @Override
     public TeleportationPoint convert(@NotNull String nativeType) {

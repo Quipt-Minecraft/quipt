@@ -8,6 +8,7 @@
 
 package com.quiptmc2.paper.commands.executors;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc.minecraft.utils.teleportation.points.TeleportationPoint;
 import com.quiptmc2.paper.QuiptPlugin;
@@ -19,30 +20,30 @@ import static io.papermc.paper.command.brigadier.Commands.argument;
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class WarpCommand extends CommandExecutor {
-    public WarpCommand(QuiptPlugin.PaperIntegration integration) {
+    public WarpCommand(QuiptPlugin integration) {
         super(integration, "warp");
     }
 
     @Override
-    public LiteralCommandNode<CommandSourceStack> execute() {
+    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name()).executes(context -> showUsage(context, "cmd.usage.warp")).then(literal("set").executes(context -> {
             context.getSource().getSender().sendMessage("Test");
             return 1;
-        }).then(argument("warp", new WarpArgumentType()).executes(context -> {
+        }).then(argument("warp", new WarpArgumentType(plugin(), "warp")).executes(context -> {
             TeleportationPoint warp = context.getArgument("warp", TeleportationPoint.class);
             return 1;
         }))).then(literal("remove").executes(context -> {
             context.getSource().getSender().sendMessage("Test");
             return 1;
-        }).then(argument("warp", new WarpArgumentType()).executes(context -> {
+        }).then(argument("warp", new WarpArgumentType(plugin(), "warp")).executes(context -> {
             TeleportationPoint warp = context.getArgument("warp", TeleportationPoint.class);
             return 1;
         }))).then(literal("list").executes(context -> {
             context.getSource().getSender().sendMessage("Test");
             return 1;
-        })).then(argument("warp", new WarpArgumentType()).executes(context -> {
+        })).then(argument("warp", new WarpArgumentType(plugin(), "warp")).executes(context -> {
             TeleportationPoint warp = context.getArgument("warp", TeleportationPoint.class);
             return 1;
-        })).build();
+        }));
     }
 }

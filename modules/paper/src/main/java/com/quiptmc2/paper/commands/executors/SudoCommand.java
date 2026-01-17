@@ -1,6 +1,7 @@
 package com.quiptmc2.paper.commands.executors;
 
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc2.paper.QuiptPlugin;
 import com.quiptmc2.paper.commands.CommandExecutor;
@@ -16,12 +17,12 @@ import static io.papermc.paper.command.brigadier.Commands.argument;
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class SudoCommand extends CommandExecutor {
-    public SudoCommand(QuiptPlugin.PaperIntegration integration) {
+    public SudoCommand(QuiptPlugin integration) {
         super(integration, "sudo");
     }
 
     @Override
-    public LiteralCommandNode<CommandSourceStack> execute() {
+    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name()).executes(context -> {
                     return 1;
                 })
@@ -36,6 +37,7 @@ public class SudoCommand extends CommandExecutor {
                                     CommandBuilderArgument.ExecutableCommand command = context.getArgument("command", CommandBuilderArgument.ExecutableCommand.class);
                                     targets.forEach(player -> command.execute(player));
                                     return 1;
-                                }))).build();
+                                })));
     }
+
 }

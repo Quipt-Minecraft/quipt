@@ -21,6 +21,10 @@ public abstract class QuiptPlugin extends JavaPlugin {
         enable();
     }
 
+    public PaperIntegration integration() {
+        return integration;
+    }
+
     public abstract void enable();
 
     public static class PaperIntegration extends MinecraftIntegration<JavaPlugin> {

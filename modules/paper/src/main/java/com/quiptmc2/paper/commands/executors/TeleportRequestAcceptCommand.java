@@ -8,6 +8,7 @@
 
 package com.quiptmc2.paper.commands.executors;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
 import com.quiptmc.paper.data.PaperPlayer;
@@ -22,14 +23,14 @@ import static io.papermc.paper.command.brigadier.Commands.literal;
 
 public class TeleportRequestAcceptCommand extends CommandExecutor {
 
-    public TeleportRequestAcceptCommand(QuiptPlugin.PaperIntegration integration) {
+    public TeleportRequestAcceptCommand(QuiptPlugin integration) {
         super(integration, "teleportrequestaccept");
     }
 
     @Override
-    public LiteralCommandNode<CommandSourceStack> execute() {
+    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name()).executes(context -> {
-            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, integration().messages().get("cmd.error.player_only"));
+            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, plugin().integration().messages().get("cmd.error.player_only"));
             PaperPlayer paperPlayer = PaperPlayer.of(player);
             for(LocationUtils.TeleportRequest request : LocationUtils.requests()){
                 System.out.println("Checking request for " + request.target().name() + " against " + player.name());
@@ -40,8 +41,8 @@ public class TeleportRequestAcceptCommand extends CommandExecutor {
                     return 1;
                 }
             }
-            player.sendMessage(integration().messages().get("cmd.teleportrequestaccept.no_requests"));
+            player.sendMessage(plugin().integration().messages().get("cmd.teleportrequestaccept.no_requests"));
             return 1;
-        }).build();
+        });
     }
 }
