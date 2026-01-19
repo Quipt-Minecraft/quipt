@@ -129,4 +129,10 @@ public class Registry<T> {
     public T[] values() {
         return (T[]) registry.values().toArray();
     }
+
+    public void remove(String key) {
+        registry.remove(key);
+    }
+
+
 }
