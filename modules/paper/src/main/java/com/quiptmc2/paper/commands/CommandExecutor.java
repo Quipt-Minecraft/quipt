@@ -16,21 +16,15 @@ import java.util.List;
 
 public abstract class CommandExecutor extends Command {
 
-
     public CommandExecutor(QuiptPlugin plugin, String cmd) {
         super(plugin, cmd);
-
     }
-
-
 
     public LiteralCommandNode<CommandSourceStack> execute(){
         return arguments().build();
     }
 
     public abstract LiteralArgumentBuilder<CommandSourceStack> arguments();
-
-
 
     public static class Builder {
         CommandExecutor cmd;

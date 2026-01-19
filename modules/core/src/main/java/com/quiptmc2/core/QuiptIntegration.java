@@ -89,7 +89,7 @@ public abstract class QuiptIntegration {
     public abstract File folder();
 
 
-    public static class Logger {
+    public class Logger {
 
         org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -102,7 +102,7 @@ public abstract class QuiptIntegration {
          * @param message The message to be logged.
          */
         public void log(String tag, String message) {
-            logger.info("[{}] {}", tag, message);
+            logger.info("[{}-{}] {}", name(), tag, message);
         }
 
         /**

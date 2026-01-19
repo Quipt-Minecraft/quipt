@@ -4,14 +4,11 @@ import com.quiptmc.core.data.Metadata;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.core.config.factories.GenericFactory;
-import com.quiptmc2.core.config.files.QuiptConfig;
-import com.quiptmc2.core.server.QuiptServer;
 import com.quiptmc2.minecraft.config.files.PartyConfig;
 import com.quiptmc2.minecraft.events.party.Party;
 import com.quiptmc2.minecraft.utils.chat.MessageUtils;
 
 import java.io.File;
-import java.util.Locale;
 
 public abstract class MinecraftIntegration<T> extends QuiptIntegration {
 
@@ -79,10 +76,11 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
             if(configs().config(PartyConfig.class) == null){
                 logger().log(name() + "-Parties", "Initializing Webhook Config...");
                 configs().factory(new GenericFactory<>(Party.class));
-                configs().register(PartyConfig.class);
+                parties = configs().register(PartyConfig.class);
             }
 
         }
         return parties;
     }
+
 }
