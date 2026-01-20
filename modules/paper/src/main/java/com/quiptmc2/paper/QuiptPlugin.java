@@ -7,6 +7,7 @@ import com.quiptmc.minecraft.api.statistics.MinecraftStat;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.minecraft.api.MinecraftIntegration;
 import com.quiptmc2.minecraft.api.MinecraftPlayer;
+import com.quiptmc2.paper.api.PaperPlayers;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 
@@ -33,12 +34,24 @@ public abstract class QuiptPlugin extends JavaPlugin {
     public abstract void enable();
 
     public static class PaperIntegration extends MinecraftIntegration<JavaPlugin> {
+
+        private PaperPlayers players;
+
         public PaperIntegration(Metadata metadata, JavaPlugin instance) {
             super(metadata, instance);
+            players = new PaperPlayers(this);
         }
 
         public JavaPlugin plugin() {
             return instance();
+        }
+
+        public PaperPlayers players() {
+            if(players == null) {
+                logger().log("Players", "Initializing players...");
+                players = new PaperPlayers(this);
+            }
+            return players;
         }
     }
 
