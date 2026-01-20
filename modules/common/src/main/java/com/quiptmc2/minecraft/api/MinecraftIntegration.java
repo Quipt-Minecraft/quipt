@@ -76,8 +76,8 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
             if(configs().config(PartyConfig.class) == null){
                 logger().log(name() + "-Parties", "Initializing Webhook Config...");
                 configs().factory(new GenericFactory<>(Party.class));
-                parties = configs().register(PartyConfig.class);
             }
+            parties = configs().register(PartyConfig.class);
 
         }
         return parties;
