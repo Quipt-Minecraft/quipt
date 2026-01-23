@@ -2,7 +2,7 @@ package com.quiptmc2.paper;
 
 import com.quiptmc2.minecraft.config.files.ResourceConfig;
 
-public class Quipt extends QuiptPlugin {
+public class QuiptPaper extends QuiptPlugin {
 
 
     @Override
