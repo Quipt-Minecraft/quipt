@@ -2,6 +2,7 @@ package com.quiptmc2.minecraft.api;
 
 import com.quiptmc.core.data.Metadata;
 import com.quiptmc.minecraft.web.ResourcePackHandler;
+import com.quiptmc2.core.Quipt;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.core.config.factories.GenericFactory;
 import com.quiptmc2.minecraft.config.files.PartyConfig;
@@ -50,14 +51,6 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
     @Override
     public File folder() {
         return folder;
-    }
-
-    public MessageUtils messages(){
-        if(messages == null){
-            logger().log(name() + "-Messages", "Initializing Messages...");
-            messages = new MessageUtils(this);
-        }
-        return messages;
     }
 
     public ResourcePackHandler packHandler() {

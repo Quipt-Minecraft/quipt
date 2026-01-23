@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.quiptmc2.minecraft.events.party.Party;
+import com.quiptmc2.minecraft.utils.chat.MessageUtils;
 import com.quiptmc2.paper.QuiptPlugin;
 import com.quiptmc2.paper.api.PaperPlayers;
 import com.quiptmc2.paper.commands.CommandExecutor;
@@ -44,7 +45,7 @@ public class PartyCommand extends CommandExecutor {
                         if (plugin().integration().parties().get(partyName) != null)
                             return logError(context, "A party with that name already exists.");
                         plugin().integration().parties().create(partyName);
-                        context.getSource().getSender().sendMessage(plugin().integration().messages().get("quipt.party.create", partyName));
+                        context.getSource().getSender().sendMessage(MessageUtils.get("quipt.party.create", partyName));
                         return Command.SINGLE_SUCCESS;
                     })))
             .then(literal("leave")
@@ -77,7 +78,7 @@ public class PartyCommand extends CommandExecutor {
                                 logError(context, target.getName() + " is not in a party.");
                                 continue;
                             }
-                            context.getSource().getSender().sendMessage(plugin().integration().messages().get("quipt.party.leave.other", target.getName(), party.id()));
+                            context.getSource().getSender().sendMessage(MessageUtils.get("quipt.party.leave.other", target.getName(), party.id()));
                             party.leave(paperTarget);
                         }
                         return Command.SINGLE_SUCCESS;
@@ -110,7 +111,7 @@ public class PartyCommand extends CommandExecutor {
                             PlayerSelectorArgumentResolver targetResolver = context.getArgument("target", PlayerSelectorArgumentResolver.class);
                             List<Player> targets = targetResolver.resolve(context.getSource());
                             for (Player target : targets) {
-                                context.getSource().getSender().sendMessage(plugin().integration().messages().get("quipt.party.join.other", target.getName(), party.id()));
+                                context.getSource().getSender().sendMessage(MessageUtils.get("quipt.party.join.other", target.getName(), party.id()));
                                 party.join(plugin().integration().players().of(target));
                             }
                             return Command.SINGLE_SUCCESS;
@@ -125,7 +126,7 @@ public class PartyCommand extends CommandExecutor {
                         try {
                             Party party = context.getArgument("partyName", Party.class);
                             plugin().integration().parties().remove(party);
-                            context.getSource().getSender().sendMessage(plugin().integration().messages().get("quipt.party.remove", party.id()));
+                            context.getSource().getSender().sendMessage(MessageUtils.get("quipt.party.remove", party.id()));
                             return Command.SINGLE_SUCCESS;
                         } catch (NullPointerException e) {
                             return logError(context, "Party not found.");

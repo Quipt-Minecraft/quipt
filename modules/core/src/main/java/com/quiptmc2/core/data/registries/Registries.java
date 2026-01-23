@@ -23,7 +23,9 @@ public class Registries {
 
     public RegistryKey key(String key) {
 
-        if (!keys.containsKey(key)) throw new IllegalArgumentException("Key not registered: " + key);
+        if (!keys.containsKey(key))
+            return null;
+
         return keys.get(key);
     }
 

@@ -45,9 +45,9 @@ public abstract class QuiptIntegration {
 
     public QuiptServer server() {
         if(server == null){
-            logger().log(name() + "-Server", "Initializing QuiptServer...");
+            logger().log("Server", "Initializing QuiptServer...");
             if(configs().config(QuiptConfig.class) == null){
-                logger().log(name() + "-Server", "Initializing Webhook Config...");
+                logger().log("Server", "Initializing Webhook Config...");
                 configs.factory(new GenericFactory<>(QuiptConfig.WebData.class));
                 configs.register(QuiptConfig.class);
             }
@@ -60,7 +60,7 @@ public abstract class QuiptIntegration {
 
     public Registries registries() {
         if(registries == null){
-            logger().log(name() + "-Registries", "Initializing Registries...");
+            logger().log("Registries", "Initializing Registries...");
             registries = new Registries();
         }
         return registries;
@@ -68,7 +68,7 @@ public abstract class QuiptIntegration {
 
     public ConfigManager configs() {
         if(configs == null){
-            logger().log(name() + "-ConfigManager", "Initializing Config Manager...");
+            logger().log("ConfigManager", "Initializing Config Manager...");
             configs = new ConfigManager(this);
         }
         return configs;
@@ -77,7 +77,7 @@ public abstract class QuiptIntegration {
     public WebhookConfig webhooks(){
         if(configs == null) configs();
         if(configs.config(WebhookConfig.class) == null){
-            logger().log(name() + "-Webhooks", "Initializing Webhook Config...");
+            logger().log("Webhooks", "Initializing Webhook Config...");
             configs.factory(new GenericFactory<>(Webhook.class));
             configs.register(WebhookConfig.class);
         }
@@ -87,6 +87,7 @@ public abstract class QuiptIntegration {
     public abstract String name();
     public abstract String version();
     public abstract File folder();
+    public abstract void enable();
 
 
     public class Logger {
@@ -113,7 +114,7 @@ public abstract class QuiptIntegration {
          * @param args    The arguments to format the message with
          */
         public void log(String tag, String message, Object... args) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.info(formatted, args);
         }
 
@@ -124,7 +125,7 @@ public abstract class QuiptIntegration {
          * @param message The warning to log
          */
         public void warn(String tag, String message) {
-            logger.warn("[{}] {}", tag, message);
+            logger.warn("[{}-{}] {}", name(), tag, message);
         }
 
         /**
@@ -135,7 +136,7 @@ public abstract class QuiptIntegration {
          * @param args    The arguments to format the warning with
          */
         public void warn(String tag, String message, Object... args) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.warn(formatted, args);
         }
 
@@ -146,7 +147,7 @@ public abstract class QuiptIntegration {
          * @param message The error to log
          */
         public void error(String tag, String message) {
-            logger.error("[{}] {}", tag, message);
+            logger.error("[{}-{}] {}", name(), tag, message);
         }
 
         /**
@@ -157,7 +158,7 @@ public abstract class QuiptIntegration {
          * @param args    The arguments to format the error with
          */
         public void error(String tag, String message, Object... args) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.error(formatted, args);
         }
 
@@ -169,7 +170,7 @@ public abstract class QuiptIntegration {
          * @param throwable   The throwable to log
          */
         public void error(String tag, String message, Throwable throwable) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.error(formatted, throwable);
         }
 
@@ -182,7 +183,7 @@ public abstract class QuiptIntegration {
          * @param args        The arguments to format the error with
          */
         public void error(String tag, String message, Throwable throwable, Object... args) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.error(formatted, args, throwable);
         }
 
@@ -193,7 +194,7 @@ public abstract class QuiptIntegration {
          * @param message The debug message to log
          */
         public void debug(String tag, String message) {
-            logger.debug("[{}] {}", tag, message);
+            logger.debug("[{}-{}] {}", name(), tag, message);
         }
 
         /**
@@ -204,7 +205,7 @@ public abstract class QuiptIntegration {
          * @param args    The arguments to format the debug message with
          */
         public void debug(String tag, String message, Object... args) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.debug(formatted, args);
         }
 
@@ -215,7 +216,7 @@ public abstract class QuiptIntegration {
          * @param message The trace message to
          */
         public void trace(String tag, String message) {
-            logger.trace("[{}] {}", tag, message);
+            logger.trace("[{}-{}] {}", name(), tag, message);
         }
 
         /**
@@ -226,7 +227,7 @@ public abstract class QuiptIntegration {
          * @param args    The arguments to format the trace message with
          */
         public void trace(String tag, String message, Object... args) {
-            String formatted = "[" + tag + "] " + message;
+            String formatted = "[" + "" + tag + "] " + message;
             logger.trace(formatted, args);
         }
 

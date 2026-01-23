@@ -1,5 +1,6 @@
 package com.quiptmc2.minecraft.utils.chat;
 
+import com.quiptmc2.core.Quipt;
 import com.quiptmc2.core.config.files.MessagesConfig;
 import com.quiptmc2.core.data.registries.Registry;
 import com.quiptmc2.minecraft.api.MinecraftIntegration;
@@ -18,13 +19,16 @@ import static net.kyori.adventure.text.Component.translatable;
 
 public class MessageUtils {
 
-    private final Registry<Component> registry;
+    private static MessagesConfig config;
+    private static Registry<Component> registry;
 
-    private final MessagesConfig config;
+    private static boolean initialized = false;
 
-    public MessageUtils(MinecraftIntegration<?> integration) {
-        registry = integration.registries().register("messages", () -> null);
-        config = integration.configs().register(MessagesConfig.class);
+    private static void init() {
+        if(initialized) return;
+        Quipt.INSTANCE.logger().log("Messages", "Initializing Messages...");
+        registry = Quipt.INSTANCE.registries().register("messages", () -> null);
+        config = Quipt.INSTANCE.configs().register(MessagesConfig.class);
         createDefaultMessages();
         for (String key : config.messages.keySet()) {
             if (registry.get(key).isEmpty()) {
@@ -32,20 +36,22 @@ public class MessageUtils {
             }
         }
         config.save();
+        initialized = true;
     }
 
-    public void register(String key, String serializedComponent) {
+    public static void register(String key, String serializedComponent) {
+        if(!initialized) init();
         if (!config.messages.has(key)) {
             registry.register(key, deserialize(serializedComponent));
             config.messages.put(key, serializedComponent);
         }
     }
 
-    public void register(String key, Component deserializedComponent) {
+    public static void register(String key, Component deserializedComponent) {
         register(key, serialize(deserializedComponent));
     }
 
-    private void createDefaultMessages() {
+    private static void createDefaultMessages() {
         register("cmd.error.no_perm", "{\"text\":\"Sorry, you don't have the permission to run that command.\",\"color\":\"red\"}");
         register("cmd.error.no_command", "{\"text\":\"Sorry, couldn't find the command \\\"[0]\\\". Please check your spelling and try again.\",\"color\":\"red\"}");
         register("cmd.error.no_console", "{\"text\":\"Sorry, this command can only be run by players.\",\"color\":\"red\"}");
@@ -55,25 +61,25 @@ public class MessageUtils {
         register("cmd.session.task", "{\"text\":\"You have been assigned the task [0]\",\"color\":\"green\"}");
     }
 
-    public Component deserialize(JSONObject json) {
+    public static Component deserialize(JSONObject json) {
         return deserialize(json.toString());
     }
 
-    public Component deserialize(String json) {
+    public static Component deserialize(String json) {
         return GsonComponentSerializer.gson().deserialize(json);
     }
 
-    public String plainText(Component component) {
+    public static String plainText(Component component) {
         return PlainTextComponentSerializer.plainText().serialize(component);
     }
 
-    public String serialize(Component component) {
+    public static String serialize(Component component) {
         String a = GsonComponentSerializer.gson().serialize(component);
         if (!a.startsWith("{")) a = "{\"text\":" + a + "}";
         return a;
     }
 
-    public Component get(String key, Object... replacements) {
+    public static Component get(String key, Object... replacements) {
         Component a = get(key);
         for (int i = 0; i != replacements.length; i++) {
             int finalI = i;
@@ -87,11 +93,11 @@ public class MessageUtils {
         return a;
     }
 
-    private Component get(String key) {
+    private static Component get(String key) {
         return registry.getOrDefault(key, translatable(key));
     }
 
-    public Component parse(@NotNull Component text) {
+    public static Component parse(@NotNull Component text) {
         String content = plainText(text);
         List<String> keys = new ArrayList<>();
         while(content.contains("${") && content.contains("}")) {

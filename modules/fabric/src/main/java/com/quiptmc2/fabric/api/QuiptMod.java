@@ -49,5 +49,10 @@ public abstract class QuiptMod implements ModInitializer {
         public String id() {
             return id;
         }
+
+        @Override
+        public void enable() {
+            logger().log("Initialization", "Initializing " + id() + ".");
+        }
     }
 }

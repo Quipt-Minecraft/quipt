@@ -2,6 +2,7 @@ package com.quiptmc2.paper.commands.executors;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.quiptmc2.minecraft.utils.chat.MessageUtils;
 import com.quiptmc2.paper.QuiptPlugin;
 import com.quiptmc2.paper.commands.CommandExecutor;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -34,7 +35,7 @@ public class ResourcePackCommand extends CommandExecutor {
                         .executes(context -> {
                             CommandSender sender = context.getSource().getSender();
                             if (!(sender instanceof Player player))
-                                return logError(context, plugin().integration().messages().get("cmd.error.player_only"));
+                                return logError(context, MessageUtils.get("cmd.error.player_only"));
 //            try {
 //                CoreUtils.packHandler().setPack(player);
                             player.sendMessage(text("Resource pack reloaded.").color(NamedTextColor.GREEN));

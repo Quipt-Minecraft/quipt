@@ -23,8 +23,12 @@ public abstract class QuiptPlugin extends JavaPlugin {
         data.put("version", getPluginMeta().getVersion());
         data.put("folder", getDataFolder());
         Metadata metadata = Metadata.of(data);
-        integration = new PaperIntegration(metadata, this);
-        enable();
+        integration = new PaperIntegration(metadata, this) {
+            @Override
+            public void enable() {
+                QuiptPlugin.this.enable();
+            }
+        };
     }
 
     public PaperIntegration integration() {
@@ -33,7 +37,7 @@ public abstract class QuiptPlugin extends JavaPlugin {
 
     public abstract void enable();
 
-    public static class PaperIntegration extends MinecraftIntegration<JavaPlugin> {
+    public static abstract class PaperIntegration extends MinecraftIntegration<JavaPlugin> {
 
         private PaperPlayers players;
 
@@ -53,6 +57,7 @@ public abstract class QuiptPlugin extends JavaPlugin {
             }
             return players;
         }
+
     }
 
     public static class PaperPlayer extends MinecraftPlayer {

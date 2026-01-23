@@ -30,7 +30,7 @@ public class TeleportRequestAcceptCommand extends CommandExecutor {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name()).executes(context -> {
-            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, plugin().integration().messages().get("cmd.error.player_only"));
+            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, MessageUtils.get("cmd.error.player_only"));
             PaperPlayer paperPlayer = PaperPlayer.of(player);
             for(LocationUtils.TeleportRequest request : LocationUtils.requests()){
                 System.out.println("Checking request for " + request.target().name() + " against " + player.name());
@@ -41,7 +41,7 @@ public class TeleportRequestAcceptCommand extends CommandExecutor {
                     return 1;
                 }
             }
-            player.sendMessage(plugin().integration().messages().get("cmd.teleportrequestaccept.no_requests"));
+            player.sendMessage(MessageUtils.get("cmd.teleportrequestaccept.no_requests"));
             return 1;
         });
     }

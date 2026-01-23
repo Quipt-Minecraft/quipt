@@ -23,6 +23,11 @@ public class TestUtils {
             public File folder() {
                 return new File(name());
             }
+
+            @Override
+            public void enable() {
+
+            }
         };
     }
 }

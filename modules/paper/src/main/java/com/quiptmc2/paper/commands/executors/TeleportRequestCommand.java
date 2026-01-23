@@ -12,6 +12,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.quiptmc.minecraft.utils.teleportation.LocationUtils;
 import com.quiptmc.paper.data.PaperPlayer;
+import com.quiptmc2.minecraft.utils.chat.MessageUtils;
 import com.quiptmc2.paper.QuiptPlugin;
 import com.quiptmc2.paper.commands.CommandExecutor;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -33,7 +34,7 @@ public class TeleportRequestCommand extends CommandExecutor {
         return literal(name()).executes(context -> showUsage(context, "quipt.cmd.teleportrequest"))
                 .then(argument("player", ArgumentTypes.player())
                         .executes(context -> {
-                            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, plugin().integration().messages().get("cmd.error.player_only"));
+                            if(!(context.getSource().getSender() instanceof Player player)) return logError(context, MessageUtils.get("cmd.error.player_only"));
                             PlayerSelectorArgumentResolver targetSelector = context.getArgument("player", PlayerSelectorArgumentResolver.class);
                             targetSelector.resolve(context.getSource()).forEach(target -> {
                                 LocationUtils.request(PaperPlayer.of(player), PaperPlayer.of(target));

@@ -6,6 +6,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.quiptmc2.minecraft.utils.chat.MessageUtils;
 import com.quiptmc2.paper.QuiptPlugin;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.Component;
@@ -53,7 +54,7 @@ public abstract class Command {
                 args.append(newNode.getName()).append(".");
             }
         }
-        return logError(context, (perm.equalsIgnoreCase("") || sender.hasPermission(perm)) ? plugin.integration().messages().get("cmd." + args + "usage") : plugin.integration().messages().get("cmd.error.no_perm", perm));
+        return logError(context, (perm.equalsIgnoreCase("") || sender.hasPermission(perm)) ? MessageUtils.get("cmd." + args + "usage") : MessageUtils.get("cmd.error.no_perm", perm));
     }
 
     public CompletableFuture<Suggestions> onlySimilar(String[] values, String argumentName, CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {

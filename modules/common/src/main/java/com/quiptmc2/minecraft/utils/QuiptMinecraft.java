@@ -1,4 +1,4 @@
 package com.quiptmc2.minecraft.utils;
 
-public class QuiptUtils {
+public class QuiptMinecraft {
 }
