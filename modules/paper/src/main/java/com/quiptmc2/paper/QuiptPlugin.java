@@ -4,6 +4,7 @@ import com.quiptmc.core.data.Metadata;
 import com.quiptmc.minecraft.api.MinecraftEntityType;
 import com.quiptmc.minecraft.api.MinecraftMaterial;
 import com.quiptmc.minecraft.api.statistics.MinecraftStat;
+import com.quiptmc2.core.Quipt;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.minecraft.api.MinecraftIntegration;
 import com.quiptmc2.minecraft.api.MinecraftPlayer;
@@ -29,6 +30,7 @@ public abstract class QuiptPlugin extends JavaPlugin {
                 QuiptPlugin.this.enable();
             }
         };
+        Quipt.INSTANCE.enable(integration);
     }
 
     public PaperIntegration integration() {

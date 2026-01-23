@@ -1,19 +1,16 @@
 package com.quiptmc2.minecraft.api;
 
 import com.quiptmc.core.data.Metadata;
-import com.quiptmc.minecraft.web.ResourcePackHandler;
-import com.quiptmc2.core.Quipt;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.core.config.factories.GenericFactory;
 import com.quiptmc2.minecraft.config.files.PartyConfig;
 import com.quiptmc2.minecraft.events.party.Party;
-import com.quiptmc2.minecraft.utils.chat.MessageUtils;
+import com.quiptmc2.minecraft.server.ResourcePackHandler;
 
 import java.io.File;
 
 public abstract class MinecraftIntegration<T> extends QuiptIntegration {
 
-    private MessageUtils messages = null;
     private ResourcePackHandler packHandler = null;
     private PartyConfig parties = null;
     private final Metadata metadata;
@@ -55,7 +52,7 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
 
     public ResourcePackHandler packHandler() {
         if(packHandler == null){
-            logger().log(name() + "-ResourcePackHandler", "Initializing Resource Pack Handler...");
+            logger().log("ResourcePackHandler", "Initializing Resource Pack Handler...");
             packHandler = new ResourcePackHandler(server());
             server().handler().handle("resources", packHandler, "resources/*");
 //            packHandler.setUrl(resourceConfig.repo_url);
@@ -65,9 +62,9 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
 
     public PartyConfig parties(){
         if(parties == null){
-            logger().log(name() + "-Parties", "Initializing Party Handler...");
+            logger().log("Parties", "Initializing Party Handler...");
             if(configs().config(PartyConfig.class) == null){
-                logger().log(name() + "-Parties", "Initializing Webhook Config...");
+                logger().log("Parties", "Initializing Webhook Config...");
                 configs().factory(new GenericFactory<>(Party.class));
             }
             parties = configs().register(PartyConfig.class);

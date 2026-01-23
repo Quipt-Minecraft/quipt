@@ -1,9 +1,8 @@
-package com.quiptmc.minecraft.web;
+package com.quiptmc2.minecraft.server;
 
-import com.quiptmc.core.config.ConfigManager;
-import com.quiptmc.core.server.QuiptServer;
-import com.quiptmc.core.server.QuiptServlet;
-import com.quiptmc.core.config.files.ResourceConfig;
+import com.quiptmc2.core.server.QuiptServer;
+import com.quiptmc2.minecraft.config.files.ResourceConfig;
+import com.quiptmc2.core.server.QuiptServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eclipse.jgit.api.Git;
@@ -36,13 +35,13 @@ public class ResourcePackHandler extends QuiptServlet {
     public ResourcePackHandler(QuiptServer server) {
         super(server);
 
-        packData = ConfigManager.getConfig(server.integration(), ResourceConfig.class);
-        pack = new File(server.integration().dataFolder(), "resources/pack.zip");
-        repo = new File(server.integration().dataFolder(), "resources/repo/");
+        packData = server.integration().configs().config(ResourceConfig.class);
+        pack = new File(server.integration().folder(), "resources/pack.zip");
+        repo = new File(server.integration().folder(), "resources/repo/");
         if (!pack.getParentFile().isDirectory())
-            server.integration().logger().log(pack.getParentFile().mkdirs() ? "Set up 'pack.zip' parents." : "Couldn't set up 'pack.zip' parents.");
+            server.integration().logger().log("Resource Server", pack.getParentFile().mkdirs() ? "Set up 'pack.zip' parents." : "Couldn't set up 'pack.zip' parents.");
         if (!repo.exists())
-            server.integration().logger().log(repo.mkdirs() ? "Set up 'repo' directory." : "Couldn't set up 'repo' directory.");
+            server.integration().logger().log("Resource Server", repo.mkdirs() ? "Set up 'repo' directory." : "Couldn't set up 'repo' directory.");
         if (pack.exists()) {
             sync();
         }
@@ -63,18 +62,18 @@ public class ResourcePackHandler extends QuiptServlet {
             serverStarted = true;
             sync();
         } catch (IOException | NoSuchAlgorithmException e) {
-            server().integration().logger().error("Error starting resource pack server", e);
+            server().integration().logger().error("Resource Server", "Error starting resource pack server", e);
         }
     }
 
     public void sync() {
-        server().integration().logger().log("Syncing resource pack.");
+        server().integration().logger().log("Resource Server", "Syncing resource pack.");
         if (repo.exists() && new File(repo, ".git").exists()) updateRepo();
         else cloneRepo();
     }
 
     private void updateRepo() {
-        server().integration().logger().log("Updating resource pack.");
+        server().integration().logger().log("Resource Server", "Updating resource pack.");
         try {
             Git git = Git.open(repo);
             git.pull().call();
@@ -83,29 +82,29 @@ public class ResourcePackHandler extends QuiptServlet {
 
             zip(commit);
         } catch (GitAPIException | IOException e) {
-            server().integration().logger().error("There was an error updating the repo", e);
+            server().integration().logger().error("Resource Server", "There was an error updating the repo", e);
         }
     }
 
     private void cloneRepo() {
         if (!enabled()) return;
-        server().integration().logger().log("Cloning resource pack.");
+        server().integration().logger().log("Resource Server", "Cloning resource pack.");
         try {
             Git git = Git.cloneRepository().setURI(packData.repo_url).setDirectory(repo).setBranch(packData.repo_branch).call();
 
-            server().integration().logger().log("Cloned resource pack.");
+            server().integration().logger().log("Resource Server", "Cloned resource pack.");
             RevCommit commit = new RevWalk(git.getRepository()).parseCommit(git.getRepository().findRef("HEAD").getObjectId());
             git.close();
             zip(commit);
         } catch (GitAPIException e) {
-            server().integration().logger().error("Error cloning repository", e);
+            server().integration().logger().error("Resource Server", "Error cloning repository", e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void zip(RevCommit commit) {
-        server().integration().logger().log("Zipping resource pack.");
+        server().integration().logger().log("Resource Server", "Zipping resource pack.");
         try {
             zipFolder(repo.toPath(), pack.toPath());
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -123,27 +122,27 @@ public class ResourcePackHandler extends QuiptServlet {
             String newCommitHash = commit.getId().getName();
 
             if(Arrays.equals(storedHash, newHash)){
-                server().integration().logger().log("Resource pack hash matches. Skipping update.");
+                server().integration().logger().log("Resource Server", "Resource pack hash matches. Skipping update.");
                 updateHashes(newHash, newCommitHash, newEncryptedHash);
                 return;
             }
 
             if (newEncryptedHash.equals(packData.hashes.encrypted_zip_hash)) {
-                server().integration().logger().log("Resource pack hash matches. Skipping update.");
+                server().integration().logger().log("Resource Server", "Resource pack hash matches. Skipping update.");
                 updateHashes(newHash, newCommitHash, newEncryptedHash);
                 return;
             }
             if (packData.hashes.commit_hash.equals(newCommitHash)) {
-                server().integration().logger().log("Commit hash match. Skipping update.");
+                server().integration().logger().log("Resource Server", "Commit hash match. Skipping update.");
                 updateHashes(newHash, newCommitHash, newEncryptedHash);
                 return;
             }
             updateHashes(newHash, newCommitHash, newEncryptedHash);
             packData.save();
-            server().integration().logger().log("Resource pack hash mismatch. Updating pack.");
+            server().integration().logger().log("Resource Server", "Resource pack hash mismatch. Updating pack.");
             updatePack();
         } catch (IOException | NoSuchAlgorithmException e) {
-            server().integration().logger().error("Error zipping resource pack", e);
+            server().integration().logger().error("Resource Server", "Error zipping resource pack", e);
         }
     }
 
@@ -162,7 +161,7 @@ public class ResourcePackHandler extends QuiptServlet {
         if (!serverStarted) start();
         String oldUrl = packData.repo_url;
         if (!oldUrl.equals(url)) {
-            server().integration().logger().log("Resources", "Resource pack URL changed. Updating pack.");
+            server().integration().logger().log("Resource Server", "Resource pack URL changed. Updating pack.");
             try {
                 Files.walk(repo.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
                 cloneRepo();
