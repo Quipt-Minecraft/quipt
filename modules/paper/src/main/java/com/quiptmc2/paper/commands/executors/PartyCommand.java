@@ -5,16 +5,14 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.quiptmc2.minecraft.events.party.Party;
 import com.quiptmc2.minecraft.utils.chat.MessageUtils;
+import com.quiptmc2.paper.QuiptPaper;
 import com.quiptmc2.paper.QuiptPlugin;
-import com.quiptmc2.paper.api.PaperPlayers;
+import com.quiptmc2.paper.api.players.PaperPlayer;
 import com.quiptmc2.paper.commands.CommandExecutor;
 import com.quiptmc2.paper.commands.executors.arguments.PartyArgumentType;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
-import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
-import io.papermc.paper.math.BlockPosition;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -55,11 +53,16 @@ public class PartyCommand extends CommandExecutor {
                         return logError(context, "You do not have permission to use this command.");
                     if (!(context.getSource().getSender() instanceof Player target))
                         return logError(context, "Only players can leave parties.");
-                    QuiptPlugin.PaperPlayer paperPlayer = plugin().integration().players().of(target);
+                    PaperPlayer paperPlayer = QuiptPaper.instance().players().of(target);
                     Party party = plugin().integration().parties().get(paperPlayer).orElse(null);
                     if (party == null)
                         return logError(context, "You are not in a party.");
                     party.leave(paperPlayer);
+
+
+
+
+
                     return Command.SINGLE_SUCCESS;
 
                 })
@@ -71,7 +74,7 @@ public class PartyCommand extends CommandExecutor {
                         PlayerSelectorArgumentResolver targetResolver = context.getArgument("target", PlayerSelectorArgumentResolver.class);
                         List<Player> targets = targetResolver.resolve(context.getSource());
                         for (Player target : targets) {
-                            QuiptPlugin.PaperPlayer paperTarget = plugin().integration().players().of(target);
+                            PaperPlayer paperTarget = QuiptPaper.instance().players().of(target);
 
                             Party party = plugin().integration().parties().get(paperTarget).orElse(null);
                             if (party == null) {
@@ -94,7 +97,7 @@ public class PartyCommand extends CommandExecutor {
                             return logError(context, "Only players can join parties.");
                         try {
                             Party party = context.getArgument("partyName", Party.class);
-                            party.join(plugin().integration().players().of(target));
+                            party.join(QuiptPaper.instance().players().of(target));
                         } catch (NullPointerException e) {
                             return logError(context, "Party not found.");
                         }
@@ -112,7 +115,7 @@ public class PartyCommand extends CommandExecutor {
                             List<Player> targets = targetResolver.resolve(context.getSource());
                             for (Player target : targets) {
                                 context.getSource().getSender().sendMessage(MessageUtils.get("quipt.party.join.other", target.getName(), party.id()));
-                                party.join(plugin().integration().players().of(target));
+                                party.join(QuiptPaper.instance().players().of(target));
                             }
                             return Command.SINGLE_SUCCESS;
                         }))))
