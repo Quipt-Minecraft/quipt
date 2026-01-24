@@ -13,8 +13,9 @@ import java.util.UUID;
 
 public abstract class MinecraftPlayer extends ConfigObject implements Audience {
 
-    public MinecraftPlayer(QuiptIntegration integration) {
+    public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
         super(integration);
+        super.id = uuid.toString();
     }
 
     public abstract int getStatistic(MinecraftStat stat);

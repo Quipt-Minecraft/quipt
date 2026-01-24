@@ -18,7 +18,7 @@ public class PaperPlayer extends MinecraftPlayer {
     private final org.bukkit.entity.Player player;
 
     public PaperPlayer(QuiptIntegration integration, org.bukkit.entity.Player player) {
-        super(integration);
+        super(integration, player.getUniqueId());
         this.player = player;
         this.uuid = player.getUniqueId();
         this.last_seen = System.currentTimeMillis();
