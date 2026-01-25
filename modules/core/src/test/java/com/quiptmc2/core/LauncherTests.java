@@ -6,7 +6,7 @@ public class LauncherTests {
 
     public static void main(String[] args) {
         QuiptIntegration integration = TestUtils.getTestIntegration();
-        integration.webhooks().add("name", "id", "token");
-        integration.webhooks().save();
+        Quipt.INSTANCE.webhooks().add("name", "id", "token");
+        Quipt.INSTANCE.webhooks().save();
     }
 }

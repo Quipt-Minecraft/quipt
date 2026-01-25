@@ -22,10 +22,9 @@ public class MessageUtils {
     private static MessagesConfig config;
     private static Registry<Component> registry;
 
-    private static boolean initialized = false;
 
     private static void init() {
-        if(initialized) return;
+        if(initialized()) return;
         Quipt.INSTANCE.logger().log("Messages", "Initializing Messages...");
         registry = Quipt.INSTANCE.registries().register("messages", () -> null);
         config = Quipt.INSTANCE.configs().register(MessagesConfig.class);
@@ -36,11 +35,14 @@ public class MessageUtils {
             }
         }
         config.save();
-        initialized = true;
+    }
+
+    public static boolean initialized() {
+        return Quipt.INSTANCE.registries().key("messages") != null;
     }
 
     public static void register(String key, String serializedComponent) {
-        if(!initialized) init();
+        if(!initialized()) init();
         if (!config.messages.has(key)) {
             registry.register(key, deserialize(serializedComponent));
             config.messages.put(key, serializedComponent);
@@ -113,5 +115,9 @@ public class MessageUtils {
             }
 
         });
+    }
+
+    public void save() {
+        config.save();
     }
 }

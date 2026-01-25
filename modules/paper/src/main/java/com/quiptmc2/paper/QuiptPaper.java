@@ -3,6 +3,8 @@ package com.quiptmc2.paper;
 import com.quiptmc2.core.data.annotations.Nullable;
 import com.quiptmc2.minecraft.config.files.ResourceConfig;
 import com.quiptmc2.paper.api.players.PaperPlayers;
+import com.quiptmc2.paper.commands.CommandExecutor;
+import com.quiptmc2.paper.commands.executors.WebhookCommand;
 
 public class QuiptPaper extends QuiptPlugin {
 
@@ -19,13 +21,14 @@ public class QuiptPaper extends QuiptPlugin {
     @Override
     public void enable() {
         instance = this;
-        if(integration.configs().config(ResourceConfig.class) == null)
-            integration.configs().register(ResourceConfig.class);
-        ResourceConfig config = integration.configs().config(ResourceConfig.class);
+        if(integration().configs().config(ResourceConfig.class) == null)
+            integration().configs().register(ResourceConfig.class);
+        ResourceConfig config = integration().configs().config(ResourceConfig.class);
         if(config.enabled){
-            integration.packHandler().start();
+            integration().packHandler().start();
         }
-        integration.logger().log("Quipt", "Quipt Plugin for Paper enabled!");
+        new CommandExecutor.Builder(new WebhookCommand(this)).setDescription("Alter webhooks").register();
+        integration().logger().log("Quipt", "Quipt Plugin for Paper enabled!");
 //        PaperPlayers.of(null);
     }
 

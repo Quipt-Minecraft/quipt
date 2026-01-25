@@ -1,38 +1,42 @@
 package com.quiptmc2.minecraft.config.objects;
 
-import com.quiptmc.core.config.ConfigObject;
-import com.quiptmc.core.data.JsonSerializable;
-import com.quiptmc.minecraft.utils.teleportation.Location;
+import com.quiptmc2.core.QuiptIntegration;
+import com.quiptmc2.core.config.objects.ConfigObject;
+import com.quiptmc2.core.data.JsonSerializable;
 import com.quiptmc2.core.data.annotations.NotNull;
+import com.quiptmc2.minecraft.location.Location;
 import org.json.JSONObject;
 
-public class ConfigLocation extends ConfigObject implements JsonSerializable {
+public class ConfigLocation extends ConfigObject {
 
 
     public double x, y, z;
     public float yaw, pitch;
     public String world;
 
-    public ConfigLocation(String id, Location location) {
+    public ConfigLocation(QuiptIntegration integration, String id, Location location) {
+        super(integration);
         super.id = id;
         this.x = location.x();
         this.y = location.y();
         this.z = location.z();
         this.yaw = location.yaw();
         this.pitch = location.pitch();
-        this.world = location.world();
+        this.world = location.world().toString();
     }
 
-    public ConfigLocation(JSONObject json) {
+    public ConfigLocation(QuiptIntegration integration, JSONObject json) {
+        super(integration);
         fromJson(json);
     }
 
-    public ConfigLocation(String id) {
+    public ConfigLocation(QuiptIntegration integration, String id) {
+        super(integration);
         super.id = id;
     }
 
-    public ConfigLocation(String id, int blockX, int blockY, int blockZ, float yaw, float pitch, @NotNull String world) {
-        this(id);
+    public ConfigLocation(QuiptIntegration integration, String id, int blockX, int blockY, int blockZ, float yaw, float pitch, @NotNull String world) {
+        this(integration, id);
         this.x = blockX;
         this.y = blockY;
         this.z = blockZ;
@@ -41,8 +45,8 @@ public class ConfigLocation extends ConfigObject implements JsonSerializable {
         this.world = world;
     }
 
-    public ConfigLocation(String id, double x, double y, double z, float yaw, float pitch, @NotNull String world) {
-        this(id);
+    public ConfigLocation(QuiptIntegration integration, String id, double x, double y, double z, float yaw, float pitch, @NotNull String world) {
+        this(integration, id);
         this.x = x;
         this.y = y;
         this.z = z;

@@ -1,6 +1,9 @@
 package com.quiptmc2.core;
 
+import com.quiptmc2.core.config.factories.GenericFactory;
+import com.quiptmc2.core.config.files.WebhookConfig;
 import com.quiptmc2.core.data.registries.Registry;
+import com.quiptmc2.core.discord.Webhook;
 
 import java.io.File;
 import java.util.Optional;
@@ -49,6 +52,15 @@ public class Quipt extends QuiptIntegration {
         integration.enable();
         logger().log("Core", "Integration " +  integration.name() + " enabled.");
         return true;
+    }
+
+    public WebhookConfig webhooks(){
+        if(configs().config(WebhookConfig.class) == null){
+            logger().log("Webhooks", "Initializing Webhook Config...");
+            configs().factory(new GenericFactory<>(Webhook.class));
+            configs().register(WebhookConfig.class);
+        }
+        return configs().config(WebhookConfig.class);
     }
 
 

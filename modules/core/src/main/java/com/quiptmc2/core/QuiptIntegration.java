@@ -74,15 +74,7 @@ public abstract class QuiptIntegration {
         return configs;
     }
 
-    public WebhookConfig webhooks(){
-        if(configs == null) configs();
-        if(configs.config(WebhookConfig.class) == null){
-            logger().log("Webhooks", "Initializing Webhook Config...");
-            configs.factory(new GenericFactory<>(Webhook.class));
-            configs.register(WebhookConfig.class);
-        }
-        return configs.config(WebhookConfig.class);
-    }
+
 
     public abstract String name();
     public abstract String version();
