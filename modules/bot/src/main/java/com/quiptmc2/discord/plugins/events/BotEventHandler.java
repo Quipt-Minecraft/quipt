@@ -1,8 +1,6 @@
 package com.quiptmc2.discord.plugins.events;
 
-import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.core.data.registries.Registry;
-import com.quiptmc2.core.data.registries.RegistryKey;
 import com.quiptmc2.discord.Bot;
 
 public class BotEventHandler {

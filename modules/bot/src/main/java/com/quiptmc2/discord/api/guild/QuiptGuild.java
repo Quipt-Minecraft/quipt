@@ -10,9 +10,12 @@ package com.quiptmc2.discord.api.guild;
 
 import com.quiptmc2.discord.api.guild.channel.QuiptTextChannel;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QuiptGuild {
 

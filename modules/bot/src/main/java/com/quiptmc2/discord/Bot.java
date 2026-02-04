@@ -1,6 +1,6 @@
 package com.quiptmc2.discord;
 
-import com.quiptmc.discord.api.QDA;
+import com.quiptmc2.discord.api.QDA;
 import com.quiptmc2.discord.api.QuiptListenerAdapter;
 import com.quiptmc2.discord.plugins.BotPluginLoader;
 import com.quiptmc2.core.QuiptIntegration;
@@ -54,6 +54,7 @@ public class Bot extends QuiptIntegration {
             this.jda = api;
             this.qda = new QDA(api);
             pluginLoader = new BotPluginLoader(this);
+            plugins().enable();
             jda.addEventListener(new QuiptListenerAdapter(this));
             logger().log("Bot", "Bot started successfully.");
         } catch (InterruptedException e) {
@@ -68,4 +69,5 @@ public class Bot extends QuiptIntegration {
     public JDA jda(){return jda;}
     public QDA qda(){return qda;}
     public BotPluginLoader plugins(){return pluginLoader;}
+
 }

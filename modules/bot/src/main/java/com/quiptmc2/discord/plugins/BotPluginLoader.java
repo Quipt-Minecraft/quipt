@@ -21,7 +21,6 @@ public class BotPluginLoader {
         this.bot = bot;
         eventHandler = new BotEventHandler(bot);
         initialize();
-        enable();
     }
 
     public BotEventHandler events(){
@@ -114,7 +113,7 @@ public class BotPluginLoader {
         bot.logger().log("PluginLoader", "Plugin {} disabled.", name);
     }
 
-    private void enable() {
+    public void enable() {
         for (BotPlugin plugin : plugins()) {
             enable(plugin);
         }
