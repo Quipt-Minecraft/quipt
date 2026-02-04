@@ -9,7 +9,9 @@
 package com.quiptmc2.discord.api.guild;
 
 import com.quiptmc2.discord.api.guild.channel.QuiptTextChannel;
+import com.quiptmc2.discord.plugins.events.user.QuiptUser;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class QuiptGuild {
 
     private final Guild guild;
 
+    private final Map<User, QuiptUser> userCache = new HashMap<>();
+
     public QuiptGuild(Guild guild) {
         this.guild = guild;
     }
@@ -29,5 +33,9 @@ public class QuiptGuild {
         List<QuiptTextChannel> channels = new ArrayList<>();
         guild.getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
         return channels;
+    }
+
+    public QuiptUser user(User author) {
+        return userCache.computeIfAbsent(author, QuiptUser::new);
     }
 }

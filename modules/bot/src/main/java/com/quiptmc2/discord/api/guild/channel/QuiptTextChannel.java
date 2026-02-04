@@ -18,16 +18,14 @@ import net.dv8tion.jda.api.utils.data.DataObject;
  * <p>Offers simple message sending, embed support, and per-player webhook
  * messaging with Minecraft avatar icons.</p>
  */
-public class QuiptTextChannel {
-
-    private final TextChannel channel;
+public class QuiptTextChannel extends QuiptMessageChannel<TextChannel>{
 
     /**
      * Creates a new wrapper for the given JDA TextChannel.
      * @param channel the underlying JDA TextChannel
      */
     public QuiptTextChannel(TextChannel channel) {
-        this.channel = channel;
+        super(channel);
     }
 
     /**
@@ -35,7 +33,7 @@ public class QuiptTextChannel {
      * @return the channel name
      */
     public String getName() {
-        return channel.getName();
+        return original().getName();
     }
 
     /**
@@ -43,7 +41,7 @@ public class QuiptTextChannel {
      * @param s the message content
      */
     public void sendMessage(String s) {
-        channel.sendMessage(s).queue();
+        original().sendMessage(s).queue();
     }
 
     /**
@@ -51,7 +49,7 @@ public class QuiptTextChannel {
      * @return the channel ID
      */
     public String getId() {
-        return channel.getId();
+        return original().getId();
     }
 
     /**
@@ -59,7 +57,7 @@ public class QuiptTextChannel {
      * @return the numeric channel ID
      */
     public long getIdLong() {
-        return channel.getIdLong();
+        return original().getIdLong();
     }
 
     /**
@@ -69,7 +67,7 @@ public class QuiptTextChannel {
     public void sendMessageEmbeds(Embed... embeds) {
         for (Embed embed : embeds) {
             EmbedBuilder builder = new EmbedBuilder(EmbedBuilder.fromData(DataObject.fromJson(embed.json().toString())));
-            channel.sendMessageEmbeds(builder.build()).queue();
+            original().sendMessageEmbeds(builder.build()).queue();
         }
     }
 
@@ -79,7 +77,7 @@ public class QuiptTextChannel {
      */
     public void sendMessage(Embed embed) {
         EmbedBuilder builder = new EmbedBuilder(EmbedBuilder.fromData(DataObject.fromJson(embed.json().toString())));
-        channel.sendMessageEmbeds(builder.build()).queue();
+        original().sendMessageEmbeds(builder.build()).queue();
     }
 
 }
