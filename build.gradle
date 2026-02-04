@@ -63,7 +63,6 @@ subprojects {
         implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
     }
 }
-
 configure(subprojects.findAll {it.name == "common"}) {
     version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 }

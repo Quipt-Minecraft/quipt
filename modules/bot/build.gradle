@@ -1,13 +1,12 @@
 plugins {
     id 'java'
     id 'application'
-//    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 
 
 application {
-    mainClass = "com.quiptmc.discord.Bot" // Set the main class for the application
+    mainClass = "com.quiptmc2.discord.Bot" // Set the main class for the application
 }
 
 
@@ -46,8 +45,16 @@ tasks.test {
 }
 
 
+
+// Ensure the standard build lifecycle produces the fat jar
+tasks.named('build') {
+    dependsOn tasks.named('shadowJar')
+}
+
+
+// Fix runBot task to use the concrete main class
 tasks.register('runBot', JavaExec) {
-    mainClass = main // Ensure this is correctly set
+    mainClass = 'com.quiptmc2.discord.Bot'
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = [
             '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005' // Choose a port
