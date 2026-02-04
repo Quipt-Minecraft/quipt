@@ -54,3 +54,4 @@ bin/
 /modules/paper/run/
 /modules/paper/src/main/resources/gradle.properties
 /modules/core/tests/
+/bot-data/

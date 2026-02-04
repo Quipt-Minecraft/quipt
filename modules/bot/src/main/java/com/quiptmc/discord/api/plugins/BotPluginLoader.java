@@ -44,7 +44,7 @@ public class BotPluginLoader {
                 return plugin;
 
             } catch (Exception e) {
-                LoggerUtils.error("PluginLoader", "There was an error registering plugin {}.", pluginFile.getName(), e);
+                LoggerUtils.error("Bot Plugin Loader", "There was an error registering plugin {}.", pluginFile.getName(), e);
             }
 
         }

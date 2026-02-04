@@ -45,7 +45,7 @@ public class Bot extends QuiptIntegration {
         BotConfig config = configs().register(BotConfig.class);
         if(config.token.equals("<YOUR_BOT_TOKEN>")){
             logger().error("Initialization", "Bot token not set.", new ExceptionInInitializerError("Please set your bot token in the config file located at " + new File(folder(), "BotConfig.json").getAbsolutePath()));
-            LoggerUtils.log("Bot", "Please set your bot token in the config file located at: \"" + config.file().getAbsolutePath() + "\"");
+            logger().log("Bot", "Please set your bot token in the config file located at: \"" + config.file().getAbsolutePath() + "\"");
             return;
         }
         try {
@@ -54,9 +54,9 @@ public class Bot extends QuiptIntegration {
             this.jda = api;
             this.qda = new QDA(api);
             pluginLoader = new BotPluginLoader(this);
-            LoggerUtils.log("Bot", "Bot started successfully.");
+            logger().log("Bot", "Bot started successfully.");
         } catch (InterruptedException e) {
-            LoggerUtils.log("Bot", "Error starting bot", e);
+            logger().log("Bot", "Error starting bot", e);
         }
     }
 
