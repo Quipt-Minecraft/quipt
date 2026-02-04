@@ -3,10 +3,8 @@ package com.quiptmc2.discord;
 import com.quiptmc.discord.api.QDA;
 import com.quiptmc2.discord.api.QuiptListenerAdapter;
 import com.quiptmc2.discord.plugins.BotPluginLoader;
-import com.quiptmc.discord.logger.LoggerUtils;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.discord.config.BotConfig;
-import com.quiptmc2.test.Test;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -56,7 +54,6 @@ public class Bot extends QuiptIntegration {
             this.jda = api;
             this.qda = new QDA(api);
             pluginLoader = new BotPluginLoader(this);
-            pluginLoader.eventHandler().register("test-listener", new Test());
             jda.addEventListener(new QuiptListenerAdapter(this));
             logger().log("Bot", "Bot started successfully.");
         } catch (InterruptedException e) {
