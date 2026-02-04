@@ -2,6 +2,7 @@ package com.quiptmc2.discord.plugins;
 
 
 import com.quiptmc2.discord.Bot;
+import com.quiptmc2.discord.plugins.events.BotEventHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +15,17 @@ public class BotPluginLoader {
 
     private final Bot bot;
     private final Map<BotPlugin, ClassLoader> plugins = new HashMap<>();
+    private BotEventHandler eventHandler;
 
     public BotPluginLoader(Bot bot) {
         this.bot = bot;
+        eventHandler = new BotEventHandler(bot);
         initialize();
         enable();
+    }
+
+    public BotEventHandler eventHandler(){
+        return eventHandler;
     }
 
     public Bot bot(){
@@ -46,7 +53,7 @@ public class BotPluginLoader {
                 assert instance instanceof BotPlugin;
                 BotPlugin plugin = (BotPlugin) instance;
                 plugin.name(properties.getProperty("name"));
-                plugin.logger().log("Initialized plugin {}.", plugin.name());
+                plugin.logger().log("PluginLoader", "Initialized plugin {}.", plugin.name());
                 plugins.put(plugin, classLoader);
                 return plugin;
 

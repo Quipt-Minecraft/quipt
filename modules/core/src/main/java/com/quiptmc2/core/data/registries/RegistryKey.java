@@ -5,7 +5,7 @@ package com.quiptmc2.core.data.registries;
  */
 public class RegistryKey {
 
-    private String key;
+    private final String key;
 
     /**
      * Constructs a new `RegistryKey` with the specified key.
@@ -23,14 +23,5 @@ public class RegistryKey {
      */
     public String key() {
         return key;
-    }
-
-    /**
-     * Sets the key of this `RegistryKey`.
-     *
-     * @param key the new key
-     */
-    public void key(String key) {
-        this.key = key;
     }
 }
