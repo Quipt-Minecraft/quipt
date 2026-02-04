@@ -1,6 +1,7 @@
 package com.quiptmc2.discord.plugins;
 
 import com.quiptmc2.core.QuiptIntegration;
+import com.quiptmc2.discord.Bot;
 import com.quiptmc2.discord.plugins.events.BotEventHandler;
 
 public abstract class BotPlugin {
@@ -29,6 +30,10 @@ public abstract class BotPlugin {
 
     public QuiptIntegration.Logger logger(){
         return pluginLoader.bot().logger();
+    }
+
+    public Bot bot(){
+        return pluginLoader.bot();
     }
 
     public ClassLoader loader(){

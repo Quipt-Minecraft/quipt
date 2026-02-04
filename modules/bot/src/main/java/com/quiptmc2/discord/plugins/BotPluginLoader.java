@@ -24,7 +24,7 @@ public class BotPluginLoader {
         enable();
     }
 
-    public BotEventHandler eventHandler(){
+    public BotEventHandler events(){
         return eventHandler;
     }
 

@@ -15,6 +15,6 @@ public class QuiptListenerAdapter extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        bot.plugins().eventHandler().handle(new com.quiptmc2.discord.plugins.events.message.MessageReceivedEvent(event));
+        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.message.MessageReceivedEvent(event));
     }
 }
