@@ -3,7 +3,7 @@ package com.quiptmc2.discord.plugins;
 import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.discord.Bot;
 
-public abstract class BotPlugin {
+public abstract class BotPlugin extends QuiptIntegration {
 
     private String name = null;
     private ClassLoader classLoader = this.getClass().getClassLoader();
@@ -15,8 +15,6 @@ public abstract class BotPlugin {
     }
 
 
-    public abstract void enable();
-
     public abstract void disable();
 
     public String name() {
@@ -25,10 +23,6 @@ public abstract class BotPlugin {
 
     public void name(String name) {
         this.name = name;
-    }
-
-    public QuiptIntegration.Logger logger(){
-        return pluginLoader.bot().logger();
     }
 
     public Bot bot(){
