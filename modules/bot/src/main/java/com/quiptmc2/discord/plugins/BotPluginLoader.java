@@ -64,7 +64,7 @@ public class BotPluginLoader {
         return null;
     }
 
-    public BotPlugin register(Class<BotPlugin> pluginClass) {
+    public BotPlugin register(Class<? extends BotPlugin> pluginClass) {
         try {
             BotPlugin plugin = pluginClass.getDeclaredConstructor(BotPluginLoader.class).newInstance(this);
             plugin.name(pluginClass.getSimpleName());
