@@ -106,7 +106,7 @@ public abstract class QuiptIntegration {
          * @param args    The arguments to format the message with
          */
         public void log(String tag, String message, Object... args) {
-            String formatted = "[" + "" + tag + "] " + message;
+            String formatted = "[" + name() + "-" + tag + "] " + message;
             logger.info(formatted, args);
         }
 
