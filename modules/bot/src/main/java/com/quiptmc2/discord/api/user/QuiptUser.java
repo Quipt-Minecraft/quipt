@@ -27,6 +27,10 @@ public class QuiptUser extends Wrapper<User> {
         return original().getTimeCreated();
     }
 
+    public String id(){
+        return original().getId();
+    }
+
     public String tag(){
         return original().getAsTag();
     }
