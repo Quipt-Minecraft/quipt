@@ -23,11 +23,11 @@ public class BotPluginLoader {
         initialize();
     }
 
-    public BotEventHandler events(){
+    public BotEventHandler events() {
         return eventHandler;
     }
 
-    public Bot bot(){
+    public Bot bot() {
         return bot;
     }
 
@@ -64,6 +64,20 @@ public class BotPluginLoader {
         return null;
     }
 
+    public BotPlugin register(Class<BotPlugin> pluginClass) {
+        try {
+            BotPlugin plugin = pluginClass.getDeclaredConstructor(BotPluginLoader.class).newInstance(this);
+            plugin.name(pluginClass.getSimpleName());
+            plugin.logger().log("PluginLoader", "Initialized plugin {}.", plugin.name());
+            plugins.put(plugin, pluginClass.getClassLoader());
+            return plugin;
+
+        } catch (Exception e) {
+            bot.logger().error("PluginLoader", "There was an error registering plugin {}.", pluginClass.getName(), e);
+            return null;
+        }
+    }
+
     public void enable(BotPlugin plugin) {
         bot.logger().log("PluginLoader", "Enabling plugin {}...", plugin.name());
         plugin.enable();
@@ -72,7 +86,8 @@ public class BotPluginLoader {
 
     private void initialize() {
         File plugin_folder = new File(bot.folder(), "bot_plugins");
-        if (!plugin_folder.exists())  bot.logger().log("PluginLoader", "Creating plugin folder: {}", plugin_folder.mkdir());
+        if (!plugin_folder.exists())
+            bot.logger().log("PluginLoader", "Creating plugin folder: {}", plugin_folder.mkdir());
         bot.logger().log("PluginLoader", "Initializing plugins...");
         for (File file : Objects.requireNonNull(plugin_folder.listFiles())) {
             register(file);
