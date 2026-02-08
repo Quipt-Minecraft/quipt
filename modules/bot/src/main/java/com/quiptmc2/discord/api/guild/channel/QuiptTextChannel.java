@@ -28,56 +28,6 @@ public class QuiptTextChannel extends QuiptMessageChannel<TextChannel>{
         super(channel);
     }
 
-    /**
-     * Gets the channel's display name.
-     * @return the channel name
-     */
-    public String getName() {
-        return original().getName();
-    }
 
-    /**
-     * Sends a plain text message to the channel.
-     * @param s the message content
-     */
-    public void sendMessage(String s) {
-        original().sendMessage(s).queue();
-    }
-
-    /**
-     * Gets the channel ID as a string.
-     * @return the channel ID
-     */
-    public String getId() {
-        return original().getId();
-    }
-
-    /**
-     * Gets the channel ID as a long.
-     * @return the numeric channel ID
-     */
-    public long getIdLong() {
-        return original().getIdLong();
-    }
-
-    /**
-     * Sends one or more Quipt Embed objects to the channel.
-     * @param embeds the embeds to send
-     */
-    public void sendMessageEmbeds(Embed... embeds) {
-        for (Embed embed : embeds) {
-            EmbedBuilder builder = new EmbedBuilder(EmbedBuilder.fromData(DataObject.fromJson(embed.json().toString())));
-            original().sendMessageEmbeds(builder.build()).queue();
-        }
-    }
-
-    /**
-     * Sends a single Quipt Embed to the channel.
-     * @param embed the embed to send
-     */
-    public void sendMessage(Embed embed) {
-        EmbedBuilder builder = new EmbedBuilder(EmbedBuilder.fromData(DataObject.fromJson(embed.json().toString())));
-        original().sendMessageEmbeds(builder.build()).queue();
-    }
 
 }

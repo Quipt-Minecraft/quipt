@@ -14,13 +14,12 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.*;
 
-public class QDA {
+public class QDA extends Wrapper<JDA> {
 
-    private final JDA jda;
     private final GuildManager guilds = new GuildManager();
 
     public QDA(JDA jda){
-        this.jda = jda;
+        super(jda);
     }
 
     public GuildManager guilds(){

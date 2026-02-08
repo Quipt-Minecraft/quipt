@@ -1,17 +1,17 @@
 package com.quiptmc2.discord.api.message;
 
+import com.quiptmc2.discord.api.Wrapper;
 import net.dv8tion.jda.api.entities.Message;
 
-public class QuiptMessage {
+public class QuiptMessage extends Wrapper<Message> {
 
-    private final Message message;
 
     public QuiptMessage(Message message) {
-        this.message = message;
+        super(message);
     }
 
     @Override
     public String toString() {
-        return message.getContentRaw();
+        return original().getContentRaw();
     }
 }

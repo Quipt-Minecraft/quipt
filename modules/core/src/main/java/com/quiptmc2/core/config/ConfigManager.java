@@ -73,11 +73,11 @@ public class ConfigManager {
         File file;
         T content;
         try {
-            file = file(integration, templateData);
+            file = file(templateData);
             content = templateClass.getConstructor(File.class, String.class, ConfigTemplate.Extension.class, QuiptIntegration.class).newInstance(file, templateData.name(), templateData.ext(), integration);
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException |
                  InstantiationException e) {
-            integration.logger().warn("Could not register config file: {} for {}.", templateClass.getName(), integration.name());
+            integration.logger().warn("Config Manager","Could not register config file: {} for {}.", templateClass.getName(), integration.name());
             return null;
         } catch (IOException e) {
             throw new IllegalStateException("Could not create config file: " + templateClass.getName() + " for " + integration.name() + ".", e);
@@ -100,7 +100,7 @@ public class ConfigManager {
         return content;
     }
 
-    private File file(QuiptIntegration integration, ConfigTemplate templateData) throws IOException {
+    private File file(ConfigTemplate templateData) throws IOException {
         File file = new File(integration.folder(), templateData.name() + "." + templateData.ext().extension());
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) {

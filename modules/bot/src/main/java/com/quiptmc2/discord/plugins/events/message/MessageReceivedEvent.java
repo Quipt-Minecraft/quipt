@@ -2,7 +2,7 @@ package com.quiptmc2.discord.plugins.events.message;
 
 import com.quiptmc2.discord.Bot;
 import com.quiptmc2.discord.api.message.QuiptMessage;
-import com.quiptmc2.discord.plugins.events.user.QuiptUser;
+import com.quiptmc2.discord.api.user.QuiptUser;
 
 public class MessageReceivedEvent extends MessageEvent<net.dv8tion.jda.api.events.message.MessageReceivedEvent> {
 

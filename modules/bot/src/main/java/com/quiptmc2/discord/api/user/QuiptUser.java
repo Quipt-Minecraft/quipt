@@ -1,4 +1,4 @@
-package com.quiptmc2.discord.plugins.events.user;
+package com.quiptmc2.discord.api.user;
 
 import com.quiptmc2.discord.api.Wrapper;
 import net.dv8tion.jda.api.entities.User;

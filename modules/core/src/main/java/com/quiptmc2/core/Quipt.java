@@ -40,7 +40,7 @@ public class Quipt extends QuiptIntegration {
 
     @Override
     public void enable() {
-        System.out.println("Quipt enabled");
+        logger().log("Initialization", "Quipt enabled");
     }
 
     public boolean enable(QuiptIntegration integration) {

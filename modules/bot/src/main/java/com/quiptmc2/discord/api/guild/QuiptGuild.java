@@ -8,30 +8,28 @@
 
 package com.quiptmc2.discord.api.guild;
 
+import com.quiptmc2.discord.api.Wrapper;
 import com.quiptmc2.discord.api.guild.channel.QuiptTextChannel;
-import com.quiptmc2.discord.plugins.events.user.QuiptUser;
+import com.quiptmc2.discord.api.user.QuiptUser;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QuiptGuild {
-
-    private final Guild guild;
+public class QuiptGuild extends Wrapper<Guild> {
 
     private final Map<User, QuiptUser> userCache = new HashMap<>();
 
     public QuiptGuild(Guild guild) {
-        this.guild = guild;
+        super(guild);
     }
 
     public List<QuiptTextChannel> getTextChannels() {
         List<QuiptTextChannel> channels = new ArrayList<>();
-        guild.getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
+        original().getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
         return channels;
     }
 
