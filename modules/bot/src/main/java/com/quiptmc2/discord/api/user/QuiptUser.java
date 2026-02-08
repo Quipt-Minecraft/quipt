@@ -3,6 +3,8 @@ package com.quiptmc2.discord.api.user;
 import com.quiptmc2.discord.api.Wrapper;
 import net.dv8tion.jda.api.entities.User;
 
+import java.time.OffsetDateTime;
+
 public class QuiptUser extends Wrapper<User> {
 
     public QuiptUser(net.dv8tion.jda.api.entities.User original) {
@@ -15,6 +17,14 @@ public class QuiptUser extends Wrapper<User> {
 
     public String discriminator(){
         return original().getDiscriminator();
+    }
+
+    public String mention(){
+        return original().getAsMention();
+    }
+
+    public OffsetDateTime created(){
+        return original().getTimeCreated();
     }
 
     public String tag(){
