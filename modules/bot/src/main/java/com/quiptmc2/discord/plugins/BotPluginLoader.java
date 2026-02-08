@@ -19,7 +19,7 @@ public class BotPluginLoader {
 
     public BotPluginLoader(Bot bot) {
         this.bot = bot;
-        eventHandler = new BotEventHandler(bot, "commands");
+        eventHandler = new BotEventHandler(bot, "main");
         initialize();
     }
 
