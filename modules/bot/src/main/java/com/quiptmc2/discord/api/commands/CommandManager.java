@@ -5,6 +5,6 @@ import com.quiptmc2.discord.plugins.events.BotEventHandler;
 
 public class CommandManager extends BotEventHandler {
     public CommandManager(Bot bot) {
-        super(bot);
+        super( bot);
     }
 }

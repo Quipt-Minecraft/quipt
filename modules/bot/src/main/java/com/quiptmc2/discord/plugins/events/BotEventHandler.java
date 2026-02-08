@@ -5,10 +5,10 @@ import com.quiptmc2.discord.Bot;
 
 public class BotEventHandler {
 
-    Registry<EventListener<? extends Event>> listeners;
+    protected Registry<EventListener<? extends Event>> listeners;
 
-    public BotEventHandler(Bot bot) {
-        listeners = bot.registries().register("listeners", () -> null);
+    public BotEventHandler(Bot bot, String registryKey) {
+        listeners = bot.registries().register("listeners-" + registryKey, () -> null);
     }
 
     public void register(String key, EventListener<?> listener) {
