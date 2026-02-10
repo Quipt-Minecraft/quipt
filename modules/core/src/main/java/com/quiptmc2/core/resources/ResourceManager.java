@@ -55,7 +55,7 @@ public class ResourceManager<I extends ResourceIdentifier, R extends Resource<I>
         return resources.get(identifier);
     }
 
-    private R create(I identifier) {
+    public R create(I identifier) {
         R resource = resourceProcessor.apply(identifier);
         resources.put(identifier, resource);
         return resource;
