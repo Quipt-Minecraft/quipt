@@ -50,10 +50,14 @@ public class ResourceManager<I extends ResourceIdentifier, R extends Resource<I>
 
     public R get(I identifier) {
         if(resourceProcessor == null) throw new IllegalStateException("Resource processor not set");
-        if(!resources.containsKey(identifier)) {
-            //todo generate new resource
-            resources.put(identifier, resourceProcessor.apply(identifier));
-        }
+        if(!resources.containsKey(identifier))
+            return create(identifier);
         return resources.get(identifier);
+    }
+
+    private R create(I identifier) {
+        R resource = resourceProcessor.apply(identifier);
+        resources.put(identifier, resource);
+        return resource;
     }
 }

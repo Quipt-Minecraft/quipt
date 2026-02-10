@@ -17,7 +17,7 @@ public class BotEventHandler {
 
     public void handle(Event<?> event) {
         listeners.forEach((key,listener)->{
-            listener.handle(event);
+            listener.processs(event);
         });
     }
 }

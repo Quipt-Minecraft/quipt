@@ -12,11 +12,11 @@ public abstract class EventListener<T extends Event<?>> {
         typeClass = clazz;
     }
 
-    public abstract void onMessageReceived(T event);
+     abstract void handle(T event);
 
-    public void handle(Event<?> event) {
+    public void processs(Event<?> event) {
         if (typeClass.isInstance(event)) {
-            onMessageReceived(typeClass.cast(event));
+            handle(typeClass.cast(event));
         }
     }
 
