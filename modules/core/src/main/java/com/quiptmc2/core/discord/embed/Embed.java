@@ -2,6 +2,7 @@ package com.quiptmc2.core.discord.embed;
 
 
 import com.quiptmc.core.data.JsonSerializable;
+import com.quiptmc2.core.data.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -180,7 +181,7 @@ public class Embed implements JsonSerializable {
          * @param icon_url The icon url of the author
          * @return The embed
          */
-        public Builder author(String name, String url, String icon_url) {
+        public Builder author(String name, @Nullable String url, @Nullable String icon_url) {
             JSONObject author = new JSONObject();
             author.put("name", name);
             author.put("url", url);

@@ -20,23 +20,23 @@ public class QuiptMessage extends Wrapper<Message> {
     }
 
     public String content() {
-        return original().getContentRaw();
+        return data().getContentRaw();
     }
 
     public OffsetDateTime created() {
-        return original().getTimeCreated();
+        return data().getTimeCreated();
     }
 
     public OffsetDateTime edited() {
-        return original().getTimeEdited();
+        return data().getTimeEdited();
     }
 
     public void delete() {
-        original().delete().queue();
+        data().delete().queue();
     }
 
     public QuiptUser author(QuiptGuild guild) {
-        return guild.user(original().getAuthor());
+        return guild.user(data().getAuthor());
     }
 
 

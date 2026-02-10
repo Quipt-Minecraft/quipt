@@ -1,4 +1,4 @@
-package com.quiptmc2.discord.plugins.events.message;
+package com.quiptmc2.discord.plugins.events.qda.message;
 
 import com.quiptmc2.discord.Bot;
 import com.quiptmc2.discord.api.message.QuiptMessage;
@@ -11,10 +11,10 @@ public class MessageReceivedEvent extends MessageEvent<net.dv8tion.jda.api.event
     }
 
     public QuiptMessage message() {
-        return new QuiptMessage(original().getMessage());
+        return new QuiptMessage(data().getMessage());
     }
 
     public QuiptUser author() {
-        return guild().user(original().getAuthor());
+        return guild().user(data().getAuthor());
     }
 }

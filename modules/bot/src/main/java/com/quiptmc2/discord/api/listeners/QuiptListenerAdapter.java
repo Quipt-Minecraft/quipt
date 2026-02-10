@@ -1,7 +1,7 @@
 package com.quiptmc2.discord.api.listeners;
 
 import com.quiptmc2.discord.Bot;
-import com.quiptmc2.discord.plugins.events.command.CommandInteractionEvent;
+import com.quiptmc2.discord.plugins.events.qda.interaction.command.CommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
@@ -20,17 +20,17 @@ public class QuiptListenerAdapter extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.message.MessageReceivedEvent(bot, event));
+        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.qda.message.MessageReceivedEvent(bot, event));
     }
 
     @Override
     public void onMessageDelete(@NotNull MessageDeleteEvent event) {
-        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.message.MessageDeleteEvent(bot, event));
+        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.qda.message.MessageDeleteEvent(bot, event));
     }
 
     @Override
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
-        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.interaction.button.ButtonInteractionEvent(event, bot));
+        bot.plugins().events().handle(new com.quiptmc2.discord.plugins.events.qda.interaction.button.ButtonInteractionEvent(event, bot));
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.quiptmc2.discord.plugins.events;
 
-import com.quiptmc2.discord.plugins.events.interaction.button.ButtonInteractionEvent;
-import com.quiptmc2.discord.plugins.events.message.MessageDeleteEvent;
-import com.quiptmc2.discord.plugins.events.message.MessageReceivedEvent;
+import com.quiptmc2.discord.plugins.events.qda.interaction.button.ButtonInteractionEvent;
+import com.quiptmc2.discord.plugins.events.qda.message.MessageDeleteEvent;
+import com.quiptmc2.discord.plugins.events.qda.message.MessageReceivedEvent;
 
 public abstract class EventListener<T extends Event<?>> {
 

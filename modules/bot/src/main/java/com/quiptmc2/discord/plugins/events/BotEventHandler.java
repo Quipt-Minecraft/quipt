@@ -5,7 +5,7 @@ import com.quiptmc2.discord.Bot;
 
 public class BotEventHandler {
 
-    protected Registry<EventListener<? extends Event>> listeners;
+    protected Registry<EventListener<? extends Event<?>>> listeners;
 
     public BotEventHandler(Bot bot, String registryKey) {
         listeners = bot.registries().register("listeners-" + registryKey, () -> null);
@@ -15,7 +15,7 @@ public class BotEventHandler {
         listeners.register(key, listener);
     }
 
-    public void handle(Event event) {
+    public void handle(Event<?> event) {
         listeners.forEach((key,listener)->{
             listener.handle(event);
         });

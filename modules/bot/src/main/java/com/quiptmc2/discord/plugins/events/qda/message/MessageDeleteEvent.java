@@ -1,4 +1,4 @@
-package com.quiptmc2.discord.plugins.events.message;
+package com.quiptmc2.discord.plugins.events.qda.message;
 
 import com.quiptmc2.discord.Bot;
 

@@ -12,30 +12,30 @@ public class QuiptUser extends Wrapper<User> {
     }
 
     public String name(){
-        return original().getName();
+        return data().getName();
     }
 
     public String discriminator(){
-        return original().getDiscriminator();
+        return data().getDiscriminator();
     }
 
     public String mention(){
-        return original().getAsMention();
+        return data().getAsMention();
     }
 
     public OffsetDateTime created(){
-        return original().getTimeCreated();
+        return data().getTimeCreated();
     }
 
     public String id(){
-        return original().getId();
+        return data().getId();
     }
 
     public String tag(){
-        return original().getAsTag();
+        return data().getAsTag();
     }
 
     public boolean bot(){
-        return original().isBot();
+        return data().isBot();
     }
 }

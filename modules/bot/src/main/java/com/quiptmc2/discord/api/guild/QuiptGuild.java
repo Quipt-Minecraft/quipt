@@ -29,7 +29,7 @@ public class QuiptGuild extends Wrapper<Guild> {
 
     public List<QuiptTextChannel> getTextChannels() {
         List<QuiptTextChannel> channels = new ArrayList<>();
-        original().getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
+        data().getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
         return channels;
     }
 

@@ -14,11 +14,11 @@ public class QuiptMessageChannel<T extends MessageChannel> extends Wrapper<T> {
     }
 
     public String mention(){
-        return original().getAsMention();
+        return data().getAsMention();
     }
 
     public void delete(){
-        original().delete().queue();
+        data().delete().queue();
     }
 
 
@@ -27,7 +27,7 @@ public class QuiptMessageChannel<T extends MessageChannel> extends Wrapper<T> {
      * @return the channel name
      */
     public String name() {
-        return original().getName();
+        return data().getName();
     }
 
     /**
@@ -35,7 +35,7 @@ public class QuiptMessageChannel<T extends MessageChannel> extends Wrapper<T> {
      * @param s the message content
      */
     public void send(String s) {
-        original().sendMessage(s).queue();
+        data().sendMessage(s).queue();
     }
 
     /**
@@ -43,7 +43,7 @@ public class QuiptMessageChannel<T extends MessageChannel> extends Wrapper<T> {
      * @return the channel ID
      */
     public String id() {
-        return original().getId();
+        return data().getId();
     }
 
     /**
@@ -53,7 +53,7 @@ public class QuiptMessageChannel<T extends MessageChannel> extends Wrapper<T> {
     public void send(Embed... embeds) {
         for (Embed embed : embeds) {
             EmbedBuilder builder = new EmbedBuilder(EmbedBuilder.fromData(DataObject.fromJson(embed.json().toString())));
-            original().sendMessageEmbeds(builder.build()).queue();
+            data().sendMessageEmbeds(builder.build()).queue();
         }
     }
 }

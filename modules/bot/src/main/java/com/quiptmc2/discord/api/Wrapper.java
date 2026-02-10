@@ -2,13 +2,13 @@ package com.quiptmc2.discord.api;
 
 public class Wrapper<T> {
 
-    private final T original;
+    private final T data;
 
-    public Wrapper(T original){
-        this.original = original;
+    public Wrapper(T data){
+        this.data = data;
     }
 
-    public T original(){
-        return original;
+    public T data(){
+        return data;
     }
 }
