@@ -12,7 +12,7 @@ public abstract class EventListener<T extends Event<?>> {
         typeClass = clazz;
     }
 
-     abstract void handle(T event);
+    public abstract void handle(T event);
 
     public void processs(Event<?> event) {
         if (typeClass.isInstance(event)) {
