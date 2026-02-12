@@ -79,4 +79,7 @@ public class ResourceIdentifier {
         return new Date(this.date);
     }
 
+    public void increment() {
+        id= id+1;
+    }
 }

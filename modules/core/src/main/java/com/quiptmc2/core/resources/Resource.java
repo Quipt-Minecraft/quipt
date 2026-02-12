@@ -10,12 +10,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.Objects;
 
-public class Resource<I extends ResourceIdentifier> implements JsonSerializable {
+public class Resource implements JsonSerializable {
 
-    private final I id;
+    private final ResourceIdentifier id;
     private final File file;
 
-    public Resource(I id, File managerFolder) {
+    public Resource(ResourceIdentifier id, File managerFolder) {
         this.id = id;
         this.file = new File(managerFolder, id.toString() + ".json");
 
