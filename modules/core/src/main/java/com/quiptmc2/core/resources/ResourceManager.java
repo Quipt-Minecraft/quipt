@@ -3,32 +3,30 @@ package com.quiptmc2.core.resources;
 import com.quiptmc2.core.QuiptIntegration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.function.Function;
 
-public class ResourceManager {
+public class ResourceManager<I extends ResourceIdentifier, R extends Resource<I>> {
 
     protected final String name;
     protected final QuiptIntegration integration;
-    protected final Map<ResourceIdentifier, Resource> resources = new HashMap<>();
+    protected final Map<I, R> resources = new HashMap<>();
 
-    private final Function<Long, ResourceIdentifier> identifierFunction;
+    private final Function<Long, I> identifierFunction;
     private final File folder;
-    private Function<ResourceIdentifier, Resource> resourceProcessor = null;
+    private final Class<R> resourceClass;
 
-    public ResourceManager(QuiptIntegration integration, String name, File containerFolder, Function<Long, ResourceIdentifier> resourceIdentifier) {
+    public ResourceManager(QuiptIntegration integration, String name, File containerFolder, Function<Long, I> resourceIdentifier, Class<R> resourceClass) {
         this.name = name;
         this.integration = integration;
         this.identifierFunction = resourceIdentifier;
         this.folder = containerFolder;
-        if (!folder().exists()) folder().mkdirs();
-    }
+        this.resourceClass = resourceClass;
+        if (!folder().exists())
+            integration.logger().log(name + " Resource Manager", "Creating resource root folder: " + (folder().mkdirs() ? "success" : "failed"));
 
-    public void processor(Function<ResourceIdentifier, Resource> processor) {
-        resourceProcessor = processor;
     }
 
     public String name() {
@@ -37,40 +35,53 @@ public class ResourceManager {
 
     public File folder() {
         if (!folder.exists()) {
-            integration.logger().log("ResourceManager", "Creating resource manager: " + (folder.mkdirs() ? "success" : "failed"));
+            integration.logger().log(name + " Resource Manager", "Creating resource manager: " + (folder.mkdirs() ? "success" : "failed"));
         }
         return folder;
     }
 
-    public ResourceIdentifier date(long date) {
+    public I date(long date) {
         return identifierFunction.apply(date);
     }
 
 
-    public ResourceIdentifier now() {
+    public I now() {
         return date(System.currentTimeMillis());
     }
 
-    public Resource[] get(ResourceIdentifier identifier) {
-        if (resourceProcessor == null) throw new IllegalStateException("Resource processor not set");
-        if (!resources.containsKey(identifier)) return new Resource[]{create(identifier)};
-        List<ResourceIdentifier> list = new ArrayList<>();
-        for(ResourceIdentifier id : resources.keySet()){
-            if(id.toString().startsWith(identifier.toString())) list.add(id);
+    public R[] get(I identifier) {
+        if (!resources.containsKey(identifier)) {
+            for (File file : Objects.requireNonNull(folder().listFiles())) {
+                if (file.getName().startsWith(identifier.toString()))
+                    load(identifier);
+            }
         }
-        Resource[] resourceArray = new Resource[list.size()];
-        for(int i = 0; i < list.size(); i++){
-            resourceArray[i] = resources.get(list.get(i));
+        List<I> list = new ArrayList<>();
+        for (I id : resources.keySet()) {
+            if (id.toString().startsWith(identifier.toString())) list.add(id);
         }
-        return resourceArray;
+        @SuppressWarnings("unchecked")
+        R[] array = (R[]) Array.newInstance(resourceClass, list.size());
+        return list.toArray(array);
     }
 
-    public Resource create(ResourceIdentifier identifier) {
-        while(resources.containsKey(identifier)){
+    public R create(I identifier) {
+        while (resources.containsKey(identifier)) {
             identifier.increment();
         }
-        Resource resource = resourceProcessor.apply(identifier);
-        resources.put(identifier, resource);
-        return resource;
+        return load(identifier);
+    }
+
+    private R load(I identifier) {
+
+        try {
+            R resource = resourceClass.getConstructor(identifier.getClass(), File.class).newInstance(identifier, folder());
+            resources.put(identifier, resource);
+            return resource;
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
