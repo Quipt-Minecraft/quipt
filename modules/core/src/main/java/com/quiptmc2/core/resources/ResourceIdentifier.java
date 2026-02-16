@@ -70,13 +70,17 @@ public class ResourceIdentifier {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ResourceIdentifier upid)
-            return upid.toString().equals(toString());
+        if (obj instanceof ResourceIdentifier rid)
+            return rid.toString().equals(toString());
         return super.equals(obj);
     }
 
     public Date date() {
         return new Date(this.date);
+    }
+
+    public void setIncrement(int amount) {
+        id= amount;
     }
 
     public void increment() {

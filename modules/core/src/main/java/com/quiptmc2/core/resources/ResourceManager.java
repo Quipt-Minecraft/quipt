@@ -52,27 +52,42 @@ public class ResourceManager<I extends ResourceIdentifier, R extends Resource<I>
     public R[] get(I identifier) {
         if (!resources.containsKey(identifier)) {
             for (File file : Objects.requireNonNull(folder().listFiles())) {
-                if (file.getName().startsWith(identifier.toString()))
-                    load(identifier);
+                if (file.getName().startsWith(identifier.toString())) {
+                    I rid;
+                    String raw = file.getName();
+                    String[] parts = raw.substring(0, raw.length() - 5).split("-");
+                    if (parts.length > 1) {
+                        int i = Integer.parseInt(parts[1]);
+                        rid = date(identifier.date().getTime());
+                        rid.setIncrement(i);
+                    } else rid = identifier;
+                    load(rid);
+                }
             }
         }
-        List<I> list = new ArrayList<>();
-        for (I id : resources.keySet()) {
-            if (id.toString().startsWith(identifier.toString())) list.add(id);
+        List<R> resources = new ArrayList<>();
+        for (Map.Entry<I, R> entry : this.resources.entrySet()) {
+            if (entry.getKey().toString().startsWith(identifier.toString())) {
+                resources.add(entry.getValue());
+            }
         }
-        @SuppressWarnings("unchecked")
-        R[] array = (R[]) Array.newInstance(resourceClass, list.size());
-        return list.toArray(array);
+        @SuppressWarnings("unchecked") R[] array = (R[]) Array.newInstance(resourceClass, resources.size());
+        return resources.toArray(array);
     }
 
     public R create(I identifier) {
-        while (resources.containsKey(identifier)) {
+
+        Set<String> taken = new HashSet<>(resources.size());
+        for (I i : resources.keySet()) {
+            taken.add(i.toString());
+        }
+        while (taken.contains(identifier.toString())) {
             identifier.increment();
         }
         return load(identifier);
     }
 
-    private R load(I identifier) {
+    public R load(I identifier) {
 
         try {
             R resource = resourceClass.getConstructor(identifier.getClass(), File.class).newInstance(identifier, folder());

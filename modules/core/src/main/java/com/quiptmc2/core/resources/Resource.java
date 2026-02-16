@@ -15,11 +15,7 @@ public class Resource<I extends ResourceIdentifier> implements JsonSerializable 
     public Resource(I id, File managerFolder) {
         this.id = id;
         this.file = new File(managerFolder, id.toString() + ".json");
-
         fromJson(load());
-
-//        throw new IllegalArgumentException("Resource with ID " + id + " not found in manager folder");
-
     }
 
     public I id() {
