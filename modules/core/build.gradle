@@ -33,11 +33,10 @@ test {
 java {
     withSourcesJar()
 }
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.release = 17
+    options.release = JavaLanguageVersion.of("$java_version").asInt()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaLanguageVersion.of("$java_version")
+    targetCompatibility = JavaLanguageVersion.of("$java_version")
 }
