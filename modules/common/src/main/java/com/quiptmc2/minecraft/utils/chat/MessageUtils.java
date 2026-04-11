@@ -117,7 +117,7 @@ public class MessageUtils {
         });
     }
 
-    public void save() {
+    public static void save() {
         config.save();
     }
 }
