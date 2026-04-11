@@ -4,39 +4,40 @@ import com.quiptmc2.core.QuiptIntegration;
 import com.quiptmc2.core.config.objects.ConfigObject;
 import com.quiptmc2.core.data.JsonSerializable;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Location extends ConfigObject implements Cloneable {
 
     UUID world;
-    double x;
-    double y;
-    double z;
-    float yaw;
-    float pitch;
+    BigDecimal x;
+    BigDecimal y;
+    BigDecimal z;
+    BigDecimal yaw;
+    BigDecimal pitch;
 
 
     public Location(QuiptIntegration integration) {
         super(integration);
     }
 
-    public double x(){
+    public BigDecimal x(){
         return x;
     }
 
-    public double y(){
+    public BigDecimal y(){
         return y;
     }
 
-    public double z(){
+    public BigDecimal z(){
         return z;
     }
 
-    public float yaw(){
+    public BigDecimal yaw(){
         return yaw;
     }
 
-    public float pitch(){
+    public BigDecimal pitch(){
         return pitch;
     }
 
@@ -49,23 +50,23 @@ public class Location extends ConfigObject implements Cloneable {
     }
 
     public void x(double x){
-        this.x = x;
+        this.x = BigDecimal.valueOf(x);
     }
 
     public void y(double y){
-        this.y = y;
+        this.y = BigDecimal.valueOf(y);
     }
 
     public void z(double z){
-        this.z = z;
+        this.z = BigDecimal.valueOf(z);
     }
 
     public void yaw(float yaw){
-        this.yaw = yaw;
+        this.yaw = BigDecimal.valueOf(yaw);
     }
 
     public void pitch(float pitch){
-        this.pitch = pitch;
+        this.pitch = BigDecimal.valueOf(pitch);
     }
 
     @Override

@@ -58,6 +58,10 @@ public abstract class QuiptIntegration {
         return server;
     }
 
+    public Heartbeat heartbeat() {
+        return heartbeat;
+    }
+
     public Registries registries() {
         if(registries == null){
             logger().log("Registries", "Initializing Registries...");
