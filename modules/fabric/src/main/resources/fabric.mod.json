@@ -14,7 +14,7 @@
       "com.quiptmc.fabric.client.datagen.EntrypointDataGenerator"
     ],
     "main": [
-      "com.quiptmc2.fabric.Quipt"
+      "com.quiptmc.fabric2.Quipt"
     ],
     "client": [
       "com.quiptmc.fabric.client.EntrypointClient"

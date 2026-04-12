@@ -1,6 +1,6 @@
 package com.quiptmc.core.utils.net;
 
-import com.quiptmc2.core.data.annotations.Nullable;
+import com.quiptmc.core2.data.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.*;

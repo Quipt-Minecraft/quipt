@@ -1,6 +1,6 @@
 package com.quiptmc.minecraft.utils.sessions;
 
-import com.quiptmc2.core.data.annotations.Nullable;
+import com.quiptmc.core2.data.annotations.Nullable;
 import com.quiptmc.minecraft.api.MinecraftPlayer;
 import org.json.JSONObject;
 

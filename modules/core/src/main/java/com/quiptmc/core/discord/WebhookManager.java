@@ -9,7 +9,7 @@
 package com.quiptmc.core.discord;
 
 import com.quiptmc.core.discord.embed.Embed;
-import com.quiptmc2.core.data.exceptions.SimpleQuiptException;
+import com.quiptmc.core2.data.exceptions.SimpleQuiptException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

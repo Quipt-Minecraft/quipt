@@ -1,6 +1,6 @@
 package com.quiptmc.minecraft.config.objects;
 
-import com.quiptmc2.core.data.annotations.NotNull;
+import com.quiptmc.core2.data.annotations.NotNull;
 import com.quiptmc.core.config.ConfigObject;
 import com.quiptmc.core.data.JsonSerializable;
 import com.quiptmc.minecraft.utils.teleportation.Location;
