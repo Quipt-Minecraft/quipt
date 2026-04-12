@@ -3,5 +3,5 @@ version: "${project_version}"
 author: "${author}"
 api-version: "${minecraft_version}"
 main: com.quiptmc.paper2.QuiptPaper
-loader: com.quiptmc2.paper.QuiptLoader
+loader: com.quiptmc.paper2.QuiptLoader
 
