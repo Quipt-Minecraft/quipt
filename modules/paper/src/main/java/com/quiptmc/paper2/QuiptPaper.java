@@ -7,6 +7,9 @@ import com.quiptmc.paper2.api.players.PaperPlayers;
 import com.quiptmc.paper2.commands.CommandExecutor;
 import com.quiptmc.paper2.commands.executors.UpdateCommand;
 import com.quiptmc.paper2.commands.executors.WebhookCommand;
+import net.kyori.adventure.text.Component;
+
+import static net.kyori.adventure.text.Component.text;
 
 public class QuiptPaper extends QuiptPlugin {
 
@@ -23,8 +26,8 @@ public class QuiptPaper extends QuiptPlugin {
     @Override
     public void enable() {
         instance = this;
-        MessageUtils.register("cmd.update.usage", "Usage: /update <group> <plugin> <build> <artifact>");
-        MessageUtils.register("cmd.webhook.usage", "Usage: /webhook <add|remove> <webhook> <url>");
+        MessageUtils.register("cmd.update.usage", text("Usage: /update <group> <plugin> <build> <artifact>"));
+        MessageUtils.register("cmd.webhook.usage", text("Usage: /webhook <add|remove> <webhook> <url>"));
 
         if(integration().configs().config(ResourceConfig.class) == null)
             integration().configs().register(ResourceConfig.class);
