@@ -4,6 +4,7 @@ import com.quiptmc.core2.data.annotations.Nullable;
 import com.quiptmc.minecraft2.config.files.ResourceConfig;
 import com.quiptmc.paper2.api.players.PaperPlayers;
 import com.quiptmc.paper2.commands.CommandExecutor;
+import com.quiptmc.paper2.commands.executors.UpdateCommand;
 import com.quiptmc.paper2.commands.executors.WebhookCommand;
 
 public class QuiptPaper extends QuiptPlugin {
@@ -28,7 +29,8 @@ public class QuiptPaper extends QuiptPlugin {
             integration().packHandler().start();
         }
         new CommandExecutor.Builder(new WebhookCommand(this)).setDescription("Alter webhooks").register();
-        integration().logger().log("Quipt", "Quipt Plugin for Paper enabled!");
+        new CommandExecutor.Builder(new UpdateCommand(this)).setDescription("Update plugins from https://ci.qsmc.live").register();
+        integration().logger().log("Paper", "QuiptPaper for Paper enabled!");
 //        PaperPlayers.of(null);
     }
 
