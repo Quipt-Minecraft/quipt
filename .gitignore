@@ -40,18 +40,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Cache ###
 /.idea/
-/paper/run/
-/fabric/run/
-/.run/
-/fabric/server/
-/fabric/client/
-/fabric/src/main/generated/
-/logs/
-/core/tests/
-/modules/core/quipt-test/
-/modules/fabric/run/
-/modules/paper/run/
-/modules/paper/src/main/resources/gradle.properties
-/modules/core/tests/
-/bot-data/
+/modules/*/run/
