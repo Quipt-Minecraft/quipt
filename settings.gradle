@@ -16,4 +16,4 @@ include ':modules:paper'
 include ':modules:fabric'
 include ':modules:bot'
 include ':modules:core'
-
+include ':modules:velocity'
