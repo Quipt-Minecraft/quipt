@@ -13,6 +13,7 @@ public class ConfigStringFactory implements ConfigObject.Factory<ConfigString> {
 
     @Override
     public ConfigString createFromJson(QuiptIntegration integration, JSONObject json) {
+        json.remove("integration");
         return new ConfigString(integration, json);
     }
 }

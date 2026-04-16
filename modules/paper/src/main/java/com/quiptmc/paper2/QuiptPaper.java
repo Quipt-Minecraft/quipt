@@ -26,6 +26,7 @@ public class QuiptPaper extends QuiptPlugin {
     @Override
     public void enable() {
         instance = this;
+
         MessageUtils.register("cmd.update.usage", text("Usage: /update <group> <plugin> <build> <artifact>"));
         MessageUtils.register("cmd.webhook.usage", text("Usage: /webhook <add|remove> <webhook> <url>"));
 
