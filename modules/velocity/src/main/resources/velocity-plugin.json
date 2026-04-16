@@ -1,6 +1,6 @@
 {
-  "id": "qsync",
-  "name": "QSync",
+  "id": "quiptproxy",
+  "name": "QuiptProxy",
   "version": "${version}",
   "main": "com.quiptmc.velocity.QuiptVelocity"
 }
