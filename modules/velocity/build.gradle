@@ -17,7 +17,6 @@ repositories {
 
 dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
-    annotationProcessor("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
 
     implementation project(":modules:common")
     implementation project(":modules:core")
@@ -42,9 +41,15 @@ tasks {
         dependsOn(shadowJar)
     }
     processResources {
-        def props = [version: project_version]
+        def pluginProperties = [version: project_version]
+        inputs.properties pluginProperties
+        filteringCharset 'UTF-8'
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        from(rootProject.file('gradle.properties'))
+
         filesMatching('velocity-plugin.json') {
-            expand(props)
+            expand pluginProperties
         }
     }
 }
