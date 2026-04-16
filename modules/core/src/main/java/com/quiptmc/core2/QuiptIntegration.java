@@ -34,7 +34,7 @@ public abstract class QuiptIntegration {
     private QuiptServer server = null;
 
     public QuiptIntegration() {
-        logger().log("Quipt", "Initializing QuiptIntegration {}...", name());
+        logger().log("Quipt", "Initializing QuiptIntegration {}...", getClass().getName());
     }
 
     public final Logger logger() {
