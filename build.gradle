@@ -16,7 +16,7 @@ plugins {
 //    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
 
-group = "com.quiptmc"
+group = "live.qsmc"
 version = "${project_version}-${build_status}.${build_number}"
 
 repositories {
@@ -28,7 +28,7 @@ dependencies {
 }
 
 allprojects {
-    group = "com.quiptmc"
+    group = "live.qsmc"
     version = "${project_version}-${build_status}.${build_number}"
 
     repositories {

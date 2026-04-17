@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
+package live.qsmc.core2.discord;
+
+import live.qsmc.core2.QuiptIntegration;
+import live.qsmc.core2.config.objects.ConfigObject;
+import org.json.JSONObject;
+
+
+public class Webhook extends ConfigObject {
+
+    public String token;
+
+    public String uuid;
+    /**
+     * A simple webhook object
+     *
+     * @param id    The ID of the webhook
+     * @param token The token of the webhook
+     */
+    public Webhook(QuiptIntegration integration, String name, String id, String token){
+        super(integration);
+        super.id = name;
+        this.token = token;
+        this.uuid = id;
+    }
+
+    public Webhook(QuiptIntegration integration) {
+        super(integration);
+    }
+
+    public String name(){
+        return id();
+    }
+
+    public String uuid(){
+        return uuid;
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        json.put("className", this.getClass().getName());
+        super.fromJson(json);
+    }
+
+    public String token(){
+        return token;
+    }
+    /**
+     * Get the URL of the webhook
+     *
+     * @return The URL of the webhook
+     */
+    public String url() {
+        return "https://discord.com/api/webhooks/" + uuid() + "/" + token();
+    }
+}

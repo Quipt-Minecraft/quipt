@@ -10,9 +10,6 @@ repositories {
     maven {
         url "https://repo.papermc.io/repository/maven-public/"
     }
-    maven {
-        url "https://repo.qsmc.live/repository/quipt"
-    }
 }
 
 dependencies {

@@ -28,7 +28,7 @@ Option B: Build From Source
 4) Install as in Option A.
 
 Platform Notes
-- Paper (Bukkit): The paper module provides the plugin entry (com.quiptmc.paper.Initializer). Most features are available here including the embedded web server and Discord bot integration.
+- Paper (Bukkit): The paper module provides the plugin entry (paper.live.qsmc.Initializer). Most features are available here including the embedded web server and Discord bot integration.
 - Fabric: Project layout is present; ensure the module’s published artifact targets your Fabric version. Some Paper-specific features (like Bukkit events) will not apply.
 - Discord Bot: The bot module can be automatically launched by the Paper plugin when enabled in DiscordConfig. You can also extend functionality with bot plug-ins by placing JARs in plugins/quipt-paper/discord_bots.
 

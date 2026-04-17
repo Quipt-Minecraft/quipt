@@ -17,7 +17,7 @@ core
 
 paper
 - Purpose: Paper/Bukkit server integration and user-facing features.
-- Entry: com.quiptmc.paper.Initializer (JavaPlugin).
+- Entry: paper.live.qsmc.Initializer (JavaPlugin).
 - Features:
   - Registers MinecraftMaterial registry for Bukkit materials.
   - Registers listeners (PlayerListener, EventListener, SessionListener; plus QuiptPlayerListener from minecraft package).

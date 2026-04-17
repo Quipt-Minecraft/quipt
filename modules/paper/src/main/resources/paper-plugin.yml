@@ -2,6 +2,6 @@ name: "${name}"
 version: "${project_version}"
 author: "${author}"
 api-version: "${minecraft_version}"
-main: com.quiptmc.paper2.QuiptPaper
-loader: com.quiptmc.paper2.QuiptLoader
+main: live.qsmc.paper2.QuiptPaper
+loader: live.qsmc.paper2.QuiptLoader
 
