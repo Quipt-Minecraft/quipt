@@ -5,6 +5,7 @@ import live.qsmc.fabric2.commands.CommandExecutor;
 import live.qsmc.fabric2.commands.executors.UpdateCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.command.CommandManager;
 
 public class QuiptFabric extends QuiptMod implements ModInitializer {
 

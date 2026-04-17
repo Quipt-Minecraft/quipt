@@ -4,11 +4,12 @@ import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import live.qsmc.velocity.commands.CommandExecutor;
+import live.qsmc.velocity.commands.executors.UpdateCommand;
 
 import java.nio.file.Path;
 
 
-@Plugin(id = "qsync", name = "QSync", version = "1.0-SNAPSHOT")
 public class QuiptVelocity extends QuiptProxy {
 
     @Inject
@@ -20,6 +21,6 @@ public class QuiptVelocity extends QuiptProxy {
 
     @Override
     public void enable() {
-
+        new CommandExecutor.Builder(new UpdateCommand(this)).register();
     }
 }
