@@ -8,9 +8,9 @@
 
 package live.qsmc.discord.api.guild.channel;
 
+import live.qsmc.core2.discord.embed.Embed;
+import live.qsmc.core2.utils.net.NetworkUtils;
 import live.qsmc.discord.logger.LoggerUtils;
-import live.qsmc.core.discord.embed.Embed;
-import live.qsmc.core.utils.net.NetworkUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Webhook;

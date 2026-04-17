@@ -2,6 +2,7 @@ package live.qsmc.core2;
 
 import live.qsmc.core2.config.factories.GenericFactory;
 import live.qsmc.core2.config.files.WebhookConfig;
+import live.qsmc.core2.data.registries.Registries;
 import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.core2.discord.Webhook;
 
@@ -13,10 +14,22 @@ public class Quipt extends QuiptIntegration {
     public static final Quipt INSTANCE = new Quipt();
 
     private final Registry<QuiptIntegration> integrationRegistry;
+    /**
+     * Registries instance for this integration
+     */
+    private Registries registries = null;
 
     public Quipt(){
         this.integrationRegistry = registries().register("integrations", () -> null);
         this.integrationRegistry.register("core", this);
+    }
+
+    public Registries registries() {
+        if(registries == null){
+            logger().log("Registries", "Initializing Registries...");
+            registries = new Registries();
+        }
+        return registries;
     }
 
     public Optional<QuiptIntegration> integration(String name) {

@@ -1,7 +1,7 @@
 package live.qsmc.core2.discord.embed;
 
 
-import live.qsmc.core.data.JsonSerializable;
+import live.qsmc.core2.data.JsonSerializable;
 import live.qsmc.core2.data.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;

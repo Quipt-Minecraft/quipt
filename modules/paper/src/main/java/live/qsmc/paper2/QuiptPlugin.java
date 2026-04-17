@@ -1,6 +1,6 @@
 package live.qsmc.paper2;
 
-import live.qsmc.core.data.Metadata;
+import live.qsmc.core2.data.Metadata;
 import live.qsmc.core2.Quipt;
 import live.qsmc.minecraft2.api.MinecraftIntegration;
 import org.bukkit.plugin.java.JavaPlugin;

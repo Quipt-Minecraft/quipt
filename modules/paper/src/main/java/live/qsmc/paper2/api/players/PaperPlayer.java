@@ -1,8 +1,5 @@
 package live.qsmc.paper2.api.players;
 
-import live.qsmc.minecraft.api.MinecraftEntityType;
-import live.qsmc.minecraft.api.MinecraftMaterial;
-import live.qsmc.minecraft.api.statistics.MinecraftStat;
 import live.qsmc.core2.QuiptIntegration;
 import live.qsmc.minecraft2.api.MinecraftPlayer;
 //import com.quiptmc2.paper.api.settings.Settings;
@@ -42,20 +39,20 @@ public class PaperPlayer extends MinecraftPlayer {
         return player;
     }
 
-    @Override
-    public int getStatistic(MinecraftStat stat) {
-        return 0;
-    }
+//    @Override
+//    public int getStatistic(MinecraftStat stat) {
+//        return 0;
+//    }
 
-    @Override
-    public int getStatistic(MinecraftStat stat, MinecraftMaterial material) {
-        return 0;
-    }
+//    @Override
+//    public int getStatistic(MinecraftStat stat, MinecraftMaterial material) {
+//        return 0;
+//    }
 
-    @Override
-    public int getStatistic(MinecraftStat stat, MinecraftEntityType entity) {
-        return 0;
-    }
+//    @Override
+//    public int getStatistic(MinecraftStat stat, MinecraftEntityType entity) {
+//        return 0;
+//    }
 
     @Override
     public void teleport(MinecraftPlayer target) {

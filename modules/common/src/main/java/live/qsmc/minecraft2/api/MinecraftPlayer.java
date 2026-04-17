@@ -1,8 +1,5 @@
 package live.qsmc.minecraft2.api;
 
-import live.qsmc.minecraft.api.MinecraftEntityType;
-import live.qsmc.minecraft.api.MinecraftMaterial;
-import live.qsmc.minecraft.api.statistics.MinecraftStat;
 import live.qsmc.core2.QuiptIntegration;
 import live.qsmc.core2.config.objects.ConfigObject;
 import net.kyori.adventure.audience.Audience;
@@ -18,9 +15,9 @@ public abstract class MinecraftPlayer extends ConfigObject implements Audience {
         super.id = uuid.toString();
     }
 
-    public abstract int getStatistic(MinecraftStat stat);
-    public abstract int getStatistic(MinecraftStat stat, MinecraftMaterial material);
-    public abstract int getStatistic(MinecraftStat stat, MinecraftEntityType entity);
+//    public abstract int getStatistic(MinecraftStat stat);
+//    public abstract int getStatistic(MinecraftStat stat, MinecraftMaterial material);
+//    public abstract int getStatistic(MinecraftStat stat, MinecraftEntityType entity);
     public abstract void teleport(MinecraftPlayer target);
 
 

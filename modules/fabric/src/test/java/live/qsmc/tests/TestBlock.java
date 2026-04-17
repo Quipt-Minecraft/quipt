@@ -1,9 +1,9 @@
 package live.qsmc.tests;
 
-import live.qsmc.fabric.blocks.abstracts.QuiptFullBlock;
-import live.qsmc.fabric.blocks.abstracts.properties.BlockEnumProperty;
-import live.qsmc.fabric.blocks.abstracts.properties.BlockIntProperty;
-import live.qsmc.fabric.blocks.abstracts.properties.BlockProperty;
+import live.qsmc.fabric2.blocks.abstracts.QuiptFullBlock;
+import live.qsmc.fabric2.blocks.abstracts.properties.BlockEnumProperty;
+import live.qsmc.fabric2.blocks.abstracts.properties.BlockIntProperty;
+import live.qsmc.fabric2.blocks.abstracts.properties.BlockProperty;
 
 public class TestBlock extends QuiptFullBlock {
     public TestBlock(Settings settings) {

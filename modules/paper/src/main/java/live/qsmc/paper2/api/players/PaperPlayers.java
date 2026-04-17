@@ -1,5 +1,6 @@
 package live.qsmc.paper2.api.players;
 
+import live.qsmc.core2.Quipt;
 import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.minecraft2.api.MinecraftIntegration;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ public class PaperPlayers {
     private final MinecraftIntegration<JavaPlugin> integration;
 
     public PaperPlayers(MinecraftIntegration<JavaPlugin> integration){
-        players = integration.registries().register("players", ()->null);
+        players = Quipt.INSTANCE.registries().register("players", ()->null);
         this.integration = integration;
     }
 

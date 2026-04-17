@@ -1,7 +1,7 @@
 package live.qsmc.core2.config.objects;
 
-import live.qsmc.core.data.JsonSerializable;
 import live.qsmc.core2.QuiptIntegration;
+import live.qsmc.core2.data.JsonSerializable;
 import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;

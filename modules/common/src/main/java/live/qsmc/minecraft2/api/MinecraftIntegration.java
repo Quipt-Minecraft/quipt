@@ -1,6 +1,6 @@
 package live.qsmc.minecraft2.api;
 
-import live.qsmc.core.data.Metadata;
+import live.qsmc.core2.data.Metadata;
 import live.qsmc.core2.QuiptIntegration;
 import live.qsmc.core2.config.factories.GenericFactory;
 import live.qsmc.minecraft2.config.files.PartyConfig;

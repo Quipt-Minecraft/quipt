@@ -26,10 +26,7 @@ public abstract class QuiptIntegration {
      * Config manager instance for this integration
      */
     private ConfigManager configs = null;
-    /**
-     * Registries instance for this integration
-     */
-    private Registries registries = null;
+
 
     private QuiptServer server = null;
 
@@ -60,13 +57,6 @@ public abstract class QuiptIntegration {
         return heartbeat;
     }
 
-    public Registries registries() {
-        if(registries == null){
-            logger().log("Registries", "Initializing Registries...");
-            registries = new Registries();
-        }
-        return registries;
-    }
 
     public ConfigManager configs() {
         if(configs == null){
