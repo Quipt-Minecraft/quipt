@@ -16,6 +16,7 @@ public interface JsonSerializable {
         while (currentClass != null) {
             for (var field : currentClass.getDeclaredFields()) {
                 if (Modifier.isPrivate(field.getModifiers())) continue;
+                if (Modifier.isFinal(field.getModifiers())) continue;
 
                 field.setAccessible(true);
                 try {
@@ -44,6 +45,7 @@ public interface JsonSerializable {
         while (currentClass != null) {
             for (var field : currentClass.getDeclaredFields()) {
                 if (Modifier.isPrivate(field.getModifiers())) continue;
+                if (Modifier.isFinal(field.getModifiers())) continue;
                 field.setAccessible(true);
                 if (json.has(field.getName())) {
                     try {

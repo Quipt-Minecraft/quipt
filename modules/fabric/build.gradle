@@ -22,7 +22,7 @@ tasks.register('mergeJar', Jar) {
         }
     }
 
-    archiveClassifier = ""
+    archiveClassifier = "dev"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
@@ -71,7 +71,7 @@ test {
 
 remapJar {
     input = tasks.mergeJar.archiveFile
-    archiveClassifier = "dev"
+    archiveClassifier = ""
 }
 
 tasks.generateMetadataFileForMavenJavaPublication {

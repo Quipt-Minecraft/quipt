@@ -3,6 +3,7 @@ package live.qsmc.fabric2;
 import live.qsmc.core2.Quipt;
 import live.qsmc.core2.data.Metadata;
 import live.qsmc.minecraft2.api.MinecraftIntegration;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
@@ -10,7 +11,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 
-public abstract class QuiptMod {
+public abstract class QuiptMod implements ModInitializer {
 
 
     FabricIntegration integration = null;
