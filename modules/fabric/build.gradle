@@ -1,8 +1,3 @@
-plugins {
-    id 'fabric-loom' version '1.14-SNAPSHOT'
-}
-
-
 loom {
     mods {
         "quipt" {
@@ -11,19 +6,12 @@ loom {
     }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 configurations {
     includedDeps.extendsFrom()
-//    test dependencies
 }
 
 tasks.register('mergeJar', Jar) {
-    from(sourceSets.main.output) // Include fabric classes
+    from(sourceSets.main.output)
     from(project.project(':modules:core').sourceSets.main.output)
     from(project.project(':modules:common').sourceSets.main.output)
     from(project.project(":modules:bot").sourceSets.main.output)
@@ -34,29 +22,16 @@ tasks.register('mergeJar', Jar) {
         }
     }
 
-    // Make sure it doesn't conflict with remapJar output
     archiveClassifier = ""
-
-    // Ensure there are no duplicate entries
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-
-
 
 tasks.build {
     dependsOn('remapJar')
 }
 
-
-
-
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation platform("org.junit:junit-bom:$junit_version")
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -69,29 +44,17 @@ dependencies {
     includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson_version")
     includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version")
     includedDeps(implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version")
-//    include(modImplementation( "net.kyori:adventure-api:4.19.0"))
 
-    //This one is the proper one
     modImplementation include("net.kyori:adventure-platform-fabric:6.8.0")
 
-
-    namedElements(implementation project.project(":modules:core") )
+    namedElements(implementation project.project(":modules:core"))
     namedElements(implementation(project.project(":modules:common")))
     namedElements(implementation(project.project(":modules:bot")))
-
-//    implementation project(path: ":core"    ,   configuration: "namedElements"  )
-//    implementation project(path: ":common"  , configuration: "namedElements"    )
-//    implementation project(path: ":bot"     ,    configuration: "namedElements" )
 }
 
-version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
-
-
 modrinth {
-
     token = System.getenv("MODRINTH_TOKEN")
-    def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
-    changelog = log
+    changelog = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
     projectId = "${modrinth_id}"
     versionNumber = "${version}"
     versionType = "${build_status}"
@@ -99,14 +62,12 @@ modrinth {
     uploadFile = remapJar
     loaders = [project.name]
     syncBodyFrom = rootProject.file("readme.md").text
-    dependencies {}
 }
 
 test {
     useJUnitPlatform()
     failOnNoDiscoveredTests = false
 }
-
 
 remapJar {
     input = tasks.mergeJar.archiveFile
@@ -131,13 +92,3 @@ processResources {
                 "supported_minecraft_versions": supported_minecraft_versions
     }
 }
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.release = JavaLanguageVersion.of("$java_version").asInt()
-
-    sourceCompatibility = JavaLanguageVersion.of("$java_version")
-    targetCompatibility = JavaLanguageVersion.of("$java_version")
-}
-
-

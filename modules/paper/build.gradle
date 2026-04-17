@@ -1,11 +1,4 @@
-plugins {
-    id 'java'
-}
-
-
 repositories {
-    mavenCentral()
-
     maven {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
@@ -22,34 +15,20 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "ch.qos.logback:logback-classic:$logback_version"
 
-    compileOnly("io.papermc.paper:paper-api:${minecraft_version}-${paperweight_build}")
-//    paperweight.paperDevBundle("${minecraft_version}-${paperweight_build}")
+    compileOnly "io.papermc.paper:paper-api:${minecraft_version}-${paperweight_build}"
 
-
-    implementation "org.json:json:$json_version"
-    implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
     implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
     implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
-
-    implementation("net.kyori:adventure-api:$adventure_api_version")
+    implementation "net.kyori:adventure-api:$adventure_api_version"
 
     implementation project(":modules:common")
     implementation project(":modules:core")
     implementation project(":modules:bot")
-
 }
-
-
-
 
 test {
     useJUnitPlatform()
 }
-
-
-//tasks.assemble {
-//    dependsOn(tasks.reobfJar)
-//}
 
 processResources {
     def pluginProperties = [minecraft_version: minecraft_version, author: author, name: rootProject.name, project_version: project_version]
@@ -63,17 +42,11 @@ processResources {
         expand pluginProperties
     }
 }
-//tasks.sourcesJar.dependsOn(copyGradleProperties)
-
-
-tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 tasks.register('mergeJar', Jar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    //    archiveBaseName.set('fabric-with-core')
-
-    from(sourceSets.main.output) // Include fabric classes
+    from(sourceSets.main.output)
 
     from(project(':modules:core').sourceSets.main.output) {
         exclude "META-INF/**"
@@ -82,21 +55,24 @@ tasks.register('mergeJar', Jar) {
     from(project(':modules:common').sourceSets.main.output) {
         exclude "META-INF/**"
     }
-
 }
-
 
 tasks.generateMetadataFileForMavenJavaPublication {
     dependsOn("mergeJar")
 }
 
 tasks.build {
-
     dependsOn('mergeJar')
-
-//    dependsOn(tasks.reobfJar)
 }
 
-//tasks.reobfJar {
-//    dependsOn("mergeJar")
-//}
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    changelog = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+    projectId = "${modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${build_status}"
+    gameVersions = outlet.mcVersions()
+    uploadFile = jar
+    loaders = [project.name]
+    syncBodyFrom = rootProject.file("readme.md").text
+}

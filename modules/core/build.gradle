@@ -1,19 +1,8 @@
-plugins {
-    id 'java'
-}
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testImplementation platform("org.junit:junit-bom:$junit_version")
     testImplementation "org.junit.jupiter:junit-jupiter"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
-
-    implementation "org.json:json:$json_version"
-    implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
     implementation "com.zaxxer:HikariCP:$hikari_version"
     implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
     implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
@@ -32,11 +21,4 @@ test {
 
 java {
     withSourcesJar()
-}
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.release = JavaLanguageVersion.of("$java_version").asInt()
-
-    sourceCompatibility = JavaLanguageVersion.of("$java_version")
-    targetCompatibility = JavaLanguageVersion.of("$java_version")
 }
