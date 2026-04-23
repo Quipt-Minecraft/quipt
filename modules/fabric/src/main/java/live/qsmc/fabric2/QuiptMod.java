@@ -35,6 +35,10 @@ public abstract class QuiptMod implements ModInitializer {
         return Metadata.of(data);
     }
 
+    public FabricIntegration integration() {
+        return integration;
+    }
+
     public static class FabricIntegration extends MinecraftIntegration<ModContainer> {
 
         private String id;

@@ -5,6 +5,7 @@ import live.qsmc.minecraft2.config.files.ResourceConfig;
 import live.qsmc.minecraft2.utils.chat.MessageUtils;
 import live.qsmc.paper2.api.players.PaperPlayers;
 import live.qsmc.paper2.commands.CommandExecutor;
+import live.qsmc.paper2.commands.executors.DumpCommand;
 import live.qsmc.paper2.commands.executors.UpdateCommand;
 import live.qsmc.paper2.commands.executors.WebhookCommand;
 
@@ -37,6 +38,7 @@ public class QuiptPaper extends QuiptPlugin {
         }
         new CommandExecutor.Builder(new WebhookCommand(this)).setDescription("Alter webhooks").register();
         new CommandExecutor.Builder(new UpdateCommand(this)).setDescription("Update plugins from https://ci.qsmc.live").register();
+        new CommandExecutor.Builder(new DumpCommand(this)).setDescription("Dump data to file").register();
         integration().logger().log("Paper", "QuiptPaper for Paper enabled!");
     }
 

@@ -28,7 +28,8 @@ public class UpdateCommand extends CommandExecutor {
 
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> arguments() {
-        return literal(name())
+        return builder()
+            .requires(sender -> sender.getSender().hasPermission("quipt.admin.update"))
             .executes(context -> showUsage(context, "quipt.admin.update"))
             .then(argument("group", StringArgumentType.word())
                 .suggests((context, builder) -> {

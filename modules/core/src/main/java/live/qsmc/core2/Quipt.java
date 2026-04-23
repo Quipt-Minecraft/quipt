@@ -77,4 +77,7 @@ public class Quipt extends QuiptIntegration {
     }
 
 
+    public QuiptIntegration[] integrations() {
+        return integrationRegistry.values();
+    }
 }

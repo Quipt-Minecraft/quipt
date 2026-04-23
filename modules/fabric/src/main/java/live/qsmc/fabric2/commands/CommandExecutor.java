@@ -21,6 +21,14 @@ public abstract class CommandExecutor extends Command {
 
     public abstract LiteralArgumentBuilder<ServerCommandSource> arguments();
 
+    public LiteralArgumentBuilder<ServerCommandSource> builder() {
+        return literal(name());
+    }
+
+    public LiteralArgumentBuilder<ServerCommandSource> literal(String name) {
+        return LiteralArgumentBuilder.literal(name);
+    }
+
     public static class Builder {
         private final CommandExecutor cmd;
         private int permissionLevel = 0;

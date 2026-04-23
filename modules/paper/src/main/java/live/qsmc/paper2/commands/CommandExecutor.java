@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
+
 public abstract class CommandExecutor extends Command {
 
     public CommandExecutor(QuiptPlugin plugin, String cmd) {
@@ -25,6 +27,14 @@ public abstract class CommandExecutor extends Command {
     }
 
     public abstract LiteralArgumentBuilder<CommandSourceStack> arguments();
+
+    public LiteralArgumentBuilder<CommandSourceStack> builder() {
+        return literal(name());
+    }
+
+    public LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
+        return LiteralArgumentBuilder.literal(name);
+    }
 
     public static class Builder {
         CommandExecutor cmd;
