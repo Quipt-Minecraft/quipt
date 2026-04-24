@@ -7,6 +7,7 @@ import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.core2.discord.Webhook;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Optional;
 
 public class Quipt extends QuiptIntegration {
@@ -77,7 +78,7 @@ public class Quipt extends QuiptIntegration {
     }
 
 
-    public QuiptIntegration[] integrations() {
-        return integrationRegistry.values();
+    public Collection<QuiptIntegration> integrations() {
+        return integrationRegistry.toMap().values();
     }
 }

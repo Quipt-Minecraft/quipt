@@ -8,7 +8,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
 import java.time.Duration;
+import java.util.UUID;
 
 /**
  * Networking helpers built on top of Java 11+ {@link HttpClient}.
@@ -51,7 +53,7 @@ public class NetworkUtils {
      * @return the completed HTTP response with a String body
      * @throws RuntimeException if the request fails or is interrupted
      */
-    public static HttpResponse<String> get(HttpConfig config, String url) {
+    public static HttpResponse<String> get(HttpConfig config, String url) throws FileNotFoundException {
         return get(config, url, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -68,7 +70,7 @@ public class NetworkUtils {
      * @return the completed HTTP response with a body of type {@code T}
      * @throws RuntimeException if the request fails or is interrupted
      */
-    public static <T> HttpResponse<T> get(HttpConfig config, String url, HttpResponse.BodyHandler<T> responseBodyHandler) {
+    public static <T> HttpResponse<T> get(HttpConfig config, String url, HttpResponse.BodyHandler<T> responseBodyHandler) throws FileNotFoundException {
         return request(config, url, HttpMethod.GET, null, responseBodyHandler);
     }
 
@@ -85,7 +87,7 @@ public class NetworkUtils {
      * @return the completed HTTP response with a String body
      * @throws RuntimeException if the request fails or is interrupted
      */
-    public static HttpResponse<String> post(HttpConfig config, String url, @Nullable JSONObject body) {
+    public static HttpResponse<String> post(HttpConfig config, String url, @Nullable JSONObject body) throws FileNotFoundException {
         return post(config, url, body, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -104,7 +106,7 @@ public class NetworkUtils {
      * @return the completed HTTP response with a body of type {@code T}
      * @throws RuntimeException if the request fails or is interrupted
      */
-    public static <T> HttpResponse<T> post(HttpConfig config, String url, @Nullable JSONObject body, HttpResponse.BodyHandler<T> responseBodyHandler) {
+    public static <T> HttpResponse<T> post(HttpConfig config, String url, @Nullable JSONObject body, HttpResponse.BodyHandler<T> responseBodyHandler) throws FileNotFoundException {
         return request(config, url, HttpMethod.POST, body, responseBodyHandler);
     }
 
@@ -127,14 +129,14 @@ public class NetworkUtils {
      * @return the completed HTTP response with a body of type {@code T}
      * @throws RuntimeException if the request fails or the thread is interrupted
      */
-    public static <T> HttpResponse<T> request(HttpConfig config, String url, HttpMethod method, @Nullable JSONObject body, HttpResponse.BodyHandler<T> responseBodyHandler) {
+    public static <T> HttpResponse<T> request(HttpConfig config, String url, HttpMethod method, @Nullable Object body, HttpResponse.BodyHandler<T> responseBodyHandler) throws FileNotFoundException {
         HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(config.connectTimeout());
         if (config.headers() != null) for (HttpHeader header : config.headers())
             builder.header(header.name, header.value);
         switch (method) {
             case GET -> builder.GET();
             case POST -> builder.POST(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
-            case PUT -> builder.PUT(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
+            case PUT -> builder.PUT(body instanceof File file ? HttpRequest.BodyPublishers.ofFile(file.toPath()) : HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
             case DELETE -> builder.DELETE();
             default -> throw new IllegalArgumentException("Unsupported HTTP method: " + method);
         }
@@ -144,6 +146,42 @@ public class NetworkUtils {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static HttpResponse<String> upload(HttpConfig config, String url, File file) throws IOException, InterruptedException {
+        String boundry = UUID.randomUUID().toString();
+        byte[] fileBytes = Files.readAllBytes(file.toPath());
+        String fileName = file.getName();
+        String mimeType = Files.probeContentType(file.toPath());
+
+        String bodyStart = "--" + boundry + "\r\n" +
+                "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
+                "Content-Type: " + mimeType + "\r\n\r\n";
+        String bodyEnd = "\r\n--" + boundry + "--";
+        byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .header("Content-Type", "multipart/form-data; boundary=" + boundry)
+            .POST(HttpRequest.BodyPublishers.ofByteArray(bodyBytes))
+            .build();
+
+        return http.send(request, HttpResponse.BodyHandlers.ofString());
+
+    }
+
+    private static byte[] concat(byte[]... arrays) {
+        int totalLength = 0;
+        for (byte[] array : arrays) {
+            totalLength += array.length;
+        }
+        byte[] result = new byte[totalLength];
+        int offset = 0;
+        for (byte[] array : arrays) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+        return result;
     }
 
     public static void save(HttpResponse<InputStream> response, File file) {

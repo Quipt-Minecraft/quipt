@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.http.HttpResponse;
 
@@ -31,7 +32,12 @@ public class UpdateCommand extends CommandExecutor {
             .executes(context -> showUsage(context, ""))
             .then(CommandManager.argument("group", StringArgumentType.word())
                 .suggests((context, builder) -> {
-                    HttpResponse<String> response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "api/json?tree=views[name]");
+                    HttpResponse<String> response = null;
+                    try {
+                        response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "api/json?tree=views[name]");
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                     JSONObject json = new JSONObject(response.body());
                     for (Object view : json.getJSONArray("views")) {
                         builder.suggest(((JSONObject) view).getString("name"));
@@ -42,7 +48,12 @@ public class UpdateCommand extends CommandExecutor {
                 .then(CommandManager.argument("name", StringArgumentType.word())
                     .suggests((context, builder) -> {
                         String group = StringArgumentType.getString(context, "group");
-                        HttpResponse<String> response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "view/" + group + "/api/json?tree=jobs[name]");
+                        HttpResponse<String> response = null;
+                        try {
+                            response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "view/" + group + "/api/json?tree=jobs[name]");
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
                         JSONObject json = new JSONObject(response.body());
                         for (Object job : json.getJSONArray("jobs")) {
                             builder.suggest(((JSONObject) job).getString("name"));
@@ -54,7 +65,12 @@ public class UpdateCommand extends CommandExecutor {
                         .suggests((context, builder) -> {
                             String group = StringArgumentType.getString(context, "group");
                             String name = StringArgumentType.getString(context, "name");
-                            HttpResponse<String> response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "view/" + group + "/job/" + name + "/api/json?tree=builds[number]");
+                            HttpResponse<String> response = null;
+                            try {
+                                response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "view/" + group + "/job/" + name + "/api/json?tree=builds[number]");
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
                             JSONObject json = new JSONObject(response.body());
                             for (Object build : json.getJSONArray("builds")) {
                                 builder.suggest(((JSONObject) build).getInt("number"));
@@ -69,8 +85,13 @@ public class UpdateCommand extends CommandExecutor {
                                 String name = StringArgumentType.getString(context, "name");
                                 String build = StringArgumentType.getString(context, "build");
                                 String buildPath = build.equals("latest") ? "lastSuccessfulBuild" : build;
-                                HttpResponse<String> response = NetworkUtils.get(HttpConfig.DEFAULTS,
-                                    jenkinsUrl + "view/" + group + "/job/" + name + "/" + buildPath + "/api/json?tree=artifacts[fileName]");
+                                HttpResponse<String> response = null;
+                                try {
+                                    response = NetworkUtils.get(HttpConfig.DEFAULTS,
+                                        jenkinsUrl + "view/" + group + "/job/" + name + "/" + buildPath + "/api/json?tree=artifacts[fileName]");
+                                } catch (FileNotFoundException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 JSONObject json = new JSONObject(response.body());
                                 for (Object artifact : json.getJSONArray("artifacts")) {
                                     builder.suggest(((JSONObject) artifact).getString("fileName"));
