@@ -2,16 +2,14 @@ package live.qsmc.core2;
 
 import live.qsmc.core2.configs.TestConfig;
 import live.qsmc.core2.utils.TestUtils;
-import live.qsmc.core2.utils.net.HttpConfig;
-import live.qsmc.core2.utils.net.HttpHeaders;
-import live.qsmc.core2.utils.net.HttpMethod;
-import live.qsmc.core2.utils.net.NetworkUtils;
+import live.qsmc.core2.utils.net.*;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.http.HttpResponse;
 
 public class NetworkTests {
@@ -48,13 +46,18 @@ public class NetworkTests {
 
 
     @Test
-    public void testUpload() throws FileNotFoundException {
+    public void testUpload() throws IOException, InterruptedException {
 //        TestConfig testConfig = testIntegration.configs().register(TestConfig.class);
 //        testConfig.save();
-//
+////
 //        File file = testConfig.file();
-//        // Nexus raw hosted repos require PUT to /repository/<repo-name>/<path>/<filename>
-//        // and an Authorization header — anonymous writes are not permitted.
+//
+//        String secret = "abc123";
+//
+//        HttpResponse<String> response = NetworkUtils.upload(HttpConfig.defaults(HttpHeaders.AUTHORIZATION_BEARER(secret)), "https://api.qsmc.live/files/upload", file);
+//        System.out.println(response.body());
+
+        //        // and an Authorization header — anonymous writes are not permitted.
 //        HttpConfig httpConfig = HttpConfig.defaults(
 //                HttpHeaders.AUTHORIZATION_BASIC("admin", "")
 //        );

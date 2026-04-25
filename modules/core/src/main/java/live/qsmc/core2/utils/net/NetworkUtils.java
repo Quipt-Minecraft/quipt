@@ -63,10 +63,10 @@ public class NetworkUtils {
      * (e.g., {@code BodyHandlers.ofByteArray()} or {@code ofInputStream()})
      * or for custom parsing strategies.
      *
-     * @param config               request configuration (headers, timeout, etc.)
-     * @param url                  absolute URL to fetch
-     * @param responseBodyHandler  handler that controls how the response body is produced
-     * @param <T>                  the type produced by the handler
+     * @param config              request configuration (headers, timeout, etc.)
+     * @param url                 absolute URL to fetch
+     * @param responseBodyHandler handler that controls how the response body is produced
+     * @param <T>                 the type produced by the handler
      * @return the completed HTTP response with a body of type {@code T}
      * @throws RuntimeException if the request fails or is interrupted
      */
@@ -98,11 +98,11 @@ public class NetworkUtils {
      * The {@code body} parameter is null-safe. If it is {@code null}, an empty
      * request body is sent.
      *
-     * @param config               request configuration (headers, timeout, etc.)
-     * @param url                  absolute URL to post to
-     * @param body                 JSON payload or {@code null}
-     * @param responseBodyHandler  handler that controls how the response body is produced
-     * @param <T>                  the type produced by the handler
+     * @param config              request configuration (headers, timeout, etc.)
+     * @param url                 absolute URL to post to
+     * @param body                JSON payload or {@code null}
+     * @param responseBodyHandler handler that controls how the response body is produced
+     * @param <T>                 the type produced by the handler
      * @return the completed HTTP response with a body of type {@code T}
      * @throws RuntimeException if the request fails or is interrupted
      */
@@ -117,15 +117,15 @@ public class NetworkUtils {
      * - Applies any headers provided by {@link HttpConfig#headers()}.
      * - Uses {@link HttpConfig#connectTimeout()} as the per-request timeout.
      * - For {@link HttpMethod#POST} and {@link HttpMethod#PUT}, the {@code body} is null-safe; if {@code null}, an empty
-     *   request body is sent.
+     * request body is sent.
      * - Throws {@link IllegalArgumentException} for unsupported methods.
      *
-     * @param config               request configuration (headers, timeout, etc.)
-     * @param url                  absolute URL to call
-     * @param method               HTTP method to use
-     * @param body                 optional JSON payload for POST/PUT; ignored for GET/DELETE
-     * @param responseBodyHandler  handler that controls how the response body is produced
-     * @param <T>                  the type produced by the handler
+     * @param config              request configuration (headers, timeout, etc.)
+     * @param url                 absolute URL to call
+     * @param method              HTTP method to use
+     * @param body                optional JSON payload for POST/PUT; ignored for GET/DELETE
+     * @param responseBodyHandler handler that controls how the response body is produced
+     * @param <T>                 the type produced by the handler
      * @return the completed HTTP response with a body of type {@code T}
      * @throws RuntimeException if the request fails or the thread is interrupted
      */
@@ -136,7 +136,8 @@ public class NetworkUtils {
         switch (method) {
             case GET -> builder.GET();
             case POST -> builder.POST(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
-            case PUT -> builder.PUT(body instanceof File file ? HttpRequest.BodyPublishers.ofFile(file.toPath()) : HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
+            case PUT ->
+                builder.PUT(body instanceof File file ? HttpRequest.BodyPublishers.ofFile(file.toPath()) : HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
             case DELETE -> builder.DELETE();
             default -> throw new IllegalArgumentException("Unsupported HTTP method: " + method);
         }
@@ -155,13 +156,16 @@ public class NetworkUtils {
         String mimeType = Files.probeContentType(file.toPath());
 
         String bodyStart = "--" + boundry + "\r\n" +
-                "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
-                "Content-Type: " + mimeType + "\r\n\r\n";
+            "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
+            "Content-Type: " + mimeType + "\r\n\r\n";
         String bodyEnd = "\r\n--" + boundry + "--";
         byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
 
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
+        HttpRequest.Builder builder = HttpRequest.newBuilder();
+        if (config.headers() != null) for (HttpHeader header : config.headers())
+            builder.header(header.name, header.value);
+
+        HttpRequest request = builder.uri(URI.create(url))
             .header("Content-Type", "multipart/form-data; boundary=" + boundry)
             .POST(HttpRequest.BodyPublishers.ofByteArray(bodyBytes))
             .build();
