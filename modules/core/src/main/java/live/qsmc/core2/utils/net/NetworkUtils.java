@@ -135,9 +135,54 @@ public class NetworkUtils {
             builder.header(header.name, header.value);
         switch (method) {
             case GET -> builder.GET();
-            case POST -> builder.POST(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
-            case PUT ->
-                builder.PUT(body instanceof File file ? HttpRequest.BodyPublishers.ofFile(file.toPath()) : HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
+            case POST -> {
+                if(body instanceof File file){
+                    try {
+                        String boundry = UUID.randomUUID().toString();
+                        byte[] fileBytes = Files.readAllBytes(file.toPath());
+                        String fileName = file.getName();
+                        String mimeType = Files.probeContentType(file.toPath());
+
+                        String bodyStart = "--" + boundry + "\r\n" +
+                            "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
+                            "Content-Type: " + mimeType + "\r\n\r\n";
+                        String bodyEnd = "\r\n--" + boundry + "--";
+                        byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
+
+                        builder.header("Content-Type", "multipart/form-data; boundary=" + boundry)
+                            .POST(HttpRequest.BodyPublishers.ofByteArray(bodyBytes));
+                    } catch (IOException e) {
+                        //todo better error handling
+                        throw new RuntimeException(e);
+                    }
+                } else{
+                    builder.POST(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
+                }
+            }
+            case PUT ->{
+                if(body instanceof File file){
+                    try {
+                        String boundry = UUID.randomUUID().toString();
+                        byte[] fileBytes = Files.readAllBytes(file.toPath());
+                        String fileName = file.getName();
+                        String mimeType = Files.probeContentType(file.toPath());
+
+                        String bodyStart = "--" + boundry + "\r\n" +
+                            "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
+                            "Content-Type: " + mimeType + "\r\n\r\n";
+                        String bodyEnd = "\r\n--" + boundry + "--";
+                        byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
+
+                        builder.header("Content-Type", "multipart/form-data; boundary=" + boundry)
+                            .PUT(HttpRequest.BodyPublishers.ofByteArray(bodyBytes));
+                    } catch (IOException e) {
+                        //todo better error handling
+                        throw new RuntimeException(e);
+                    }
+                } else{
+                    builder.PUT(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
+                }
+            }
             case DELETE -> builder.DELETE();
             default -> throw new IllegalArgumentException("Unsupported HTTP method: " + method);
         }
@@ -150,29 +195,9 @@ public class NetworkUtils {
     }
 
     public static HttpResponse<String> upload(HttpConfig config, String url, File file) throws IOException, InterruptedException {
-        String boundry = UUID.randomUUID().toString();
-        byte[] fileBytes = Files.readAllBytes(file.toPath());
-        String fileName = file.getName();
-        String mimeType = Files.probeContentType(file.toPath());
-
-        String bodyStart = "--" + boundry + "\r\n" +
-            "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
-            "Content-Type: " + mimeType + "\r\n\r\n";
-        String bodyEnd = "\r\n--" + boundry + "--";
-        byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
-
-        HttpRequest.Builder builder = HttpRequest.newBuilder();
-        if (config.headers() != null) for (HttpHeader header : config.headers())
-            builder.header(header.name, header.value);
-
-        HttpRequest request = builder.uri(URI.create(url))
-            .header("Content-Type", "multipart/form-data; boundary=" + boundry)
-            .POST(HttpRequest.BodyPublishers.ofByteArray(bodyBytes))
-            .build();
-
-        return http.send(request, HttpResponse.BodyHandlers.ofString());
-
+        return request(config, url, HttpMethod.POST, file, HttpResponse.BodyHandlers.ofString());
     }
+
 
     private static byte[] concat(byte[]... arrays) {
         int totalLength = 0;
