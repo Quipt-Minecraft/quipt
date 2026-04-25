@@ -16,8 +16,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 
 import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
@@ -49,23 +52,20 @@ public class DumpCommand extends CommandExecutor {
                         data.put(integration.name(), integrationData);
                     }
 
-
-
-                    HttpConfig config = HttpConfig.defaults(HttpHeaders.X_CONTENT_TYPE_OPTIONS("json/application"), HttpHeaders.AUTHORIZATION_BEARER("3b18dad4a71b55e7bb7a8c2a1bc245a02305cfb0552b83ecf119b5da621f8e04850c6bf700a90fc530af15d3affeae2619cf2e51858bd46d444225232b97d592"));
-                    HttpResponse<String> responseRaw = null;
+                    File file = new File("temp-" + System.currentTimeMillis() + ".json");
                     try {
-                        responseRaw = NetworkUtils.post(config, "https://hastebin.com/documents", new JSONObject().put("data", data));
-                    } catch (FileNotFoundException e) {
+                        Files.writeString(file.toPath(), data.toString(4), StandardOpenOption.CREATE_NEW);
+                        NetworkUtils.upload(HttpConfig.defaults(HttpHeaders.AUTHORIZATION_BEARER("abc123")), "https://api.qsmc.live/files/upload", file);
+                    } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println(responseRaw.body());
-                    JSONObject response = new JSONObject(responseRaw.body());
-                    String shareUrl = "https://hastebin.com/share/" + response.getString("key") + ".json";
+                    String shareUrl = "https://api.qsmc.live/files/download/" + file.getName();
                     Component output = text("Config dump uploaded to: ")
                         .append(text(shareUrl)
                             .clickEvent(ClickEvent.openUrl(shareUrl)))
                         .append(text("."));
                     context.getSource().getSender().sendMessage(output);
+                    file.delete();
                     return 1;
                 }));
     }
