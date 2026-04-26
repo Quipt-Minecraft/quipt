@@ -54,7 +54,7 @@ public class NetworkTests {
 //
 //        String secret = "abc123";
 //
-//        HttpResponse<String> response = NetworkUtils.upload(HttpConfig.defaults(HttpHeaders.AUTHORIZATION_BEARER(secret)), "https://api.qsmc.live/files/upload", file);
+//        HttpResponse<String> response = NetworkUtils.upload(HttpConfig.defaults(HttpHeaders.AUTHORIZATION_BEARER(secret)), "http://localhost:8080/files/upload?path=/test/", file);
 //        System.out.println(response.body());
 
         //        // and an Authorization header — anonymous writes are not permitted.
