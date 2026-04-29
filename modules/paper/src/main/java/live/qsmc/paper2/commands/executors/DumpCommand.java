@@ -52,14 +52,15 @@ public class DumpCommand extends CommandExecutor {
                         data.put(integration.name(), integrationData);
                     }
 
-                    File file = new File("temp-" + System.currentTimeMillis() + ".json");
+                    String path = "/dump/config/";
+                    File file = new File("dump-" + System.currentTimeMillis() + ".json");
                     try {
                         Files.writeString(file.toPath(), data.toString(4), StandardOpenOption.CREATE_NEW);
-                        NetworkUtils.upload(HttpConfig.defaults(HttpHeaders.AUTHORIZATION_BEARER("abc123")), "https://api.qsmc.live/files/upload", file);
+                        NetworkUtils.upload(HttpConfig.defaults(HttpHeaders.AUTHORIZATION_BEARER("abc123")), "https://api.qsmc.live/files/upload?path=" + path, file);
                     } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    String shareUrl = "https://api.qsmc.live/files/download/" + file.getName();
+                    String shareUrl = "https://api.qsmc.live/files/download" + path + file.getName();
                     Component output = text("Config dump uploaded to: ")
                         .append(text(shareUrl)
                             .clickEvent(ClickEvent.openUrl(shareUrl)))

@@ -220,7 +220,12 @@ public class ConfigManager {
      * @return The config file
      */
     public <T extends Config> T config(Class<T> clazz) {
-        return (T) configs.getOrDefault(clazz.getAnnotation(ConfigTemplate.class).name(), register(clazz));
+        if (!clazz.isAnnotationPresent(ConfigTemplate.class))
+            throw new IllegalStateException("The ConfigTemplate class " + clazz.getName() + " must have @ConfigFile annotation present, however none are detected.");
+        if (!configs.containsKey(clazz.getAnnotation(ConfigTemplate.class).name())){
+            register(clazz);
+        }
+        return (T) configs.get(clazz.getAnnotation(ConfigTemplate.class).name());
     }
 
     /**
