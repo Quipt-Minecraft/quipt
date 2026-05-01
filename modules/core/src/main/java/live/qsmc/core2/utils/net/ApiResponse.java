@@ -13,6 +13,13 @@ public record ApiResponse<T>(Status status, T data) implements JsonSerializable 
         return status == Status.FAILURE;
     }
 
+    @Override
+    public JSONObject json() {
+        return new JSONObject()
+                .put("status", status.name())
+                .put("data", data);
+    }
+
     public enum Status {
         SUCCESS,
         FAILURE,
