@@ -21,7 +21,7 @@ public abstract class CommandExecutor extends Command {
 
     public CommandExecutor(QuiptMod mod, String cmd) {
         super(mod, cmd);
-        permissions = Quipt.INSTANCE.registries().register("permissions", () -> null);
+        permissions = Quipt.INSTANCE.registries().register("cmd." + cmd + ".permissions", () -> null);
     }
 
     public Permission permission(String id){

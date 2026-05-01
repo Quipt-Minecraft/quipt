@@ -27,13 +27,12 @@ public class UpdateCommand extends CommandExecutor {
         super(mod, "update");
     }
 
-    Permission permission = new Permission.Atom(Identifier.of("quipt.update"));
 
     @Override
     public LiteralArgumentBuilder<ServerCommandSource> arguments() {
         return CommandManager.literal(name())
-            .requires(source -> source.getPermissions().hasPermission(permission))
-            .executes(context -> showUsage(context, permission))
+            .requires(source -> source.getPermissions().hasPermission(permission(4)))
+            .executes(context -> showUsage(context, permission(4)))
             .then(CommandManager.argument("group", StringArgumentType.word())
                 .suggests((context, builder) -> {
                     HttpResponse<String> response = null;
@@ -48,7 +47,7 @@ public class UpdateCommand extends CommandExecutor {
                     }
                     return builder.buildFuture();
                 })
-                .executes(context -> showUsage(context, permission))
+                .executes(context -> showUsage(context, permission(4)))
                 .then(CommandManager.argument("name", StringArgumentType.word())
                     .suggests((context, builder) -> {
                         String group = StringArgumentType.getString(context, "group");
@@ -64,7 +63,7 @@ public class UpdateCommand extends CommandExecutor {
                         }
                         return builder.buildFuture();
                     })
-                    .executes(context -> showUsage(context, permission))
+                    .executes(context -> showUsage(context, permission(4)))
                     .then(CommandManager.argument("build", StringArgumentType.word())
                         .suggests((context, builder) -> {
                             String group = StringArgumentType.getString(context, "group");
@@ -82,7 +81,7 @@ public class UpdateCommand extends CommandExecutor {
                             builder.suggest("latest");
                             return builder.buildFuture();
                         })
-                        .executes(context -> showUsage(context, permission))
+                        .executes(context -> showUsage(context, permission(4)))
                         .then(CommandManager.argument("artifact", StringArgumentType.word())
                             .suggests((context, builder) -> {
                                 String group = StringArgumentType.getString(context, "group");

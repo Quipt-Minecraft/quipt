@@ -29,13 +29,12 @@ public class DumpCommand extends CommandExecutor {
         super(plugin, "dump");
     }
 
-    private final Permission permission = new Permission.Level(PermissionLevel.ADMINS);
 
     @Override
     public LiteralArgumentBuilder<ServerCommandSource> arguments() {
         return builder()
-            .requires(sender -> sender.getPermissions().hasPermission(permission))
-            .executes(context -> showUsage(context, permission))
+            .requires(sender -> sender.getPermissions().hasPermission(new Permission.Level(PermissionLevel.ADMINS)))
+            .executes(context -> showUsage(context, permission("quipt.admin.dump")))
             .then(literal("registries")
                 .executes(context -> {
                     QuiptConfig config = Quipt.INSTANCE.configs().config(QuiptConfig.class);

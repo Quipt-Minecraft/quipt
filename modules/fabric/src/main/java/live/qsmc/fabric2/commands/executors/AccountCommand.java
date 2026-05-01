@@ -11,17 +11,11 @@ import live.qsmc.core2.utils.net.NetworkUtils;
 import live.qsmc.fabric2.QuiptMod;
 import live.qsmc.fabric2.commands.CommandExecutor;
 import live.qsmc.minecraft2.utils.chat.MessageUtils;
-import net.minecraft.command.argument.ArgumentTypes;
-import net.minecraft.command.permission.Permission;
-import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.net.http.HttpResponse;
-
-import static com.mojang.brigadier.builder.RequiredArgumentBuilder.argument;
 
 
 public class AccountCommand extends CommandExecutor {
@@ -29,22 +23,17 @@ public class AccountCommand extends CommandExecutor {
         super(mod, "account");
     }
 
-    private final Permission accountPerm = new Permission.Atom(Identifier.of("quipt.account"));
-    private final Permission helpPerm = new Permission.Atom(Identifier.of("quipt.account.help"));
-    private final Permission linkPerm = new Permission.Atom(Identifier.of("quipt.account.link"));
-    private final Permission registerPerm = new Permission.Atom(Identifier.of("quipt.account.register"));
-
     @Override
     public LiteralArgumentBuilder<ServerCommandSource> arguments() {
         return literal(name())
-            .requires(sender -> sender.getPermissions().hasPermission(accountPerm))
-            .executes(context -> showUsage(context, accountPerm))
+            .requires(sender -> sender.getPermissions().hasPermission(permission(4)))
+            .executes(context -> showUsage(context, permission(4)))
             .then(literal("help")
-                .requires(sender -> sender.getPermissions().hasPermission(helpPerm))
-                .executes(context -> showUsage(context, helpPerm)))
+                .requires(sender -> sender.getPermissions().hasPermission(permission(4)))
+                .executes(context -> showUsage(context, permission(4))))
             .then(literal("token")
-                .requires(sender -> sender.getPermissions().hasPermission(linkPerm))
-                .executes(context -> showUsage(context, linkPerm))
+                .requires(sender -> sender.getPermissions().hasPermission(permission(4)))
+                .executes(context -> showUsage(context, permission(4)))
 
                 .then(argument("access_token", StringArgumentType.string())
                     .executes(context -> {
@@ -68,12 +57,12 @@ public class AccountCommand extends CommandExecutor {
 
                     })))
             .then(literal("register")
-                .requires(context -> context.getPermissions().hasPermission(registerPerm))
-                .executes(context -> showUsage(context, registerPerm))
+                .requires(context -> context.getPermissions().hasPermission(permission(4)))
+                .executes(context -> showUsage(context, permission(4)))
                 .then(argument("username", StringArgumentType.string())
-                    .executes(context -> showUsage(context, registerPerm))
+                    .executes(context -> showUsage(context, permission(4)))
                     .then(argument("password", StringArgumentType.string())
-                        .executes(context -> showUsage(context, registerPerm))
+                        .executes(context -> showUsage(context, permission(4)))
                         .then(argument("email", StringArgumentType.greedyString())
                             .executes(context -> {
                                 JSONObject request = new JSONObject();
