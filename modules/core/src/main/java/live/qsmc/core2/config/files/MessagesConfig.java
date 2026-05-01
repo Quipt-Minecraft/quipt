@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 
-import static live.qsmc.core2.config.ConfigTemplate.Extension.QPT;
+import static live.qsmc.core2.config.ConfigTemplate.Extension.JSON;
 
-@ConfigTemplate(name = "message", ext = QPT)
+@ConfigTemplate(name = "message", ext = JSON)
 public class MessagesConfig extends Config {
 
     @ConfigValue

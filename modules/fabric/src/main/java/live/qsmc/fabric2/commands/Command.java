@@ -7,6 +7,11 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import live.qsmc.fabric2.QuiptMod;
+import live.qsmc.minecraft2.utils.chat.MessageUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.command.permission.Permission;
 import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.ServerCommandSource;
@@ -15,6 +20,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
+
+import static net.kyori.adventure.text.Component.text;
 
 public abstract class Command {
 
@@ -35,25 +42,40 @@ public abstract class Command {
     }
 
     public int logError(CommandContext<ServerCommandSource> context, String message) {
-        return logError(context, Text.literal(message));
+        return logError(context, text(message));
     }
 
-    public int logError(CommandContext<ServerCommandSource> context, Text message) {
-        context.getSource().sendError(Text.literal("").append(message).formatted(Formatting.RED));
-        return 0;
+    public int logError(CommandContext<ServerCommandSource> context, Component message) {
+        return log(context, message, NamedTextColor.RED, 0);
     }
 
-    public int showUsage(CommandContext<ServerCommandSource> context, String perm) {
+    public int logSuccess(CommandContext<ServerCommandSource> context, String message) {
+        return logSuccess(context, text(message));
+    }
+
+    public int logSuccess(CommandContext<ServerCommandSource> context, Component message) {
+        return log(context, message, NamedTextColor.GREEN, 1);
+    }
+
+    public int log(CommandContext<ServerCommandSource> context, String message, TextColor color, int value) {
+        return log(context, text(message), color, value);
+    }
+
+    public int log(CommandContext<ServerCommandSource> context, Component message, TextColor color, int value) {
+        context.getSource().sendMessage(text().style(Style.style().color(color).build()).append(message));
+        return value;
+    }
+
+    public int showUsage(CommandContext<ServerCommandSource> context, Permission perm) {
+        ServerCommandSource sender = context.getSource();
         StringBuilder args = new StringBuilder();
-        for (ParsedCommandNode<ServerCommandSource> node : context.getNodes()) {
+        for(ParsedCommandNode<ServerCommandSource> node : context.getNodes()){
             CommandNode<?> newNode = node.getNode();
-            if (newNode instanceof LiteralCommandNode) {
+            if(newNode instanceof LiteralCommandNode){
                 args.append(newNode.getName()).append(".");
             }
         }
-        boolean hasPerm = perm.equalsIgnoreCase("") || context.getSource().getPermissions().hasPermission(new Permission.Atom(Identifier.of(perm)));
-        String errorMessage = hasPerm ? "Usage: /" + args.toString().replace(".", " ").trim() : "You do not have permission (" + perm + ")";
-        return logError(context, errorMessage);
+        return logError(context, sender.getPermissions().hasPermission(perm) ? MessageUtils.get("cmd." + args + "usage") : MessageUtils.get("cmd.error.no_perm", perm));
     }
 
     public CompletableFuture<Suggestions> onlySimilar(String[] values, String argumentName, CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {

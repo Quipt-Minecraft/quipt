@@ -2,6 +2,7 @@ package live.qsmc.paper2.commands.executors;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import live.qsmc.minecraft2.utils.chat.MessageUtils;
+import live.qsmc.paper2.QuiptPaper;
 import live.qsmc.paper2.QuiptPlugin;
 import live.qsmc.paper2.commands.CommandExecutor;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -27,7 +28,7 @@ public class ResourcePackCommand extends CommandExecutor {
                 .executes(context -> showUsage(context, "quipt.admin.resourcepack"))
                 .then(literal("update")
                         .executes(context -> {
-                            plugin().integration().packHandler().updatePack();
+                            QuiptPaper.instance().packHandler().updatePack();
                             return 1;
                         }))
                 .then(literal("reload")

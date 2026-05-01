@@ -1,43 +1,51 @@
-package live.qsmc.paper2.commands.executors;
+package live.qsmc.fabric2.commands.executors;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import live.qsmc.core2.Quipt;
 import live.qsmc.core2.config.files.QuiptConfig;
 import live.qsmc.core2.utils.net.ApiResponse;
 import live.qsmc.core2.utils.net.HttpConfig;
 import live.qsmc.core2.utils.net.HttpHeaders;
 import live.qsmc.core2.utils.net.NetworkUtils;
+import live.qsmc.fabric2.QuiptMod;
+import live.qsmc.fabric2.commands.CommandExecutor;
 import live.qsmc.minecraft2.utils.chat.MessageUtils;
-import live.qsmc.paper2.QuiptPlugin;
-import live.qsmc.paper2.commands.CommandExecutor;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.minecraft.command.argument.ArgumentTypes;
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.net.http.HttpResponse;
 
-import static io.papermc.paper.command.brigadier.Commands.argument;
-import static net.kyori.adventure.text.Component.text;
+import static com.mojang.brigadier.builder.RequiredArgumentBuilder.argument;
+
 
 public class AccountCommand extends CommandExecutor {
-    public AccountCommand(QuiptPlugin plugin) {
-        super(plugin, "account");
+    public AccountCommand(QuiptMod mod) {
+        super(mod, "account");
     }
 
+    private final Permission accountPerm = new Permission.Atom(Identifier.of("quipt.account"));
+    private final Permission helpPerm = new Permission.Atom(Identifier.of("quipt.account.help"));
+    private final Permission linkPerm = new Permission.Atom(Identifier.of("quipt.account.link"));
+    private final Permission registerPerm = new Permission.Atom(Identifier.of("quipt.account.register"));
+
     @Override
-    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
+    public LiteralArgumentBuilder<ServerCommandSource> arguments() {
         return literal(name())
-            .requires(context -> context.getSender().hasPermission("quipt.account"))
-            .executes(context -> showUsage(context, "quipt.account"))
+            .requires(sender -> sender.getPermissions().hasPermission(accountPerm))
+            .executes(context -> showUsage(context, accountPerm))
             .then(literal("help")
-                .requires(context -> context.getSender().hasPermission("quipt.account.help"))
-                .executes(context -> showUsage(context, "quipt.account.help")))
+                .requires(sender -> sender.getPermissions().hasPermission(helpPerm))
+                .executes(context -> showUsage(context, helpPerm)))
             .then(literal("token")
-                .requires(context -> context.getSender().hasPermission("quipt.account.link"))
-                .executes(context -> showUsage(context, "quipt.account.link"))
+                .requires(sender -> sender.getPermissions().hasPermission(linkPerm))
+                .executes(context -> showUsage(context, linkPerm))
+
                 .then(argument("access_token", StringArgumentType.string())
                     .executes(context -> {
 
@@ -47,7 +55,7 @@ public class AccountCommand extends CommandExecutor {
                             String apiUrl = "https://api.qsmc.live/token/validate";
                             HttpResponse<String> responseRaw = NetworkUtils.get(httpConfig, apiUrl);
                             ApiResponse<?> response = new ApiResponse<>(responseRaw);
-                            if(response.isFailure()){
+                            if (response.isFailure()) {
                                 return logError(context, "Invalid access token");
                             }
                             QuiptConfig config = Quipt.INSTANCE.configs().config(QuiptConfig.class);
@@ -60,12 +68,12 @@ public class AccountCommand extends CommandExecutor {
 
                     })))
             .then(literal("register")
-                .requires(context -> context.getSender().hasPermission("quipt.account.link"))
-                .executes(context -> showUsage(context, "quipt.account.link"))
+                .requires(context -> context.getPermissions().hasPermission(registerPerm))
+                .executes(context -> showUsage(context, registerPerm))
                 .then(argument("username", StringArgumentType.string())
-                    .executes(context -> showUsage(context, "quipt.account.link"))
+                    .executes(context -> showUsage(context, registerPerm))
                     .then(argument("password", StringArgumentType.string())
-                        .executes(context -> showUsage(context, "quipt.account.link"))
+                        .executes(context -> showUsage(context, registerPerm))
                         .then(argument("email", StringArgumentType.greedyString())
                             .executes(context -> {
                                 JSONObject request = new JSONObject();

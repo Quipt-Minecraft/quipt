@@ -1,5 +1,6 @@
 package live.qsmc.minecraft2.api;
 
+import live.qsmc.core2.Quipt;
 import live.qsmc.core2.data.Metadata;
 import live.qsmc.core2.QuiptIntegration;
 import live.qsmc.core2.config.factories.GenericFactory;
@@ -11,7 +12,6 @@ import java.io.File;
 
 public abstract class MinecraftIntegration<T> extends QuiptIntegration {
 
-    private ResourcePackHandler packHandler = null;
     private PartyConfig parties = null;
     private final Metadata metadata;
     private final String name;
@@ -50,15 +50,7 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
         return folder;
     }
 
-    public ResourcePackHandler packHandler() {
-        if(packHandler == null){
-            logger().log("ResourcePackHandler", "Initializing Resource Pack Handler...");
-            packHandler = new ResourcePackHandler(server());
-            server().handler().handle("resources", packHandler, "resources/*");
-//            packHandler.setUrl(resourceConfig.repo_url);
-        }
-        return packHandler;
-    }
+
 
     public PartyConfig parties(){
         if(parties == null){

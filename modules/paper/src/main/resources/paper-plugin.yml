@@ -1,4 +1,4 @@
-name: "${name}"
+name: "${name}-paper"
 version: "${project_version}"
 author: "${author}"
 api-version: "${minecraft_version}"

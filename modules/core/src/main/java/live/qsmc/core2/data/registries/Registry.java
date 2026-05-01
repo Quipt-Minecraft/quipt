@@ -135,4 +135,7 @@ public class Registry<T> {
     }
 
 
+    public Set<String> keys() {
+        return registry.keySet();
+    }
 }

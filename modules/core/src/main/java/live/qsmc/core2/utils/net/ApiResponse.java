@@ -3,7 +3,42 @@ package live.qsmc.core2.utils.net;
 import live.qsmc.core2.data.JsonSerializable;
 import org.json.JSONObject;
 
-public record ApiResponse<T>(Status status, T data) implements JsonSerializable {
+import java.net.http.HttpResponse;
+
+public class ApiResponse<T> implements JsonSerializable {
+
+    public Status status;
+    public T data;
+
+    public ApiResponse(HttpResponse<?> response) {
+        if(response == null)
+            throw new IllegalArgumentException("Response cannot be null");
+        if(response.body() == null)
+            throw new IllegalArgumentException("Response body cannot be null");
+        JSONObject json;
+        if(response.body() instanceof JSONObject bodyJson)
+            json = bodyJson;
+        else
+            json = new JSONObject(response.body() + "");
+        status = Status.valueOf(json.getString("status").toUpperCase());
+        if(json.has("data"))
+            data = (T) json.get("data");
+        else data = null;
+    }
+
+    public ApiResponse(Status status, T data) {
+        this.status = status;
+        this.data = data;
+    }
+
+    public Status status(){
+        return status;
+    }
+
+    public T data(){
+        return data;
+    }
+
 
     public boolean isSuccess() {
         return status == Status.SUCCESS;
@@ -13,12 +48,6 @@ public record ApiResponse<T>(Status status, T data) implements JsonSerializable 
         return status == Status.FAILURE;
     }
 
-    @Override
-    public JSONObject json() {
-        return new JSONObject()
-                .put("status", status.name())
-                .put("data", data);
-    }
 
     public enum Status {
         SUCCESS,

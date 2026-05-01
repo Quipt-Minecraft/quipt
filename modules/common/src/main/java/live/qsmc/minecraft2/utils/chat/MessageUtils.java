@@ -3,6 +3,7 @@ package live.qsmc.minecraft2.utils.chat;
 import live.qsmc.core2.Quipt;
 import live.qsmc.core2.config.files.MessagesConfig;
 import live.qsmc.core2.data.registries.Registry;
+import live.qsmc.core2.data.registries.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -19,31 +20,24 @@ import static net.kyori.adventure.text.Component.translatable;
 public class MessageUtils {
 
     private static MessagesConfig config;
-    private static Registry<Component> registry;
+//    private static Registry<Component> registry;
 
 
-    private static void init() {
-        if(initialized()) return;
+    public static void init() {
         Quipt.INSTANCE.logger().log("Messages", "Initializing Messages...");
-        registry = Quipt.INSTANCE.registries().register("messages", () -> null);
         config = Quipt.INSTANCE.configs().register(MessagesConfig.class);
         createDefaultMessages();
-        for (String key : config.messages.keySet()) {
-            if (registry.get(key).isEmpty()) {
-                registry.register(key, deserialize(config.messages.getString(key)));
-            }
-        }
+//        for (String key : config.messages.keySet()) {
+//            if (registry.get(key).isEmpty()) {
+//                registry.register(key, deserialize(config.messages.getString(key)));
+//            }
+//        }
         config.save();
     }
 
-    public static boolean initialized() {
-        return Quipt.INSTANCE.registries().key("messages") != null;
-    }
-
     public static void register(String key, String serializedComponent) {
-        if(!initialized()) init();
         if (!config.messages.has(key)) {
-            registry.register(key, deserialize(serializedComponent));
+//            registry.register(key, deserialize(serializedComponent));
             config.messages.put(key, serializedComponent);
         }
     }
@@ -81,21 +75,24 @@ public class MessageUtils {
     }
 
     public static Component get(String key, Object... replacements) {
-        Component a = get(key);
-        for (int i = 0; i != replacements.length; i++) {
-            int finalI = i;
-            a = a.replaceText(builder -> {
-                Component replacement;
-                if (replacements[finalI] instanceof Component) replacement = (Component) replacements[finalI];
-                else replacement = text(replacements[finalI].toString());
-                builder.match("\\[" + finalI + "\\]").replacement(replacement);
-            });
+        String raw = get(key);
+        for(int index = 0; index != replacements.length; index++) {
+            String rawReplacement;
+            if (replacements[index] instanceof Component) rawReplacement = serialize((Component) replacements[index]);
+            else rawReplacement = replacements[index].toString();
+            raw = raw.replace("[" + index + "]", rawReplacement);
         }
-        return a;
+
+        return deserialize(raw);
     }
 
-    private static Component get(String key) {
-        return registry.getOrDefault(key, translatable(key));
+
+    private static String get(String key) {
+        if(!config.messages.has(key)) {
+            //attempt to load from registry
+            save();
+        }
+        return config.messages.has(key) ? config.messages.getString(key) : serialize(translatable(key));
     }
 
     public static Component parse(@NotNull Component text) {

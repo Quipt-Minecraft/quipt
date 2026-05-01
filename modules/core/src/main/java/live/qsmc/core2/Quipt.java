@@ -1,13 +1,16 @@
 package live.qsmc.core2;
 
 import live.qsmc.core2.config.factories.GenericFactory;
+import live.qsmc.core2.config.files.QuiptConfig;
 import live.qsmc.core2.config.files.WebhookConfig;
 import live.qsmc.core2.data.registries.Registries;
 import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.core2.discord.Webhook;
+import live.qsmc.core2.server.QuiptServer;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 public class Quipt extends QuiptIntegration {
@@ -20,7 +23,7 @@ public class Quipt extends QuiptIntegration {
      */
     private Registries registries = null;
 
-    private boolean apiRegistered = false;
+    private QuiptServer server = null;
 
     public Quipt(){
         this.integrationRegistry = registries().register("integrations", () -> null);
@@ -33,6 +36,21 @@ public class Quipt extends QuiptIntegration {
             registries = new Registries();
         }
         return registries;
+    }
+
+    public QuiptServer server() {
+        if(server == null){
+            logger().log("Server", "Initializing QuiptServer...");
+            if(configs().config(QuiptConfig.class) == null){
+                logger().log("Server", "Initializing Webhook Config...");
+                configs().factory(new GenericFactory<>(QuiptConfig.WebData.class));
+                configs().register(QuiptConfig.class);
+            }
+            QuiptConfig.WebData webData = configs().config(QuiptConfig.class).webData;
+            QuiptServer.ServerConfig serverConfig = new QuiptServer.ServerConfig(QuiptServer.ServerProtocol.valueOf(webData.protocol.toUpperCase(Locale.ROOT)), webData.host, webData.port);
+            server = new QuiptServer(this, serverConfig);
+        }
+        return server;
     }
 
     public Optional<QuiptIntegration> integration(String name) {

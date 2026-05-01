@@ -1,6 +1,9 @@
 package live.qsmc.fabric2.commands;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import live.qsmc.fabric2.QuiptMod;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -27,6 +30,10 @@ public abstract class CommandExecutor extends Command {
 
     public LiteralArgumentBuilder<ServerCommandSource> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
+    }
+
+    public <T> RequiredArgumentBuilder<ServerCommandSource, T> argument(String name, ArgumentType<T> type) {
+        return RequiredArgumentBuilder.argument(name, type);
     }
 
     public static class Builder {

@@ -28,7 +28,7 @@ public abstract class QuiptIntegration {
     private ConfigManager configs = null;
 
 
-    private QuiptServer server = null;
+
 
     public QuiptIntegration() {
         logger().log("Quipt", "Initializing QuiptIntegration {}...", getClass().getName());
@@ -38,20 +38,7 @@ public abstract class QuiptIntegration {
         return logger;
     }
 
-    public QuiptServer server() {
-        if(server == null){
-            logger().log("Server", "Initializing QuiptServer...");
-            if(configs().config(QuiptConfig.class) == null){
-                logger().log("Server", "Initializing Webhook Config...");
-                configs.factory(new GenericFactory<>(QuiptConfig.WebData.class));
-                configs.register(QuiptConfig.class);
-            }
-            QuiptConfig.WebData webData = configs.config(QuiptConfig.class).webData;
-            QuiptServer.ServerConfig serverConfig = new QuiptServer.ServerConfig(QuiptServer.ServerProtocol.valueOf(webData.protocol.toUpperCase(Locale.ROOT)), webData.host, webData.port);
-            server = new QuiptServer(this, serverConfig);
-        }
-        return server;
-    }
+
 
     public Heartbeat heartbeat() {
         return heartbeat;
