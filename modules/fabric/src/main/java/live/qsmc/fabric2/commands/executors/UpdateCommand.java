@@ -7,9 +7,11 @@ import live.qsmc.core2.utils.net.HttpConfig;
 import live.qsmc.core2.utils.net.NetworkUtils;
 import live.qsmc.fabric2.QuiptMod;
 import live.qsmc.fabric2.commands.CommandExecutor;
+import net.minecraft.command.permission.Permission;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -25,11 +27,13 @@ public class UpdateCommand extends CommandExecutor {
         super(mod, "update");
     }
 
+    Permission permission = new Permission.Atom(Identifier.of("quipt.update"));
+
     @Override
     public LiteralArgumentBuilder<ServerCommandSource> arguments() {
         return CommandManager.literal(name())
-//            .requires(source -> source.(2))
-            .executes(context -> showUsage(context, ""))
+            .requires(source -> source.getPermissions().hasPermission(permission))
+            .executes(context -> showUsage(context, permission))
             .then(CommandManager.argument("group", StringArgumentType.word())
                 .suggests((context, builder) -> {
                     HttpResponse<String> response = null;
@@ -44,7 +48,7 @@ public class UpdateCommand extends CommandExecutor {
                     }
                     return builder.buildFuture();
                 })
-                .executes(context -> showUsage(context, ""))
+                .executes(context -> showUsage(context, permission))
                 .then(CommandManager.argument("name", StringArgumentType.word())
                     .suggests((context, builder) -> {
                         String group = StringArgumentType.getString(context, "group");
@@ -60,7 +64,7 @@ public class UpdateCommand extends CommandExecutor {
                         }
                         return builder.buildFuture();
                     })
-                    .executes(context -> showUsage(context, ""))
+                    .executes(context -> showUsage(context, permission))
                     .then(CommandManager.argument("build", StringArgumentType.word())
                         .suggests((context, builder) -> {
                             String group = StringArgumentType.getString(context, "group");
@@ -78,7 +82,7 @@ public class UpdateCommand extends CommandExecutor {
                             builder.suggest("latest");
                             return builder.buildFuture();
                         })
-                        .executes(context -> showUsage(context, ""))
+                        .executes(context -> showUsage(context, permission))
                         .then(CommandManager.argument("artifact", StringArgumentType.word())
                             .suggests((context, builder) -> {
                                 String group = StringArgumentType.getString(context, "group");
