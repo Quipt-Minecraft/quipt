@@ -78,36 +78,13 @@ public class QuiptPaper extends QuiptPlugin {
             text("Usage: /account register <username> <password> <email>"));
 
 
-
         MessageUtils.register(
             "quipt.account.register.success",
             text("Account registration has started. Please check your email for a verification link."));
+
         MessageUtils.register(
             "quipt.dump.success",
-            "{" +
-                    "\"color\":\"yellow\"," +
-                    "\"extra\":" +
-                        "[" +
-                            "{" +
-                                "\"color\":\"green\"," +
-                                "\"text\":\" dump has been uploaded successfully.\"" +
-                            "}," +
-                            "\"\\n\"," +
-                            "{" +
-                                "\"color\":\"white\"," +
-                                "\"text\":\"Click here to download: \"" +
-                            "}," +
-                            "{" +
-                                "\"color\":\"yellow\"," +
-                                "\"click_event\":{" +
-                                    "\"action\":\"open_url\"," +
-                                    "\"url\":\"[1]\"" +
-                                "}," +
-                                "\"text\":\"[1]\"" +
-                            "}" +
-                        "]," +
-                        "\"text\":\"[0]\"" +
-                    "}");
+            "{\"color\":\"dark_green\",\"extra\":[{\"color\":\"green\",\"text\":\" has been uploaded successfully.\"},\"\\n\",{\"color\":\"green\",\"text\":\"Click \"},{\"color\":\"yellow\",\"click_event\":{\"action\":\"open_url\",\"url\":\"[1]\"},\"text\":\"here\"},{\"color\":\"green\",\"text\":\" to download.\"}],\"text\":\"[0]\"}");
 
         MessageUtils.save();
 
