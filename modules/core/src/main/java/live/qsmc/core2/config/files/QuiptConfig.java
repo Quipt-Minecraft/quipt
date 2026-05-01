@@ -14,6 +14,9 @@ public class QuiptConfig extends Config {
     @ConfigValue
     public WebData webData;
 
+    @ConfigValue
+    public String access_token = "";
+
 
     /**
      * Creates a new config file

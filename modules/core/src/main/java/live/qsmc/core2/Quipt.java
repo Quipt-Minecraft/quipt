@@ -20,6 +20,8 @@ public class Quipt extends QuiptIntegration {
      */
     private Registries registries = null;
 
+    private boolean apiRegistered = false;
+
     public Quipt(){
         this.integrationRegistry = registries().register("integrations", () -> null);
         this.integrationRegistry.register("core", this);

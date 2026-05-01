@@ -12,6 +12,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
@@ -41,8 +42,24 @@ public abstract class Command {
     }
 
     public int logError(CommandContext<CommandSourceStack> context, Component message) {
-        context.getSource().getSender().sendMessage(message.style(Style.style().color(NamedTextColor.RED).build()));
-        return 0;
+        return log(context, message, NamedTextColor.RED, 0);
+    }
+
+    public int logSuccess(CommandContext<CommandSourceStack> context, String message) {
+        return logSuccess(context, text(message));
+    }
+
+    public int logSuccess(CommandContext<CommandSourceStack> context, Component message) {
+        return log(context, message, NamedTextColor.GREEN, 1);
+    }
+
+    public int log(CommandContext<CommandSourceStack> context, String message, TextColor color, int value) {
+        return log(context, text(message), color, value);
+    }
+
+    public int log(CommandContext<CommandSourceStack> context, Component message, TextColor color, int value) {
+        context.getSource().getSender().sendMessage(text().style(Style.style().color(color).build()).append(message));
+        return value;
     }
 
     public int showUsage(CommandContext<CommandSourceStack> context, String perm) {

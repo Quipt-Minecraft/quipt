@@ -3,6 +3,7 @@ package live.qsmc.core2.data.registries;
 import live.qsmc.core2.QuiptIntegration;
 import org.json.JSONObject;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -54,6 +55,10 @@ public class Registries {
             registry.clear();
         }
         keys.clear();
+    }
+
+    public Collection<RegistryKey> keys() {
+        return keys.values();
     }
 
     public JSONObject dump() {
