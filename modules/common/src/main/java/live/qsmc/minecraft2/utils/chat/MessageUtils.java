@@ -2,8 +2,11 @@ package live.qsmc.minecraft2.utils.chat;
 
 import live.qsmc.core2.Quipt;
 import live.qsmc.core2.config.files.MessagesConfig;
+import live.qsmc.core2.data.annotations.Nullable;
 import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.core2.data.registries.RegistryKey;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -20,24 +23,23 @@ import static net.kyori.adventure.text.Component.translatable;
 public class MessageUtils {
 
     private static MessagesConfig config;
-//    private static Registry<Component> registry;
+    static Registry<Placeholder> placeholders;
 
 
     public static void init() {
         Quipt.INSTANCE.logger().log("Messages", "Initializing Messages...");
         config = Quipt.INSTANCE.configs().register(MessagesConfig.class);
+        placeholders = Quipt.INSTANCE.registries().register("placeholders", () -> null);
         createDefaultMessages();
-//        for (String key : config.messages.keySet()) {
-//            if (registry.get(key).isEmpty()) {
-//                registry.register(key, deserialize(config.messages.getString(key)));
-//            }
-//        }
         config.save();
+    }
+
+    public static Registry<Placeholder> placeholders() {
+        return placeholders;
     }
 
     public static void register(String key, String serializedComponent) {
         if (!config.messages.has(key)) {
-//            registry.register(key, deserialize(serializedComponent));
             config.messages.put(key, serializedComponent);
         }
     }
@@ -76,7 +78,7 @@ public class MessageUtils {
 
     public static Component get(String key, Object... replacements) {
         String raw = get(key);
-        for(int index = 0; index != replacements.length; index++) {
+        for (int index = 0; index != replacements.length; index++) {
             String rawReplacement;
             if (replacements[index] instanceof Component) rawReplacement = serialize((Component) replacements[index]);
             else rawReplacement = replacements[index].toString();
@@ -88,22 +90,23 @@ public class MessageUtils {
 
 
     private static String get(String key) {
-        if(!config.messages.has(key)) {
+        if (!config.messages.has(key)) {
             //attempt to load from registry
             save();
         }
         return config.messages.has(key) ? config.messages.getString(key) : serialize(translatable(key));
     }
 
-    public static Component parse(@NotNull Component text) {
+    public static Component parse(@NotNull Component text, @Nullable Audience viewer) {
         String content = plainText(text);
         List<String> keys = new ArrayList<>();
-        while(content.contains("${") && content.contains("}")) {
+        while (content.contains("${") && content.contains("}")) {
             int start = content.indexOf("${");
             int end = content.indexOf("}", start);
             String key = content.substring(start + 2, end);
             keys.add(key);
-            content = content.replace("${" + key + "}", "");
+            if (placeholders().get(key).isPresent())
+                content = content.replace("${" + key + "}", placeholders().get(key).get().convert(viewer));
         }
         return text.replaceText(builder -> {
             for (String key : keys) {
