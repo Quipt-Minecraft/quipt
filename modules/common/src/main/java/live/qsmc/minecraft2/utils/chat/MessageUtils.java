@@ -5,6 +5,7 @@ import live.qsmc.core2.config.files.MessagesConfig;
 import live.qsmc.core2.data.annotations.Nullable;
 import live.qsmc.core2.data.registries.Registry;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -31,6 +32,10 @@ public class MessageUtils {
         placeholders = Quipt.INSTANCE.registries().register("placeholders", () -> null);
         createDefaultMessages();
         config.save();
+
+        MessageUtils.placeholders().register("test", (viewer) -> {
+            return "test";
+        });
     }
 
     public static Registry<StringPlaceholder> placeholders() {

@@ -6,20 +6,28 @@ import live.qsmc.fabric2.commands.CommandExecutor;
 import live.qsmc.fabric2.commands.executors.AccountCommand;
 import live.qsmc.fabric2.commands.executors.DumpCommand;
 import live.qsmc.fabric2.commands.executors.UpdateCommand;
+import live.qsmc.fabric2.net.PluginMessageEvent;
+import live.qsmc.fabric2.net.PluginMessagePacket;
 import live.qsmc.minecraft2.server.ResourcePackHandler;
 import live.qsmc.minecraft2.utils.chat.MessageUtils;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.util.Identifier;
 
 import static net.kyori.adventure.text.Component.text;
 
-public class QuiptFabric extends QuiptMod implements ModInitializer {
+public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPayloadHandler<PluginMessagePacket> {
 
     private static QuiptFabric instance = null;
 
     private ResourcePackHandler packHandler = null;
+
+    public static Identifier BUNGEE_CHANNEL = Identifier.of("bungeecord", "main");
+
 
 
     @Nullable
@@ -92,6 +100,15 @@ public class QuiptFabric extends QuiptMod implements ModInitializer {
         //Load other Quipt mods
         FabricLoader.getInstance().getEntrypointContainers("quipt", QuiptMod.class)
                 .forEach(container -> container.getEntrypoint().run(container));
+        PayloadTypeRegistry.playS2C().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(PluginMessagePacket.CHANNEL_ID, this);
+    }
+
+    @Override
+    public void receive(PluginMessagePacket payload, ServerPlayNetworking.Context context) {
+        PluginMessageEvent.EVENT.invoker().onReceive(payload, context);
     }
 
     public ResourcePackHandler packHandler() {
