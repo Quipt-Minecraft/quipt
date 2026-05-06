@@ -4,9 +4,7 @@ import live.qsmc.core2.Quipt;
 import live.qsmc.core2.config.files.MessagesConfig;
 import live.qsmc.core2.data.annotations.Nullable;
 import live.qsmc.core2.data.registries.Registry;
-import live.qsmc.core2.data.registries.RegistryKey;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -16,6 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.SystemColor.text;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -23,7 +22,7 @@ import static net.kyori.adventure.text.Component.translatable;
 public class MessageUtils {
 
     private static MessagesConfig config;
-    static Registry<Placeholder> placeholders;
+    static Registry<StringPlaceholder> placeholders;
 
 
     public static void init() {
@@ -34,7 +33,7 @@ public class MessageUtils {
         config.save();
     }
 
-    public static Registry<Placeholder> placeholders() {
+    public static Registry<StringPlaceholder> placeholders() {
         return placeholders;
     }
 
@@ -97,23 +96,15 @@ public class MessageUtils {
         return config.messages.has(key) ? config.messages.getString(key) : serialize(translatable(key));
     }
 
-    public static Component parse(@NotNull Component text, @Nullable Audience viewer) {
-        String content = plainText(text);
-        List<String> keys = new ArrayList<>();
-        while (content.contains("${") && content.contains("}")) {
-            int start = content.indexOf("${");
-            int end = content.indexOf("}", start);
-            String key = content.substring(start + 2, end);
-            keys.add(key);
+    public static Component parse(@NotNull String serializedComponent, @Nullable Audience viewer) {
+        while (serializedComponent.contains("${") && serializedComponent.contains("}")) {
+            int start = serializedComponent.indexOf("${");
+            int end = serializedComponent.indexOf("}", start);
+            String key = serializedComponent.substring(start + 2, end);
             if (placeholders().get(key).isPresent())
-                content = content.replace("${" + key + "}", placeholders().get(key).get().convert(viewer));
+                serializedComponent = serializedComponent.replace("${" + key + "}", placeholders().get(key).get().convert(viewer));
         }
-        return text.replaceText(builder -> {
-            for (String key : keys) {
-                builder.match("\\$\\{" + key + "\\}").replacement(get(key));
-            }
-
-        });
+        return deserialize(serializedComponent);
     }
 
     public static void save() {
