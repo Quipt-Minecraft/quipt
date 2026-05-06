@@ -33,9 +33,6 @@ public class MessageUtils {
         createDefaultMessages();
         config.save();
 
-        MessageUtils.placeholders().register("test", (viewer) -> {
-            return "test";
-        });
     }
 
     public static Registry<StringPlaceholder> placeholders() {
