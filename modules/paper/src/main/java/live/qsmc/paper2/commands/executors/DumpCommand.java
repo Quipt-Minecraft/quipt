@@ -6,6 +6,7 @@ import live.qsmc.core2.Quipt;
 import live.qsmc.core2.QuiptIntegration;
 import live.qsmc.core2.config.files.QuiptConfig;
 import live.qsmc.core2.data.JsonSerializable;
+import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.core2.data.registries.RegistryKey;
 import live.qsmc.core2.utils.net.HttpConfig;
 import live.qsmc.core2.utils.net.HttpHeaders;
@@ -37,20 +38,27 @@ public class DumpCommand extends CommandExecutor {
                     QuiptConfig config = Quipt.INSTANCE.configs().config(QuiptConfig.class);
                     if (config.access_token == null || config.access_token.isBlank())
                         return logError(context, "Registry dump requires an access token to be registered in the base Quipt config.");
-                    JSONObject core = new JSONObject();
-                    for (RegistryKey key : Quipt.INSTANCE.registries().keys()) {
-                        JSONArray registryEntries = new JSONArray();
-                        for (Object object : Quipt.INSTANCE.registries().get(key).values()) {
-                            if (object instanceof JsonSerializable serializable) {
-                                registryEntries.put(serializable.json());
-                            } else {
-                                registryEntries.put(object);
+                    JSONObject dumpRoot = new JSONObject();
+                    for (RegistryKey registryKey : Quipt.INSTANCE.registries().keys()) {
+                        Registry<?> registry = Quipt.INSTANCE.registries().get(registryKey);
+                        JSONObject dumpRegistry = new JSONObject();
+                        for(String entryKey : registry.keys()){
+                            if(registry.get(entryKey).isPresent()){
+                                JSONObject dumpEntry;
+                                    Object object = registry.get(entryKey).get();
+                                if (object instanceof JsonSerializable serializable) {
+                                    dumpEntry = serializable.json();
+                                } else {
+                                    dumpEntry = new JSONObject().put("value", object);
+                                }
+                                dumpRegistry.put(entryKey, dumpEntry);
                             }
                         }
-                        core.put(key.key(), registryEntries);
+
+                        dumpRoot.put(registryKey.key(), dumpRegistry);
                     }
 
-                    context.getSource().getSender().sendMessage(uploadData(core, Type.REGISTRIES, config));
+                    context.getSource().getSender().sendMessage(uploadData(dumpRoot, Type.REGISTRIES, config));
                     return 1;
                 }))
             .then(literal("config")
