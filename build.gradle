@@ -28,9 +28,6 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
-    tasks.withType(Jar).configureEach {
-        archiveBaseName = "quipt-${project.name}"
-    }
 
     java {
         toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
@@ -82,6 +79,7 @@ configure(subprojects.findAll { it.name == "paper" }) {
         exclude 'META-INF/*.RSA'
         append 'META-INF/LICENSE'
         append 'META-INF/NOTICE'
+        archiveBaseName.set("quipt-${project.name}")
     }
 
     tasks {
@@ -95,10 +93,6 @@ configure(subprojects.findAll { it.name == "fabric" }) {
     apply plugin: 'fabric-loom'
 
     version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
-
-    tasks.named('remapJar') {
-        archiveBaseName = "quipt-${project.name}"
-    }
 
     dependencies {
         minecraft "com.mojang:minecraft:${minecraft_version}"

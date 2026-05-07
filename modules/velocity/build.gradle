@@ -32,6 +32,7 @@ tasks {
     velocityVersion("3.5.0-SNAPSHOT")
   }
     shadowJar {
+        archiveBaseName.set("quipt-velocity")
         archiveClassifier.set("")
     }
     build {
