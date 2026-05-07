@@ -4,12 +4,12 @@ import groovy.text.SimpleTemplateEngine
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom'               version '1.14-SNAPSHOT' apply false
-    id 'io.github.dexman545.outlet' version '1.6.1'        apply false
-    id 'com.modrinth.minotaur'     version '2.+'           apply false
-    id 'com.gradleup.shadow'       version '8.3.6'         apply false
-    id 'xyz.jpenilla.run-paper'    version '3.0.2'         apply false
-    id 'xyz.jpenilla.run-velocity' version '3.0.2'         apply false
+    id 'fabric-loom' version '1.14-SNAPSHOT' apply false
+    id 'io.github.dexman545.outlet' version '1.6.1' apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
+    id 'com.gradleup.shadow' version '8.3.6' apply false
+    id 'xyz.jpenilla.run-paper' version '3.0.2' apply false
+    id 'xyz.jpenilla.run-velocity' version '3.0.2' apply false
 }
 
 group = "live.qsmc"
@@ -27,6 +27,8 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
+
+    archivesBaseName = "quipt-${project.name}"
 
     java {
         toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
