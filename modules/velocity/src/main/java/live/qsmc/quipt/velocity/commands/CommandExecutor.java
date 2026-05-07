@@ -1,6 +1,8 @@
 package live.qsmc.quipt.velocity.commands;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandSource;
@@ -15,6 +17,14 @@ public abstract class CommandExecutor extends Command {
 
     public LiteralCommandNode<CommandSource> execute() {
         return arguments().build();
+    }
+
+    public LiteralArgumentBuilder<CommandSource> literal(String name) {
+        return LiteralArgumentBuilder.literal(name);
+    }
+
+    public <T> RequiredArgumentBuilder<CommandSource, T> argument(String name, ArgumentType<T> type) {
+        return RequiredArgumentBuilder.argument(name, type);
     }
 
     public abstract LiteralArgumentBuilder<CommandSource> arguments();

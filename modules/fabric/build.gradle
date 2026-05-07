@@ -22,7 +22,7 @@ tasks.register('mergeJar', Jar) {
         }
     }
 
-    archiveClassifier = "dev"
+    archiveClassifier = ""
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
@@ -71,7 +71,7 @@ test {
 
 remapJar {
     input = tasks.mergeJar.archiveFile
-    archiveClassifier = ""
+    archiveClassifier = "-dev"
     archiveBaseName.set("quipt-fabric")
 }
 

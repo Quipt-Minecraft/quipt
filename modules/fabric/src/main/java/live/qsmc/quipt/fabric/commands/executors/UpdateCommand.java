@@ -3,6 +3,7 @@ package live.qsmc.quipt.fabric.commands.executors;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import live.qsmc.quipt.core.data.annotations.Nullable;
 import live.qsmc.quipt.core.utils.net.HttpConfig;
 import live.qsmc.quipt.core.utils.net.NetworkUtils;
 import live.qsmc.quipt.fabric.QuiptMod;
@@ -10,19 +11,79 @@ import live.qsmc.quipt.fabric.commands.CommandExecutor;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class UpdateCommand extends CommandExecutor {
 
-    private final String jenkinsUrl = "https://ci.qsmc.live/";
+    private final String repoUrl = "https://repo.qsmc.live/service/rest/";
+    private final String version = "v1";
+    private long lastUpdate = 0;
+    private final Map<String, Map<String, Map<String, List<VersionData>>>> versions = new HashMap<>();
 
     public UpdateCommand(QuiptMod mod) {
         super(mod, "update");
+    }
+
+    public void checkUpdate() {
+        checkUpdate(null);
+    }
+
+    private void checkUpdate(@Nullable Object continuationToken) {
+        long now = System.currentTimeMillis();
+        if ((continuationToken != null) || now - lastUpdate > TimeUnit.MILLISECONDS.convert(2, TimeUnit.SECONDS)) {
+            lastUpdate = now;
+            if (continuationToken == null) versions.clear();
+            try {
+                HttpResponse<String> rawResponse = NetworkUtils.get(HttpConfig.DEFAULTS, repoUrl + version + "/search" + (continuationToken == null ? "" : "?continuationToken=" + continuationToken));
+                try {
+                    JSONObject json = new JSONObject(rawResponse.body());
+                    JSONArray items = json.getJSONArray("items");
+                    for (Object o : items) {
+                        if (!(o instanceof JSONObject item)) continue;
+                        if (!item.getString("format").equals("maven2")) continue;
+                        String repo = item.getString("repository");
+                        String name = item.getString("name");
+                        String version = item.getString("version");
+                        if (!versions.containsKey(repo))
+                            versions.put(repo, new HashMap<>());
+                        if (!versions.get(repo).containsKey(name))
+                            versions.get(repo).put(name, new HashMap<>());
+                        if (!versions.get(repo).get(name).containsKey(version))
+                            versions.get(repo).get(name).put(version, new ArrayList<>());
+                        if (item.has("assets")) {
+                            JSONArray assets = item.getJSONArray("assets");
+                            for (Object a : assets) {
+                                if (!(a instanceof JSONObject asset)) continue;
+                                JSONObject mavenData = asset.getJSONObject("maven2");
+                                if (!mavenData.getString("extension").equals("jar")) continue;
+                                String artifact = mavenData.getString("artifactId") + "-" + mavenData.getString("version");
+                                String downloadUrl = asset.getString("downloadUrl");
+                                versions.get(repo).get(name).get(version).add(new VersionData(artifact, downloadUrl));
+                            }
+                        }
+                        versions.get(repo).get(name).get(version);
+                    }
+                    if (json.has("continuationToken") && json.get("continuationToken") != null) {
+                        checkUpdate(json.get("continuationToken"));
+                    }
+                } catch (Exception e) {
+                    System.out.println(rawResponse.body());
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
@@ -31,109 +92,63 @@ public class UpdateCommand extends CommandExecutor {
         return CommandManager.literal(name())
             .requires(source -> source.getPermissions().hasPermission(permission(4)))
             .executes(context -> showUsage(context, permission(4)))
-            .then(CommandManager.argument("group", StringArgumentType.word())
+            .then(CommandManager.argument("repository", StringArgumentType.word())
                 .suggests((context, builder) -> {
-                    HttpResponse<String> response = null;
-                    try {
-                        response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "api/json?tree=views[name]");
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    JSONObject json = new JSONObject(response.body());
-                    for (Object view : json.getJSONArray("views")) {
-                        builder.suggest(((JSONObject) view).getString("name"));
-                    }
-                    return builder.buildFuture();
+                    checkUpdate();
+                    String[] repos = versions.keySet().toArray(new String[0]);
+                    String input = builder.getInput().substring(builder.getStart());
+                    return onlySimilar(repos, input, context, builder);
                 })
                 .executes(context -> showUsage(context, permission(4)))
                 .then(CommandManager.argument("name", StringArgumentType.word())
                     .suggests((context, builder) -> {
-                        String group = StringArgumentType.getString(context, "group");
-                        HttpResponse<String> response = null;
-                        try {
-                            response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "view/" + group + "/api/json?tree=jobs[name]");
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                        JSONObject json = new JSONObject(response.body());
-                        for (Object job : json.getJSONArray("jobs")) {
-                            builder.suggest(((JSONObject) job).getString("name"));
-                        }
-                        return builder.buildFuture();
+                        String repository = StringArgumentType.getString(context, "repository");
+                        checkUpdate();
+                        String[] options = versions.get(repository).keySet().toArray(new String[0]);
+                        String input = builder.getInput().substring(builder.getStart());
+                        return onlySimilar(options, input, context, builder);
+
                     })
                     .executes(context -> showUsage(context, permission(4)))
-                    .then(CommandManager.argument("build", StringArgumentType.word())
+                    .then(CommandManager.argument("version", StringArgumentType.word())
                         .suggests((context, builder) -> {
-                            String group = StringArgumentType.getString(context, "group");
+                            String repository = StringArgumentType.getString(context, "repository");
                             String name = StringArgumentType.getString(context, "name");
-                            HttpResponse<String> response = null;
-                            try {
-                                response = NetworkUtils.get(HttpConfig.DEFAULTS, jenkinsUrl + "view/" + group + "/job/" + name + "/api/json?tree=builds[number]");
-                            } catch (FileNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                            JSONObject json = new JSONObject(response.body());
-                            for (Object build : json.getJSONArray("builds")) {
-                                builder.suggest(((JSONObject) build).getInt("number"));
-                            }
-                            builder.suggest("latest");
-                            return builder.buildFuture();
+                            checkUpdate();
+                            String[] options = versions.get(repository).get(name).keySet().toArray(new String[0]);
+                            String input = builder.getInput().substring(builder.getStart());
+                            return onlySimilar(options, input, context, builder);
                         })
                         .executes(context -> showUsage(context, permission(4)))
                         .then(CommandManager.argument("artifact", StringArgumentType.word())
                             .suggests((context, builder) -> {
-                                String group = StringArgumentType.getString(context, "group");
+                                String repository = StringArgumentType.getString(context, "repository");
                                 String name = StringArgumentType.getString(context, "name");
-                                String build = StringArgumentType.getString(context, "build");
-                                String buildPath = build.equals("latest") ? "lastSuccessfulBuild" : build;
-                                HttpResponse<String> response = null;
-                                try {
-                                    response = NetworkUtils.get(HttpConfig.DEFAULTS,
-                                        jenkinsUrl + "view/" + group + "/job/" + name + "/" + buildPath + "/api/json?tree=artifacts[fileName]");
-                                } catch (FileNotFoundException e) {
-                                    throw new RuntimeException(e);
+                                String version = StringArgumentType.getString(context, "version");
+
+                                checkUpdate();
+                                List<VersionData> versionData = versions.get(repository).get(name).get(version);
+                                String[] options = new String[versionData.size()];
+                                for (int i = 0; i < versionData.size(); i++) {
+                                    options[i] = versionData.get(i).artifact();
                                 }
-                                JSONObject json = new JSONObject(response.body());
-                                for (Object artifact : json.getJSONArray("artifacts")) {
-                                    builder.suggest(((JSONObject) artifact).getString("fileName"));
-                                }
-                                return builder.buildFuture();
+                                String input = builder.getInput().substring(builder.getStart());
+                                return onlySimilar(options, input, context, builder);
                             })
                             .executes(context -> {
                                 ServerCommandSource source = context.getSource();
-                                String group = StringArgumentType.getString(context, "group");
+                                String repository = StringArgumentType.getString(context, "repository");
                                 String name = StringArgumentType.getString(context, "name");
-                                String build = StringArgumentType.getString(context, "build");
+                                String version = StringArgumentType.getString(context, "version");
                                 String artifact = StringArgumentType.getString(context, "artifact");
-
-                                String buildPath = build.equals("latest") ? "lastSuccessfulBuild" : build;
+                                String downloadUrl = versions.get(repository).get(name).get(version).stream().filter(v -> v.artifact().equals(artifact)).findFirst().orElseThrow().downloadUrl();
 
                                 // Run async to avoid blocking the server thread
                                 new Thread(() -> {
                                     try {
-                                        // Get artifacts list and find the relativePath for the selected artifact
-                                        HttpResponse<String> artifactsResponse = NetworkUtils.get(HttpConfig.DEFAULTS,
-                                            jenkinsUrl + "view/" + group + "/job/" + name + "/" + buildPath + "/api/json?tree=artifacts[fileName,relativePath]");
-                                        JSONObject artifactsJson = new JSONObject(artifactsResponse.body());
-
-                                        String relativePath = null;
-                                        for (Object a : artifactsJson.getJSONArray("artifacts")) {
-                                            JSONObject ao = (JSONObject) a;
-                                            if (ao.getString("fileName").equals(artifact)) {
-                                                relativePath = ao.getString("relativePath");
-                                                break;
-                                            }
-                                        }
-
-                                        if (relativePath == null) {
-                                            source.sendFeedback(() -> Text.literal("Artifact '" + artifact + "' not found in build " + build + "."), false);
-                                            return;
-                                        }
-
                                         // Download selected artifact to mods folder
                                         File modsDir = new File("mods");
                                         File newJar = new File(modsDir, artifact);
-                                        String downloadUrl = jenkinsUrl + "view/" + group + "/job/" + name + "/" + buildPath + "/artifact/" + relativePath;
                                         HttpResponse<InputStream> downloadResponse = NetworkUtils.get(HttpConfig.DEFAULTS, downloadUrl, HttpResponse.BodyHandlers.ofInputStream());
                                         NetworkUtils.save(downloadResponse, newJar);
 
@@ -162,6 +177,10 @@ public class UpdateCommand extends CommandExecutor {
     private String extractBaseName(String filename) {
         String name = filename.endsWith(".jar") ? filename.substring(0, filename.length() - 4) : filename;
         return name.replaceAll("-\\d.*$", "");
+    }
+
+    private record VersionData(String artifact, String downloadUrl) {
+
     }
 }
 
