@@ -1,6 +1,7 @@
-package live.qsmc.discord2.plugins.events.custom;
+package live.qsmc.core2.events.custom;
 
-import live.qsmc.discord2.plugins.events.Event;
+
+import live.qsmc.core2.events.Event;
 
 public abstract class CustomEvent<D extends EventData> extends Event<D> {
     public CustomEvent(D data) {

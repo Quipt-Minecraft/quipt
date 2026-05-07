@@ -1,9 +1,9 @@
-package live.qsmc.discord2.plugins.events.qda.message;
+package live.qsmc.discord2.plugins.events.message;
 
 import live.qsmc.discord2.Bot;
 import live.qsmc.discord2.api.guild.QuiptGuild;
 import live.qsmc.discord2.api.guild.channel.QuiptMessageChannel;
-import live.qsmc.discord2.plugins.events.qda.DiscordEvent;
+import live.qsmc.discord2.plugins.events.DiscordEvent;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 
@@ -14,7 +14,7 @@ public abstract class MessageEvent<T extends GenericMessageEvent> extends Discor
     }
 
     public String id(){
-        return data().getMessageId();
+        return this.data().getMessageId();
     }
 
     public QuiptGuild guild(){

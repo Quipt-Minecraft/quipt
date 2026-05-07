@@ -1,4 +1,4 @@
-package live.qsmc.discord2.api;
+package live.qsmc.core2.data;
 
 public class Wrapper<T> {
 

@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.*;
 
-public class QDA extends Wrapper<JDA> {
+public class QDA extends live.qsmc.core2.data.Wrapper<JDA> {
 
     private final GuildManager guilds = new GuildManager();
 

@@ -1,7 +1,7 @@
 package live.qsmc.discord2.api.guild.channel;
 
 import live.qsmc.core2.discord.embed.Embed;
-import live.qsmc.discord2.api.Wrapper;
+import live.qsmc.core2.data.Wrapper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.utils.data.DataObject;

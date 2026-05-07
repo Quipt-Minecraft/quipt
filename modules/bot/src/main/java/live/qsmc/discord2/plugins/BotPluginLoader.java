@@ -1,8 +1,8 @@
 package live.qsmc.discord2.plugins;
 
 
+import live.qsmc.core2.events.EventHandler;
 import live.qsmc.discord2.Bot;
-import live.qsmc.discord2.plugins.events.BotEventHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +15,15 @@ public class BotPluginLoader {
 
     private final Bot bot;
     private final Map<BotPlugin, ClassLoader> plugins = new HashMap<>();
-    private BotEventHandler eventHandler;
+    private EventHandler eventHandler;
 
     public BotPluginLoader(Bot bot) {
         this.bot = bot;
-        eventHandler = new BotEventHandler(bot, "main");
+        eventHandler = new EventHandler(bot);
         initialize();
     }
 
-    public BotEventHandler events() {
+    public EventHandler events() {
         return eventHandler;
     }
 

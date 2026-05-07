@@ -1,6 +1,6 @@
 package live.qsmc.discord2.api.user;
 
-import live.qsmc.discord2.api.Wrapper;
+import live.qsmc.core2.data.Wrapper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.OffsetDateTime;

@@ -1,12 +1,12 @@
 package live.qsmc.discord2;
 
+import live.qsmc.core2.events.EventHandler;
 import live.qsmc.discord2.api.QDA;
 import live.qsmc.discord2.api.commands.CommandManager;
 import live.qsmc.discord2.api.listeners.QuiptListenerAdapter;
 import live.qsmc.discord2.plugins.BotPluginLoader;
 import live.qsmc.core2.QuiptIntegration;
 import live.qsmc.discord2.config.BotConfig;
-import live.qsmc.discord2.plugins.events.BotEventHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -74,7 +74,7 @@ public class Bot extends QuiptIntegration {
     public QDA qda(){return qda;}
     public BotPluginLoader plugins(){return pluginLoader;}
 
-    public BotEventHandler commands() {
+    public EventHandler commands() {
         if(commands == null) {
             commands = new CommandManager(this);
         }

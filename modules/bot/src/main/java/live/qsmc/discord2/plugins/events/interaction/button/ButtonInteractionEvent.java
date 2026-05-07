@@ -1,7 +1,7 @@
-package live.qsmc.discord2.plugins.events.qda.interaction.button;
+package live.qsmc.discord2.plugins.events.interaction.button;
 
 import live.qsmc.discord2.Bot;
-import live.qsmc.discord2.plugins.events.qda.DiscordEvent;
+import live.qsmc.discord2.plugins.events.DiscordEvent;
 
 public class ButtonInteractionEvent extends DiscordEvent<net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent> {
 

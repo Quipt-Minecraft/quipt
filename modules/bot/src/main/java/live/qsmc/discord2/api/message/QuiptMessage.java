@@ -1,6 +1,6 @@
 package live.qsmc.discord2.api.message;
 
-import live.qsmc.discord2.api.Wrapper;
+import live.qsmc.core2.data.Wrapper;
 import live.qsmc.discord2.api.guild.QuiptGuild;
 import live.qsmc.discord2.api.user.QuiptUser;
 import net.dv8tion.jda.api.entities.Message;

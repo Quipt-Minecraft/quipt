@@ -1,4 +1,4 @@
-package live.qsmc.discord2.plugins.events.qda.message;
+package live.qsmc.discord2.plugins.events.message;
 
 import live.qsmc.discord2.Bot;
 import live.qsmc.discord2.api.message.QuiptMessage;

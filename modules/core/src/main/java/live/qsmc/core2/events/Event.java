@@ -1,6 +1,7 @@
-package live.qsmc.discord2.plugins.events;
+package live.qsmc.core2.events;
 
-import live.qsmc.discord2.api.Wrapper;
+
+import live.qsmc.core2.data.Wrapper;
 
 public abstract class Event<T> extends Wrapper<T> {
     public Event(T original) {

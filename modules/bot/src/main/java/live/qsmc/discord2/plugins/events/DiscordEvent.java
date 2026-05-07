@@ -1,7 +1,7 @@
-package live.qsmc.discord2.plugins.events.qda;
+package live.qsmc.discord2.plugins.events;
 
+import live.qsmc.core2.events.Event;
 import live.qsmc.discord2.Bot;
-import live.qsmc.discord2.plugins.events.Event;
 
 public abstract class DiscordEvent<T extends net.dv8tion.jda.api.events.Event> extends Event<T> {
 
