@@ -2,5 +2,5 @@
   "id": "quiptproxy",
   "name": "QuiptProxy",
   "version": "${version}",
-  "main": "live.qsmc.velocity.QuiptVelocity"
+  "main": "live.qsmc.quipt.velocity.QuiptVelocity"
 }

@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "live.qsmc.fabric.mixin.client",
+  "package": "live.qsmc.quipt.fabric.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
   ],

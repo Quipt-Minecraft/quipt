@@ -12,11 +12,11 @@ plugins {
     id 'xyz.jpenilla.run-velocity' version '3.0.2' apply false
 }
 
-group = "live.qsmc"
+group = "live.qsmc.quipt"
 version = "${project_version}-${build_status}.${build_number}"
 
 allprojects {
-    group = "live.qsmc"
+    group = "live.qsmc.quipt"
     version = "${project_version}-${build_status}.${build_number}"
 
     repositories {
@@ -43,7 +43,7 @@ subprojects {
     publishing {
         publications {
             create("mavenJava", MavenPublication) {
-                artifactId = project.name
+                artifactId = "quipt-${project.name}"
                 from components.java
             }
         }

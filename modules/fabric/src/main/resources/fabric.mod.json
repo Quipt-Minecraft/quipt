@@ -11,13 +11,13 @@
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
-      "live.qsmc.fabric2.client.datagen.EntrypointDataGenerator"
+      "live.qsmc.quipt.fabric.client.datagen.EntrypointDataGenerator"
     ],
     "main": [
-      "live.qsmc.fabric2.QuiptFabric"
+      "live.qsmc.quipt.fabric.QuiptFabric"
     ],
     "client": [
-      "live.qsmc.fabric2.client.EntrypointClient"
+      "live.qsmc.quipt.fabric.client.EntrypointClient"
     ]
   },
   "mixins": [
