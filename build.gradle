@@ -43,7 +43,7 @@ subprojects {
     publishing {
         publications {
             create("mavenJava", MavenPublication) {
-                artifactId = "quipt-${project.name}"
+                artifactId = project.name
                 from components.java
             }
         }
