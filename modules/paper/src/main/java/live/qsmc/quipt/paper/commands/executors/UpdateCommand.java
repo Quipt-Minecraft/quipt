@@ -44,7 +44,7 @@ public class UpdateCommand extends CommandExecutor {
 
     private void checkUpdate(@Nullable Object continuationToken) {
         long now = System.currentTimeMillis();
-        if ((continuationToken != null) || now - lastUpdate > TimeUnit.MILLISECONDS.convert(2, TimeUnit.SECONDS)) {
+        if ((continuationToken != null) || now - lastUpdate > TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES)) {
             lastUpdate = now;
             if (continuationToken == null) versions.clear();
             try {

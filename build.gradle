@@ -61,7 +61,7 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll { it.name == "common" }) {
+configure(subprojects.findAll { it.name == "common" || it.name == "velocity"  }) {
     version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 }
 
