@@ -1,12 +1,9 @@
 package live.qsmc.discord2;
 
-import live.qsmc.core2.events.EventHandler;
-import live.qsmc.discord2.api.QDA;
-import live.qsmc.discord2.api.commands.CommandManager;
-import live.qsmc.discord2.api.listeners.QuiptListenerAdapter;
-import live.qsmc.discord2.plugins.BotPluginLoader;
 import live.qsmc.core2.QuiptIntegration;
+import live.qsmc.discord2.api.QDA;
 import live.qsmc.discord2.config.BotConfig;
+import live.qsmc.discord2.plugins.BotPluginLoader;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -20,7 +17,6 @@ public class Bot extends QuiptIntegration {
     private JDA jda;
     private QDA qda;
     private BotPluginLoader pluginLoader;
-    private CommandManager commands;
 
     public static Bot instance(){
         if(instance == null){
@@ -58,8 +54,6 @@ public class Bot extends QuiptIntegration {
             this.qda = new QDA(api);
             pluginLoader = new BotPluginLoader(this);
             plugins().enable();
-            jda.addEventListener(new QuiptListenerAdapter(this));
-            commands = new CommandManager(this);
             logger().log("Bot", "Bot started successfully.");
         } catch (InterruptedException e) {
             logger().log("Bot", "Error starting bot", e);
@@ -74,10 +68,4 @@ public class Bot extends QuiptIntegration {
     public QDA qda(){return qda;}
     public BotPluginLoader plugins(){return pluginLoader;}
 
-    public EventHandler commands() {
-        if(commands == null) {
-            commands = new CommandManager(this);
-        }
-        return commands;
-    }
 }
