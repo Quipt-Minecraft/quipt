@@ -6,6 +6,7 @@ import live.qsmc.core2.config.files.WebhookConfig;
 import live.qsmc.core2.data.registries.Registries;
 import live.qsmc.core2.data.registries.Registry;
 import live.qsmc.core2.discord.Webhook;
+import live.qsmc.core2.events.EventHandler;
 import live.qsmc.core2.server.QuiptServer;
 
 import java.io.File;
@@ -24,6 +25,8 @@ public class Quipt extends QuiptIntegration {
     private Registries registries = null;
 
     private QuiptServer server = null;
+
+    private EventHandler eventHandler = null;
 
     public Quipt(){
         this.integrationRegistry = registries().register("integrations", () -> null);
@@ -95,6 +98,14 @@ public class Quipt extends QuiptIntegration {
             configs().register(WebhookConfig.class);
         }
         return configs().config(WebhookConfig.class);
+    }
+
+    public EventHandler events(){
+        if(eventHandler == null){
+            logger().log("EventHandler", "Initializing EventHandler...");
+            eventHandler = new EventHandler(this);
+        }
+        return eventHandler;
     }
 
 
