@@ -3,14 +3,14 @@ package live.qsmc.core2.events;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventHandleResult<E extends Event<D>, D extends EventData<R>, R> {
+public class EventHandleResult<E extends Event<D>, D extends Event.Data, R> {
 
     private boolean cancelled = false;
 
     List<R> results = new ArrayList<>();
 
     public void process(EventListener<E, D, R> listener, E event) {
-        R result = listener.processs(event);
+        R result = listener.process(event);
         if (result != null)
             results.add(result);
     }

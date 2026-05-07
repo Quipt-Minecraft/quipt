@@ -1,7 +1,7 @@
 package live.qsmc.core2.events;
 
 
-public abstract class EventListener<E extends Event<D>, D extends EventData<R>, R> {
+public abstract class EventListener<E extends Event<D>, D extends Event.Data, R> {
 
     private final Class<E> eventClass;
 
@@ -15,7 +15,7 @@ public abstract class EventListener<E extends Event<D>, D extends EventData<R>, 
 
     public abstract R handle(E event);
 
-    public R processs(Event<?> event) {
+    public R process(Event<?> event) {
         if (eventClass.isInstance(event)) {
             return handle(eventClass.cast(event));
         }

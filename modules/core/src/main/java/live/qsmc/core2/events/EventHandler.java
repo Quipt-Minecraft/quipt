@@ -20,10 +20,10 @@ public class EventHandler {
         listeners.register(listener.toString(), listener);
     }
 
-    public <E extends Event<D>, D extends EventData<R>, R> EventHandleResult<E, D, R> handle(E event) {
+    @SuppressWarnings("unchecked")
+    public <E extends Event<D>, D extends Event.Data, R> EventHandleResult<E, D, R> handle(E event) {
         EventHandleResult<E, D, R> result = new EventHandleResult<>();
         listeners.forEach((key, listener) -> {
-
             if (listener.eventClass().equals(event.getClass()))
                 result.process((EventListener<E,D,R>) listener, event);
         });
