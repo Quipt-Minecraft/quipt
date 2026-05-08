@@ -43,7 +43,7 @@ public class UpdateCommand extends CommandExecutor {
         long now = System.currentTimeMillis();
         if ((continuationToken != null) || now - lastUpdate > TimeUnit.MILLISECONDS.convert(2, TimeUnit.SECONDS)) {
             lastUpdate = now;
-            if (continuationToken == null) versions.clear();
+//            if (continuationToken == null) versions.clear();
             try {
                 HttpResponse<String> rawResponse = NetworkUtils.get(HttpConfig.DEFAULTS, repoUrl + version + "/search" + (continuationToken == null ? "" : "?continuationToken=" + continuationToken));
                 try {

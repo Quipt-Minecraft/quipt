@@ -12,11 +12,11 @@ plugins {
     id 'xyz.jpenilla.run-velocity' version '3.0.2' apply false
 }
 
-group = "live.qsmc.quipt"
+group = "live.qsmc"
 version = "${project_version}-${build_status}.${build_number}"
 
 allprojects {
-    group = "live.qsmc.quipt"
+    group = "live.qsmc"
     version = "${project_version}-${build_status}.${build_number}"
 
     repositories {
@@ -28,6 +28,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
+    archivesBaseName = "quipt-${project.name}"
 
     java {
         toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
@@ -61,7 +62,7 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll { it.name == "common" || it.name == "velocity"  }) {
+configure(subprojects.findAll { it.name == "common" }) {
     version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 }
 
@@ -79,7 +80,6 @@ configure(subprojects.findAll { it.name == "paper" }) {
         exclude 'META-INF/*.RSA'
         append 'META-INF/LICENSE'
         append 'META-INF/NOTICE'
-        archiveBaseName.set("quipt-${project.name}")
     }
 
     tasks {

@@ -71,8 +71,7 @@ test {
 
 remapJar {
     input = tasks.mergeJar.archiveFile
-    archiveClassifier = "-dev"
-    archiveBaseName.set("quipt-fabric")
+    archiveClassifier = "dev"
 }
 
 tasks.generateMetadataFileForMavenJavaPublication {
