@@ -46,6 +46,9 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
+    withType(GenerateModuleMetadata).configureEach {
+        dependsOn(shadowJar)
+    }
     processResources {
         def pluginProperties = [version: project_version]
         inputs.properties pluginProperties
