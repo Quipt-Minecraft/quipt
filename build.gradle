@@ -58,14 +58,6 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" || it.
         mcVersionRange = supported_minecraft_versions
         allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
     }
-    publishing {
-        publications {
-            create("mavenJava", MavenPublication) {
-                artifactId = project.name
-                from components.java
-            }
-        }
-    }
     tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 }
 
@@ -73,4 +65,16 @@ java {
     withSourcesJar()
     withJavadocJar()
     toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+}
+
+tasks.register("preparePublish") {
+    group = "publishing"
+    description = "Generates Maven metadata for all submodule publications."
+    subprojects.each { sub ->
+        String subProjectName = "${sub.name.charAt(0).toUpperCase()}${sub.name.substring(1).toLowerCase()}"
+        dependsOn sub.tasks.matching { t ->
+            t.name == "generateMetadataFileFor${subProjectName}Publication" ||
+                    t.name == "generatePomFileFor${subProjectName}Publication"
+        }
+    }
 }

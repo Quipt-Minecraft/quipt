@@ -179,7 +179,7 @@ public class UpdateCommand extends CommandExecutor {
         return name.replaceAll("-\\d.*$", "");
     }
 
-    private record VersionData(String artifact, String downloadUrl) {
+    public record VersionData(String artifact, String downloadUrl) {
 
     }
 }

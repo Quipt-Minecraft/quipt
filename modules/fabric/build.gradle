@@ -15,26 +15,6 @@ configurations {
     includedDeps.extendsFrom()
 }
 
-tasks.register('mergeJar', Jar) {
-    from(sourceSets.main.output)
-    from(project.project(':modules:core').sourceSets.main.output)
-    from(project.project(':modules:common').sourceSets.main.output)
-    from(project.project(":modules:bot").sourceSets.main.output)
-
-    configurations.includedDeps.each { dep ->
-        from(zipTree(dep)) {
-            exclude "META-INF/**"
-        }
-    }
-
-    archiveClassifier = ""
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.build {
-    dependsOn('remapJar')
-}
-
 dependencies {
 
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -67,8 +47,8 @@ dependencies {
 publishing {
     publications {
         create("fabric", MavenPublication) {
-            artifactId = project.name
-            artifact remapJar
+            from(components["java"])  // provides Gradle metadata/component info
+
         }
     }
 }
@@ -90,14 +70,16 @@ test {
     failOnNoDiscoveredTests = false
 }
 
-remapJar {
-    input = tasks.mergeJar.archiveFile
+jar {
     archiveClassifier = "dev"
 }
 
-tasks.generateMetadataFileForMavenJavaPublication {
-    dependsOn(tasks.mergeJar)
+remapJar {
+    inputFile = jar.archiveFile
+    archiveClassifier = ""
 }
+
+
 
 processResources {
     inputs.property "version", project_version

@@ -73,27 +73,6 @@ processResources {
     }
 }
 
-tasks.register('mergeJar', Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    from(sourceSets.main.output)
-
-    from(project(':modules:core').sourceSets.main.output) {
-        exclude "META-INF/**"
-    }
-
-    from(project(':modules:common').sourceSets.main.output) {
-        exclude "META-INF/**"
-    }
-}
-
-tasks.generateMetadataFileForMavenJavaPublication {
-    dependsOn("mergeJar")
-}
-
-tasks.build {
-    dependsOn('mergeJar')
-}
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
