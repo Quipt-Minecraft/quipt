@@ -15,6 +15,15 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:$logback_version"
 }
 
+publishing {
+    publications {
+        create("core", MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
 }

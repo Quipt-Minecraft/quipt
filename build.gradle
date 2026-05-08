@@ -37,23 +37,7 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 
-    publishing {
-        publications {
-            create("mavenJava", MavenPublication) {
-                artifactId = project.name
-                from components.java
-            }
-        }
-        repositories {
-            maven {
-                url "https://maven.pkg.github.com/Quipt-Minecraft/quipt"
-                credentials {
-                    username = "QuickScythe"
-                    password = System.getenv("PACKAGES_TOKEN")
-                }
-            }
-        }
-    }
+
 
     dependencies {
         implementation "org.json:json:$json_version"
@@ -61,47 +45,12 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" }) {
+configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" ||  it.name == "paper" ||  it.name == "fabric" }) {
     version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
 }
 
-configure(subprojects.findAll { it.name == "paper" }) {
-    apply plugin: 'com.gradleup.shadow'
-    apply plugin: 'xyz.jpenilla.run-paper'
 
-    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
-
-    shadowJar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        mergeServiceFiles()
-        exclude 'META-INF/*.SF'
-        exclude 'META-INF/*.DSA'
-        exclude 'META-INF/*.RSA'
-        append 'META-INF/LICENSE'
-        append 'META-INF/NOTICE'
-    }
-
-    tasks {
-        runServer {
-            minecraftVersion("${minecraft_version}")
-        }
-    }
-}
-
-configure(subprojects.findAll { it.name == "fabric" }) {
-    apply plugin: 'fabric-loom'
-
-    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${minecraft_version}"
-        mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-        modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    }
-}
-
-configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
+configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" || it.name == "velocity" }) {
     apply plugin: 'com.modrinth.minotaur'
     apply plugin: 'io.github.dexman545.outlet'
 
@@ -109,44 +58,15 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
         mcVersionRange = supported_minecraft_versions
         allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
     }
-
-    tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
-
-    tasks.register('discord') {
-        doLast {
-            try {
-                def channel = System.getenv("DISCORD_CHANNEL")
-                def token = System.getenv("DISCORD_TOKEN")
-                URL url = uri("https://discord.com/api/webhooks/$channel/$token").toURL()
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection()
-                connection.setRequestMethod("POST")
-                connection.setRequestProperty("Content-Type", "application/json; utf-8")
-                connection.setRequestProperty("Accept", "application/json")
-                connection.setDoOutput(true)
-
-                String jsonTemplate = rootProject.file("modrinth.json").text
-                def engine = new SimpleTemplateEngine()
-                def template = engine.createTemplate(jsonTemplate)
-                def binding = [
-                        project    : project,
-                        rootProject: rootProject,
-                        version    : version,
-                        modrinth_id: modrinth_id
-                ]
-                String jsonInputString = template.make(binding).toString()
-
-                try (OutputStream os = connection.getOutputStream()) {
-                    byte[] input = jsonInputString.getBytes("utf-8")
-                    os.write(input, 0, input.length)
-                }
-
-                System.out.println("Discord response: " + connection.getResponseCode())
-            } catch (Exception e) {
-                e.printStackTrace()
+    publishing {
+        publications {
+            create("mavenJava", MavenPublication) {
+                artifactId = project.name
+                from components.java
             }
         }
     }
-    tasks.modrinth.dependsOn discord
+    tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 }
 
 java {

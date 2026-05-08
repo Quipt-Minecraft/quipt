@@ -26,6 +26,15 @@ dependencies {
     implementation project(":modules:core")
 }
 
+publishing {
+    publications {
+        create("bot", MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
 }

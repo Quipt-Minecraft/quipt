@@ -1,8 +1,8 @@
 
 plugins {
     id("java-library")
-    id("xyz.jpenilla.run-velocity") version "3.0.2"
-    id("com.gradleup.shadow") version "8.3.6"
+    id("xyz.jpenilla.run-velocity")
+    id("com.gradleup.shadow")
 }
 
 repositories {
@@ -18,6 +18,15 @@ dependencies {
     implementation project(":modules:common")
     implementation project(":modules:core")
     implementation "org.json:json:$json_version"
+}
+
+publishing {
+    publications {
+        create("velocity", MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
+    }
 }
 
 java {
