@@ -24,7 +24,7 @@ publishing {
     publications {
         create("velocity", MavenPublication) {
             artifactId = project.name
-            from components.shadow
+            from components.java
         }
     }
 }
