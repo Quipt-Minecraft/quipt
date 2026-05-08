@@ -28,7 +28,6 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
-    archivesBaseName = "quipt-${project.name}"
 
     java {
         toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
