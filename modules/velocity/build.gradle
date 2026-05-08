@@ -33,6 +33,10 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
 }
 
+tasks.withType(GenerateModuleMetadata).configureEach {
+    dependsOn(tasks.shadowJar)
+}
+
 tasks {
   runVelocity {
     // Configure the Velocity version for our task.
@@ -44,9 +48,6 @@ tasks {
         archiveClassifier.set("")
     }
     build {
-        dependsOn(shadowJar)
-    }
-    withType(GenerateModuleMetadata).configureEach {
         dependsOn(shadowJar)
     }
     processResources {
