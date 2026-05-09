@@ -14,8 +14,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -198,17 +196,17 @@ public class UpdateCommand extends CommandExecutor {
                                                     .hoverEvent(HoverEvent.showText(text(newJar.getAbsolutePath()))))
                                                 .append(text( ".", NamedTextColor.GREEN))
                                                 .append(text(finalDeleted > 0 ?
-                                                    " and removed " + finalDeleted + " old version(s). "
+                                                    " Removed " + finalDeleted + " old version(s). "
                                                     : " ",
-                                                    NamedTextColor.RED))
-                                                .append(text("Restart to apply.", NamedTextColor.GOLD));
+                                                    NamedTextColor.GREEN))
+                                                .append(text("Restart to apply.", NamedTextColor.GOLD)
+                                                    .hoverEvent(HoverEvent.showText(text("Click to run `/restart` command.")))
+                                                    .clickEvent(ClickEvent.runCommand("/restart")));
                                             source.sendMessage(text);
-//                                            source.sendFeedback(()-> text, false);
-//                                            MutableText text = Text.literal("Downloaded ")
 //                                                    .append(Component.text(baseName).clickEvent(ClickEvent.openUrl(downloadUrl)))
-                                            source.sendFeedback(() -> Text.literal("Downloaded " + baseName + (finalDeleted > 0 ? " and removed " + finalDeleted + " old version(s). Restart to apply." : ". Restart to apply.")), false);
+
                                         } catch (Exception e) {
-                                            source.sendFeedback(() -> Text.literal("Update failed: " + e.getMessage()), false);
+                                            source.sendMessage(text("Update failed: " + e.getMessage(), NamedTextColor.RED));
                                         }
                                     }).start();
 

@@ -23,15 +23,17 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    implementation "org.json:json:$json_version"
-    implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
-    implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
-    implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
-    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
-    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson_version"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version"
+    implementation include("org.json:json:$json_version")
+    implementation include("org.eclipse.jgit:org.eclipse.jgit:$jgit_version")
+    implementation include("jakarta.servlet:jakarta.servlet-api:5.0.0")
+    implementation include("org.eclipse.jetty:jetty-server:$jetty_server_version")
+    implementation include("org.eclipse.jetty:jetty-servlet:$jetty_servlet_version")
+    implementation include("com.fasterxml.jackson.core:jackson-core:$jackson_version")
+    implementation include("com.fasterxml.jackson.core:jackson-annotations:$jackson_version")
+    implementation include("com.fasterxml.jackson.core:jackson-databind:$jackson_version")
+    implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson_version")
+    implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version")
+    implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version")
 
     modImplementation include("net.kyori:adventure-platform-fabric:6.8.0")
 

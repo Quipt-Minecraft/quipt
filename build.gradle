@@ -39,10 +39,7 @@ subprojects {
 
 
 
-    dependencies {
-        implementation "org.json:json:$json_version"
-        implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
-    }
+
 }
 
 configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" ||  it.name == "paper" ||  it.name == "fabric" }) {

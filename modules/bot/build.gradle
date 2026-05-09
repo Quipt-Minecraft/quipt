@@ -18,6 +18,7 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
     implementation "net.dv8tion:JDA:$jda_version"
+    implementation "org.json:json:$json_version"
     implementation "ch.qos.logback:logback-classic:$logback_version"
     implementation "com.sparkjava:spark-core:$spark_version"
     implementation "mysql:mysql-connector-java:$sql_version"
