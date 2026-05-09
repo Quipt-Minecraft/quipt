@@ -1,8 +1,12 @@
-
 plugins {
     id("java-library")
     id("xyz.jpenilla.run-velocity")
     id("com.gradleup.shadow")
+}
+
+configurations {
+    bundle
+    implementation.extendsFrom(bundle)
 }
 
 repositories {
@@ -15,8 +19,8 @@ repositories {
 dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
 
-    implementation project(":modules:common")
-    implementation project(":modules:core")
+    bundle project(":modules:common")
+    bundle project(":modules:core")
     implementation "org.json:json:$json_version"
 }
 
@@ -24,7 +28,7 @@ publishing {
     publications {
         create("velocity", MavenPublication) {
             artifactId = project.name
-            from components.java
+            artifact(tasks.named('shadowJar'))
         }
     }
 }
@@ -33,18 +37,12 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
 }
 
-tasks.withType(GenerateModuleMetadata).configureEach {
-    dependsOn(tasks.shadowJar)
-}
-
 tasks {
   runVelocity {
-    // Configure the Velocity version for our task.
-    // This is the only required configuration besides applying the plugin.
-    // Your plugin's jar (or shadowJar if present) will be used automatically.
     velocityVersion("3.5.0-SNAPSHOT")
   }
     shadowJar {
+        configurations = [project.configurations.bundle]
         archiveClassifier.set("")
     }
     build {

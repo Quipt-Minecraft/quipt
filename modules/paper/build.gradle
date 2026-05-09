@@ -3,6 +3,11 @@ plugins {
     id "xyz.jpenilla.run-paper"
 }
 
+configurations {
+    bundle
+    implementation.extendsFrom(bundle)
+}
+
 repositories {
     maven {
         name = "papermc-repo"
@@ -26,9 +31,9 @@ dependencies {
     implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
     implementation "net.kyori:adventure-api:$adventure_api_version"
 
-    implementation project(":modules:common")
-    implementation project(":modules:core")
-    implementation project(":modules:bot")
+    bundle project(":modules:common")
+    bundle project(":modules:core")
+    bundle project(":modules:bot")
 }
 
 publishing {
@@ -41,6 +46,7 @@ publishing {
 }
 
 shadowJar {
+    configurations = [project.configurations.bundle]
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     mergeServiceFiles()
     exclude 'META-INF/*.SF'
