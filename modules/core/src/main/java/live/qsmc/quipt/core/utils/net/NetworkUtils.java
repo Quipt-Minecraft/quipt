@@ -31,7 +31,7 @@ public class NetworkUtils {
      * Shared HTTP client instance with a default connect timeout of 10 seconds.
      * The per-request timeout still comes from {@link HttpConfig#connectTimeout()}.
      */
-    private static final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
+    private static final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
 
     /**
      * Default configuration used by convenience methods or as a baseline.

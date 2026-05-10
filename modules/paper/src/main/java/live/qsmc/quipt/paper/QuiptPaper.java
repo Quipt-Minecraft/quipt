@@ -7,10 +7,7 @@ import live.qsmc.quipt.minecraft.server.ResourcePackHandler;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
 import live.qsmc.quipt.paper.api.players.PaperPlayers;
 import live.qsmc.quipt.paper.commands.CommandExecutor;
-import live.qsmc.quipt.paper.commands.executors.AccountCommand;
-import live.qsmc.quipt.paper.commands.executors.DumpCommand;
-import live.qsmc.quipt.paper.commands.executors.UpdateCommand;
-import live.qsmc.quipt.paper.commands.executors.WebhookCommand;
+import live.qsmc.quipt.paper.commands.executors.*;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import static net.kyori.adventure.text.Component.text;
@@ -96,6 +93,7 @@ public class QuiptPaper extends QuiptPlugin {
         new CommandExecutor.Builder(new UpdateCommand(this)).setDescription("Update plugins from https://ci.qsmc.live").register();
         new CommandExecutor.Builder(new DumpCommand(this)).setDescription("Dump data to file").register();
         new CommandExecutor.Builder(new AccountCommand(this)).setDescription("Command for account management").register();
+        new CommandExecutor.Builder(new QuiptCommand(this)).setDescription("Quipt command").register();
         integration().logger().log("Paper", "QuiptPaper for Paper enabled!");
     }
 

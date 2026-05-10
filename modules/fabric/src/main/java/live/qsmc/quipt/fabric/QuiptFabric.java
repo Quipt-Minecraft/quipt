@@ -5,6 +5,7 @@ import live.qsmc.quipt.core.data.annotations.Nullable;
 import live.qsmc.quipt.fabric.commands.CommandExecutor;
 import live.qsmc.quipt.fabric.commands.executors.AccountCommand;
 import live.qsmc.quipt.fabric.commands.executors.DumpCommand;
+import live.qsmc.quipt.fabric.commands.executors.QuiptCommand;
 import live.qsmc.quipt.fabric.commands.executors.UpdateCommand;
 import live.qsmc.quipt.fabric.net.PluginMessageEvent;
 import live.qsmc.quipt.fabric.net.PluginMessagePacket;
@@ -95,6 +96,7 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
         new CommandExecutor.Builder(new UpdateCommand(this)).register();
         new CommandExecutor.Builder(new DumpCommand(this)).register();
         new CommandExecutor.Builder(new AccountCommand(this)).register();
+        new CommandExecutor.Builder(new QuiptCommand(this)).register();
         //Load other Quipt mods
         FabricLoader.getInstance().getEntrypointContainers("quipt", QuiptMod.class)
                 .forEach(container -> container.getEntrypoint().run(container));

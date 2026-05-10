@@ -19,8 +19,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.FileOutputStream;
 import java.net.http.HttpResponse;
+import java.util.zip.ZipFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,6 @@ public class UpdateCommand extends CommandExecutor {
     private final String version = "v1";
     private long lastUpdate = 0;
     private final Map<String, Map<String, Map<String, Map<String, List<VersionData>>>>> versions = new HashMap<>();
-
     // /update <repo> <group> <module|name> <version> <artifact>
 
     public UpdateCommand(QuiptMod mod) {
@@ -100,10 +100,10 @@ public class UpdateCommand extends CommandExecutor {
 
     @Override
     public LiteralArgumentBuilder<ServerCommandSource> arguments() {
-        return CommandManager.literal(name())
+        return literal(name())
             .requires(source -> source.getPermissions().hasPermission(permission(4)))
             .executes(context -> showUsage(context, permission(4)))
-            .then(CommandManager.argument("repository", StringArgumentType.word())
+            .then(argument("repository", StringArgumentType.word())
                 .suggests((context, builder) -> {
                     checkUpdate();
                     String[] repos = versions.keySet().toArray(new String[0]);
@@ -120,7 +120,7 @@ public class UpdateCommand extends CommandExecutor {
                         return onlySimilar(groups, input, context, builder);
                     })
                     .executes(context -> showUsage(context, permission(4)))
-                    .then(CommandManager.argument("name", StringArgumentType.word())
+                    .then(argument("name", StringArgumentType.word())
                         .suggests((context, builder) -> {
                             String repository = StringArgumentType.getString(context, "repository");
                             String group = StringArgumentType.getString(context, "group");
@@ -131,7 +131,7 @@ public class UpdateCommand extends CommandExecutor {
 
                         })
                         .executes(context -> showUsage(context, permission(4)))
-                        .then(CommandManager.argument("version", StringArgumentType.word())
+                        .then(argument("version", StringArgumentType.word())
                             .suggests((context, builder) -> {
                                 String repository = StringArgumentType.getString(context, "repository");
                                 String group = StringArgumentType.getString(context, "group");
@@ -142,7 +142,7 @@ public class UpdateCommand extends CommandExecutor {
                                 return onlySimilar(options, input, context, builder);
                             })
                             .executes(context -> showUsage(context, permission(4)))
-                            .then(CommandManager.argument("artifact", StringArgumentType.word())
+                            .then(argument("artifact", StringArgumentType.word())
                                 .suggests((context, builder) -> {
                                     String repository = StringArgumentType.getString(context, "repository");
                                     String group = StringArgumentType.getString(context, "group");
@@ -173,11 +173,33 @@ public class UpdateCommand extends CommandExecutor {
                                     // Run async to avoid blocking the server thread
                                     new Thread(() -> {
                                         try {
-                                            // Download selected artifact to mods folder
-
+                                            // Download selected artifact to a temp file first to avoid corrupting
+                                            // the existing jar if the download is interrupted mid-stream.
                                             File newJar = new File(DOWNLOAD_DIR, nameAndVersion + ".jar");
-                                            HttpResponse<InputStream> downloadResponse = NetworkUtils.get(HttpConfig.DEFAULTS, downloadUrl, HttpResponse.BodyHandlers.ofInputStream());
-                                            NetworkUtils.save(downloadResponse, newJar);
+                                            File tmpJar = new File(DOWNLOAD_DIR, nameAndVersion + ".jar.tmp");
+                                            tmpJar.deleteOnExit(); // clean up on JVM exit if something goes wrong
+                                            HttpResponse<byte[]> downloadResponse = NetworkUtils.get(HttpConfig.DEFAULTS, downloadUrl, HttpResponse.BodyHandlers.ofByteArray());
+                                            int status = downloadResponse.statusCode();
+                                            if (status < 200 || status >= 300) {
+                                                throw new RuntimeException("Server returned HTTP " + status + " for " + downloadUrl);
+                                            }
+                                            try (FileOutputStream out = new FileOutputStream(tmpJar)) {
+                                                out.write(downloadResponse.body());
+                                            }
+
+                                            // Validate the downloaded file is a valid zip/jar before replacing
+                                            try (ZipFile zip = new ZipFile(tmpJar)) {
+                                                if (zip.size() == 0) throw new RuntimeException("Downloaded jar is empty");
+                                            } catch (Exception e) {
+                                                tmpJar.delete();
+                                                throw new RuntimeException("Downloaded file is not a valid jar: " + e.getMessage(), e);
+                                            }
+
+                                            // Atomically replace the target jar
+                                            if (newJar.exists()) newJar.delete();
+                                            if (!tmpJar.renameTo(newJar)) {
+                                                throw new RuntimeException("Failed to move downloaded jar to " + newJar.getAbsolutePath());
+                                            }
 
                                             // Delete old version(s) with the same base name
                                             String baseName = extractBaseName(nameAndVersion);
