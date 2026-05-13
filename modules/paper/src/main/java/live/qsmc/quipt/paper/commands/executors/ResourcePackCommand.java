@@ -4,7 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
 import live.qsmc.quipt.paper.QuiptPaper;
 import live.qsmc.quipt.paper.QuiptPlugin;
-import live.qsmc.quipt.paper.commands.CommandExecutor;
+import live.qsmc.quipt.paper.commands.PaperCommandExecutor;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import static net.kyori.adventure.text.Component.text;
 
 
-public class ResourcePackCommand extends CommandExecutor {
+public class ResourcePackCommand extends PaperCommandExecutor {
 
     public ResourcePackCommand(QuiptPlugin plugin) {
         super(plugin, "resourcepack");

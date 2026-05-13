@@ -1,12 +1,10 @@
 package live.qsmc.quipt.fabric;
 
+import live.qsmc.quipt.minecraft.commands.executors.QuiptCommand;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.data.annotations.Nullable;
-import live.qsmc.quipt.fabric.commands.CommandExecutor;
-import live.qsmc.quipt.fabric.commands.executors.AccountCommand;
-import live.qsmc.quipt.fabric.commands.executors.DumpCommand;
-import live.qsmc.quipt.fabric.commands.executors.QuiptCommand;
-import live.qsmc.quipt.fabric.commands.executors.UpdateCommand;
+import live.qsmc.quipt.fabric.commands.FabricCommandExecutor;
+import live.qsmc.quipt.fabric.commands.executors.*;
 import live.qsmc.quipt.fabric.net.PluginMessageEvent;
 import live.qsmc.quipt.fabric.net.PluginMessagePacket;
 import live.qsmc.quipt.minecraft.server.ResourcePackHandler;
@@ -90,13 +88,15 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
             "quipt.dump.success",
             "{\"color\":\"dark_green\",\"extra\":[{\"color\":\"green\",\"text\":\" has been uploaded successfully.\"},\"\\n\",{\"color\":\"green\",\"text\":\"Click \"},{\"color\":\"yellow\",\"click_event\":{\"action\":\"open_url\",\"url\":\"[1]\"},\"text\":\"here\"},{\"color\":\"green\",\"text\":\" to download.\"}],\"text\":\"[0]\"}");
 
+        MessageUtils.register(
+            "cmd.quipt.usage",
+            text("Usage: /quipt <list|help>"));
+
         MessageUtils.save();
         //Load Quipt itself
         initialize(FabricLoader.getInstance().getModContainer("quipt").get());
-        new CommandExecutor.Builder(new UpdateCommand(this)).register();
-        new CommandExecutor.Builder(new DumpCommand(this)).register();
-        new CommandExecutor.Builder(new AccountCommand(this)).register();
-        new CommandExecutor.Builder(new QuiptCommand(this)).register();
+//        new FabricCommandExecutor.Builder(new UpdateCommand(this)).register();
+        new FabricCommandExecutor.Builder(new FabricCommonCommandExecutor<>(this, QuiptCommand.class, "quipt")).register();
         //Load other Quipt mods
         FabricLoader.getInstance().getEntrypointContainers("quipt", QuiptMod.class)
                 .forEach(container -> container.getEntrypoint().run(container));

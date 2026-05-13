@@ -2,11 +2,13 @@ package live.qsmc.quipt.paper;
 
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.data.annotations.Nullable;
+import live.qsmc.quipt.minecraft.commands.executors.QuiptCommand;
+import live.qsmc.quipt.minecraft.commands.executors.WebhookCommand;
 import live.qsmc.quipt.minecraft.config.files.ResourceConfig;
 import live.qsmc.quipt.minecraft.server.ResourcePackHandler;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
 import live.qsmc.quipt.paper.api.players.PaperPlayers;
-import live.qsmc.quipt.paper.commands.CommandExecutor;
+import live.qsmc.quipt.paper.commands.PaperCommandExecutor;
 import live.qsmc.quipt.paper.commands.executors.*;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -81,6 +83,10 @@ public class QuiptPaper extends QuiptPlugin {
             "quipt.dump.success",
             "{\"color\":\"dark_green\",\"extra\":[{\"color\":\"green\",\"text\":\" has been uploaded successfully.\"},\"\\n\",{\"color\":\"green\",\"text\":\"Click \"},{\"color\":\"yellow\",\"click_event\":{\"action\":\"open_url\",\"url\":\"[1]\"},\"text\":\"here\"},{\"color\":\"green\",\"text\":\" to download.\"}],\"text\":\"[0]\"}");
 
+        MessageUtils.register(
+            "cmd.quipt.usage",
+            text("Usage: /quipt <list|help>"));
+
         MessageUtils.save();
 
         if (integration().configs().config(ResourceConfig.class) == null)
@@ -89,11 +95,8 @@ public class QuiptPaper extends QuiptPlugin {
         if (config != null && config.enabled) {
             packHandler().start();
         }
-        new CommandExecutor.Builder(new WebhookCommand(this)).setDescription("Alter webhooks").register();
-        new CommandExecutor.Builder(new UpdateCommand(this)).setDescription("Update plugins from https://ci.qsmc.live").register();
-        new CommandExecutor.Builder(new DumpCommand(this)).setDescription("Dump data to file").register();
-        new CommandExecutor.Builder(new AccountCommand(this)).setDescription("Command for account management").register();
-        new CommandExecutor.Builder(new QuiptCommand(this)).setDescription("Quipt command").register();
+        new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, QuiptCommand.class, "quipt")).register();
+        new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, WebhookCommand.class, "webhook")).register();
         integration().logger().log("Paper", "QuiptPaper for Paper enabled!");
     }
 

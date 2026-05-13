@@ -8,15 +8,19 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import live.qsmc.quipt.core.data.Metadata;
+import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Path;
 
-public abstract class QuiptProxy extends QuiptIntegration {
+public abstract class QuiptProxy {
 
     private final ProxyServer server;
     private PluginDescription description;
     @DataDirectory final private Path dataDirectory;
+    private VelocityIntegration integration;
 
     @Inject
     public QuiptProxy(ProxyServer server, @DataDirectory Path dataDirectory){
@@ -29,25 +33,23 @@ public abstract class QuiptProxy extends QuiptIntegration {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         server.getPluginManager().fromInstance(this).ifPresentOrElse(container -> {
             description = container.getDescription();
+            JSONObject data = new JSONObject();
+            data.put("name", description.getName());
+            data.put("version", description.getVersion());
+            data.put("folder", dataDirectory.toFile());
+            Metadata metadata = Metadata.of(data);
+            integration = new VelocityIntegration(metadata, description) {
+                @Override
+                public void enable() {
+                    QuiptProxy.this.enable();
+                }
+            };
+            Quipt.INSTANCE.enable(integration);
         }, () -> {System.out.println("!!!!!!!!No description!!!!!!!!");});
-        Quipt.INSTANCE.enable(this);
-      // Plugin initialization logic goes here
     }
 
-    @Override
-    public File folder() {
-        return dataDirectory.toFile();
-    }
+    public abstract void enable();
 
-    @Override
-    public String name() {
-        return description == null ? "Quipt-Velocity-Test-Plugin" : description.getName().orElse("TEST");
-    }
-
-    @Override
-    public String version() {
-        return description == null ? "0.0.1" : description.getVersion().orElse("vTEST");
-    }
 
     public ProxyServer proxy(){
         return server;
@@ -55,6 +57,24 @@ public abstract class QuiptProxy extends QuiptIntegration {
 
     public PluginDescription description() {
         return description;
+    }
+
+    public VelocityIntegration integration() {
+        return integration;
+    }
+
+    public abstract static class VelocityIntegration extends MinecraftIntegration<PluginDescription> {
+
+
+        public VelocityIntegration(Metadata metadata, PluginDescription instance) {
+            super(metadata, instance);
+        }
+
+        @Override
+        public File addons() {
+            return new File("plugins");
+        }
+
     }
 
 }

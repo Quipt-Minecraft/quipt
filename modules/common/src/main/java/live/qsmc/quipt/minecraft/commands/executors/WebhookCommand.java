@@ -1,38 +1,37 @@
-package live.qsmc.quipt.paper.commands.executors;
+package live.qsmc.quipt.minecraft.commands.executors;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.discord.Webhook;
-import live.qsmc.quipt.paper.QuiptPlugin;
-import live.qsmc.quipt.paper.commands.CommandExecutor;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.bukkit.command.CommandSender;
+import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.commands.Command;
+import live.qsmc.quipt.minecraft.commands.CommandBuilder;
+import live.qsmc.quipt.minecraft.commands.CommonCommand;
+import live.qsmc.quipt.minecraft.commands.executors.quipt.*;
 
-import java.util.Iterator;
+import java.util.Iterator;import static net.kyori.adventure.text.Component.text;
 
-import static io.papermc.paper.command.brigadier.Commands.argument;
+public class WebhookCommand<S> extends CommonCommand<S> {
 
-public class WebhookCommand extends CommandExecutor {
-
-    public WebhookCommand(QuiptPlugin plugin) {
-        super(plugin, "webhook");
+    public WebhookCommand(Command<S> command, MinecraftIntegration<?> integration) {
+        super(command, integration);
     }
 
     @Override
-    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
-        return literal(name())
-            .requires(sender -> sender.getSender().hasPermission("lastlife.admin"))
-            .executes(context -> showUsage(context, "lastlife.admin"))
-            .then(literal("add")
-                .executes(context -> showUsage(context, "lastlife.admin"))
-                .then(argument("id", StringArgumentType.word())
-                    .then(argument("token", StringArgumentType.word())
-                        .then(argument("channel", StringArgumentType.word())
+    public LiteralArgumentBuilder<S> arguments(CommandBuilder<S> builder) {
+        return builder.literal(command().name())
+            .requires(sender -> command().hasPermission(sender, ""))
+            .executes(context -> command().showUsage(context, "lastlife.admin"))
+            .then(builder.literal("add")
+                .executes(context -> command().showUsage(context, "lastlife.admin"))
+                .then(builder.argument("id", StringArgumentType.word())
+                    .then(builder.argument("token", StringArgumentType.word())
+                        .then(builder.argument("channel", StringArgumentType.word())
                             .executes(context -> {
-                                CommandSender sender = context.getSource().getSender();
-                                if (!sender.hasPermission("lastlife.admin"))
-                                    return logError(context, "You do not have permission to use this command.");
+                                S sender = context.getSource();
+                                if (!command().hasPermission(sender, ""))
+                                    return command().logError(context, "You do not have permission to use this command.");
 
                                 String id = StringArgumentType.getString(context, "id");
                                 String token = StringArgumentType.getString(context, "token");
@@ -42,22 +41,21 @@ public class WebhookCommand extends CommandExecutor {
                                 Quipt.INSTANCE.webhooks().add(id, channel, token);
                                 Webhook wh = Quipt.INSTANCE.webhooks().get(id);
                                 if (wh == null)
-                                    return logError(context, "Failed to create webhook. Please check your inputs.");
+                                    return command().logError(context, "Failed to create webhook. Please check your inputs.");
 
                                 // Persist to config and save
                                 Quipt.INSTANCE.webhooks().webhooks.put(wh);
                                 Quipt.INSTANCE.webhooks().save();
-
-                                sender.sendMessage(net.kyori.adventure.text.Component.text("Added webhook '" + id + "' and saved to config."));
+                                command().sendMessage(sender, text("Added webhook '" + id + "' and saved to config."));
                                 return 1;
                             })))))
-            .then(literal("remove")
-                .executes(context -> showUsage(context, "lastlife.admin"))
-                .then(argument("id", StringArgumentType.word())
+            .then(builder.literal("remove")
+                .executes(context -> command().showUsage(context, "lastlife.admin"))
+                .then(builder.argument("id", StringArgumentType.word())
                     .executes(context -> {
-                        CommandSender sender = context.getSource().getSender();
-                        if (!sender.hasPermission("lastlife.admin"))
-                            return logError(context, "You do not have permission to use this command.");
+                        S sender = context.getSource();
+                        if (!command().hasPermission(sender, ""))
+                            return command().logError(context, "You do not have permission to use this command.");
 
                         String id = StringArgumentType.getString(context, "id");
 
@@ -96,11 +94,11 @@ public class WebhookCommand extends CommandExecutor {
                         }
 
                         if (!removed) {
-                            return logError(context, "Webhook not found by channel or id: " + id);
+                            return command().logError(context, "Webhook not found by channel or id: " + id);
                         }
 
                         Quipt.INSTANCE.webhooks().save();
-                        sender.sendMessage(net.kyori.adventure.text.Component.text("Removed webhook '" + id + "' from config."));
+                        command().sendMessage(sender, text("Removed webhook '" + id + "' and saved to config."));
                         return 1;
                     })));
     }

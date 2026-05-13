@@ -10,6 +10,10 @@ public class Metadata {
 
     private final JSONObject data;
 
+    public Metadata() {
+        this.data = new JSONObject();
+    }
+
     /**
      * Constructs a Metadata instance with the specified JSON data.
      * Recursively converts nested JSON objects to Metadata instances.
@@ -69,6 +73,10 @@ public class Metadata {
         } catch (ClassCastException | JSONException e) {
             throw new IllegalArgumentException("Could not find MetadataValue for " + key);
         }
+    }
+
+    public <E> void put(String key, E value) {
+        data.put(key, value);
     }
 
     /**

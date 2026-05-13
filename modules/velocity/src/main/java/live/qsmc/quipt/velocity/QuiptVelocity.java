@@ -3,8 +3,10 @@ package live.qsmc.quipt.velocity;
 import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import live.qsmc.quipt.velocity.commands.CommandExecutor;
-import live.qsmc.quipt.velocity.commands.executors.UpdateCommand;
+import live.qsmc.quipt.minecraft.commands.executors.QuiptCommand;
+import live.qsmc.quipt.minecraft.commands.executors.WebhookCommand;
+import live.qsmc.quipt.velocity.commands.VelocityCommandExecutor;
+import live.qsmc.quipt.velocity.commands.executors.VelocityCommonCommandExecutor;
 
 import java.nio.file.Path;
 
@@ -20,6 +22,7 @@ public class QuiptVelocity extends QuiptProxy {
 
     @Override
     public void enable() {
-        new CommandExecutor.Builder(new UpdateCommand(this)).register();
+        new VelocityCommandExecutor.Builder(new VelocityCommonCommandExecutor<>(this, QuiptCommand.class, "vquipt")).register();
+        new VelocityCommandExecutor.Builder(new VelocityCommonCommandExecutor<>(this, WebhookCommand.class, "vwebhook")).register();
     }
 }

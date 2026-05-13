@@ -1,4 +1,4 @@
-package live.qsmc.quipt.paper.commands;
+package live.qsmc.quipt.minecraft.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedCommandNode;
@@ -7,25 +7,20 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
-import live.qsmc.quipt.paper.QuiptPlugin;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
 
 import static net.kyori.adventure.text.Component.text;
 
-public abstract class Command {
+public abstract class Command<S> {
 
-    private final QuiptPlugin plugin;
     private final String cmd;
 
-    public Command(QuiptPlugin plugin, String cmd){
-        this.plugin = plugin;
+    public Command(String cmd) {
         this.cmd = cmd;
     }
 
@@ -33,52 +28,61 @@ public abstract class Command {
         return cmd;
     }
 
-    public QuiptPlugin plugin() {
-        return plugin;
-    }
+    public abstract void sendMessage(S source, Component message);
 
-    public int logError(CommandContext<CommandSourceStack> context, String message) {
+    public abstract boolean hasPermission(S source, String permission);
+
+    public int logError(CommandContext<S> context, String message) {
         return logError(context, text(message));
     }
 
-    public int logError(CommandContext<CommandSourceStack> context, Component message) {
+    public int logError(CommandContext<S> context, Component message) {
         return log(context, message, NamedTextColor.RED, 0);
     }
 
-    public int logSuccess(CommandContext<CommandSourceStack> context, String message) {
+    public int logSuccess(CommandContext<S> context, String message) {
         return logSuccess(context, text(message));
     }
 
-    public int logSuccess(CommandContext<CommandSourceStack> context, Component message) {
+    public int logSuccess(CommandContext<S> context, Component message) {
         return log(context, message, NamedTextColor.GREEN, 1);
     }
 
-    public int log(CommandContext<CommandSourceStack> context, String message, TextColor color, int value) {
+    public int log(CommandContext<S> context, String message, TextColor color, int value) {
         return log(context, text(message), color, value);
     }
 
-    public int log(CommandContext<CommandSourceStack> context, Component message, TextColor color, int value) {
-        context.getSource().getSender().sendMessage(text().style(Style.style().color(color).build()).append(message));
+    public int log(CommandContext<S> context, Component message, TextColor color, int value) {
+        Component styled = message.style(Style.style().color(color).build());
+        sendMessage(context.getSource(), styled);
         return value;
     }
 
-    public int showUsage(CommandContext<CommandSourceStack> context, String perm) {
-        CommandSender sender = context.getSource().getSender();
+    private String getUsageKey(CommandContext<S> context) {
+        S sender = context.getSource();
         StringBuilder args = new StringBuilder();
-        for(ParsedCommandNode<CommandSourceStack> node : context.getNodes()){
+        for(ParsedCommandNode<S> node : context.getNodes()){
             CommandNode<?> newNode = node.getNode();
             if(newNode instanceof LiteralCommandNode){
                 args.append(newNode.getName()).append(".");
             }
         }
-        return logError(context, (perm.equalsIgnoreCase("") || sender.hasPermission(perm)) ? MessageUtils.get("cmd." + args + "usage") : MessageUtils.get("cmd.error.no_perm", perm));
+        return "cmd." + args + "usage";
     }
 
-    public CompletableFuture<Suggestions> onlySimilar(String[] values, String argumentName, CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
+    public Component getUsage(CommandContext<S> context) {
+        return MessageUtils.get(getUsageKey(context));
+    }
+
+    public int showUsage(CommandContext<S> context, String perm) {
+        return logError(context, hasPermission(context.getSource(), perm) ? MessageUtils.get(getUsageKey(context)) : MessageUtils.get("cmd.error.no_perm", perm));
+    }
+
+    public CompletableFuture<Suggestions> onlySimilar(String[] values, String argumentName, CommandContext<S> context, SuggestionsBuilder builder) {
         String value;
         try {
             value = context.getArgument(argumentName, String.class);
-        }catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             value = "";
         }
         return getSuggestionsCompletableFuture(values, value, builder);

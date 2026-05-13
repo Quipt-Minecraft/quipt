@@ -13,13 +13,15 @@ import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 
-public abstract class CommandExecutor extends Command {
+import live.qsmc.quipt.minecraft.commands.CommandBuilder;
+
+public abstract class FabricCommandExecutor extends FabricCommand implements CommandBuilder<ServerCommandSource> {
 
 
     private final Registry<Permission> permissions;
 
 
-    public CommandExecutor(QuiptMod mod, String cmd) {
+    public FabricCommandExecutor(QuiptMod mod, String cmd) {
         super(mod, cmd);
         permissions = Quipt.INSTANCE.registries().register("cmd." + cmd + ".permissions", () -> null);
     }
@@ -56,10 +58,10 @@ public abstract class CommandExecutor extends Command {
     }
 
     public static class Builder {
-        private final CommandExecutor cmd;
+        private final FabricCommandExecutor cmd;
         private int permissionLevel = 0;
 
-        public Builder(CommandExecutor executor) {
+        public Builder(FabricCommandExecutor executor) {
             this.cmd = executor;
         }
 
@@ -76,4 +78,3 @@ public abstract class CommandExecutor extends Command {
         }
     }
 }
-

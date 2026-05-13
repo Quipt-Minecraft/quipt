@@ -6,12 +6,13 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandSource;
+import live.qsmc.quipt.minecraft.commands.CommandBuilder;
 import live.qsmc.quipt.velocity.QuiptProxy;
 import org.jetbrains.annotations.CheckReturnValue;
 
-public abstract class CommandExecutor extends Command {
+public abstract class VelocityCommandExecutor extends VelocityCommand implements CommandBuilder<CommandSource> {
 
-    public CommandExecutor(QuiptProxy proxy, String cmd) {
+    public VelocityCommandExecutor(QuiptProxy proxy, String cmd) {
         super(proxy, cmd);
     }
 
@@ -30,11 +31,11 @@ public abstract class CommandExecutor extends Command {
     public abstract LiteralArgumentBuilder<CommandSource> arguments();
 
     public static class Builder {
-        private final CommandExecutor cmd;
+        private final VelocityCommandExecutor cmd;
         private String[] aliases = new String[]{};
 
         @CheckReturnValue
-        public Builder(CommandExecutor executor) {
+        public Builder(VelocityCommandExecutor executor) {
             this.cmd = executor;
         }
 
@@ -54,4 +55,3 @@ public abstract class CommandExecutor extends Command {
         }
     }
 }
-

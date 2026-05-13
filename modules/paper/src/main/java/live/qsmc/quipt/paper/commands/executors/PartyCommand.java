@@ -8,7 +8,7 @@ import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
 import live.qsmc.quipt.paper.QuiptPaper;
 import live.qsmc.quipt.paper.QuiptPlugin;
 import live.qsmc.quipt.paper.api.players.PaperPlayer;
-import live.qsmc.quipt.paper.commands.CommandExecutor;
+import live.qsmc.quipt.paper.commands.PaperCommandExecutor;
 import live.qsmc.quipt.paper.commands.executors.arguments.PartyArgumentType;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
@@ -17,10 +17,8 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static io.papermc.paper.command.brigadier.Commands.argument;
 
-
-public class PartyCommand extends CommandExecutor {
+public class PartyCommand extends PaperCommandExecutor {
 
     public PartyCommand(QuiptPlugin plugin) {
         super(plugin, "party");

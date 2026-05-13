@@ -48,6 +48,11 @@ public abstract class QuiptMod implements ModInitializer {
             id = instance.getMetadata().getId();
         }
 
+        @Override
+        public File addons() {
+            return new File("mods");
+        }
+
         public String id() {
             return id;
         }

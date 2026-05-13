@@ -63,4 +63,5 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
         return parties;
     }
 
+    public abstract File addons();
 }

@@ -3,16 +3,16 @@ package live.qsmc.quipt.paper.commands;
 import live.qsmc.quipt.paper.QuiptPlugin;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 
-public abstract class SubCommandExecutor extends Command implements com.mojang.brigadier.Command<CommandSourceStack> {
+public abstract class SubCommandExecutor extends PaperCommand implements com.mojang.brigadier.Command<CommandSourceStack> {
 
-    private final Command root;
+    private final PaperCommand root;
 
-    public SubCommandExecutor(QuiptPlugin plugin, Command root, String cmd) {
+    public SubCommandExecutor(QuiptPlugin plugin, PaperCommand root, String cmd) {
         super(plugin, cmd);
         this.root = root;
     }
 
-    public Command root() {
+    public PaperCommand root() {
         return root;
     }
 

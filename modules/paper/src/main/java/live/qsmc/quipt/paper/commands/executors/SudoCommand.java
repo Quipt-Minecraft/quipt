@@ -3,7 +3,7 @@ package live.qsmc.quipt.paper.commands.executors;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import live.qsmc.quipt.paper.QuiptPlugin;
-import live.qsmc.quipt.paper.commands.CommandExecutor;
+import live.qsmc.quipt.paper.commands.PaperCommandExecutor;
 import live.qsmc.quipt.paper.commands.executors.arguments.CommandBuilderArgument;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
@@ -12,9 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static io.papermc.paper.command.brigadier.Commands.argument;
-
-public class SudoCommand extends CommandExecutor {
+public class SudoCommand extends PaperCommandExecutor {
     public SudoCommand(QuiptPlugin integration) {
         super(integration, "sudo");
     }

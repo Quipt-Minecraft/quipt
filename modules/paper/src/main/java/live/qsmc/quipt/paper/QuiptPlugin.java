@@ -6,6 +6,8 @@ import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 
+import java.io.File;
+
 public abstract class QuiptPlugin extends JavaPlugin {
 
     PaperIntegration integration = null;
@@ -42,6 +44,10 @@ public abstract class QuiptPlugin extends JavaPlugin {
 
         public JavaPlugin plugin() {
             return instance();
+        }
+
+        public File addons() {
+            return new File("plugins");
         }
 
     }

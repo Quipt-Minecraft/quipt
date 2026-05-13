@@ -1,8 +1,11 @@
 package live.qsmc.quipt.paper.commands;
 
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import live.qsmc.quipt.minecraft.commands.CommandBuilder;
 import live.qsmc.quipt.paper.QuiptPlugin;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -14,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class CommandExecutor extends Command {
+public abstract class PaperCommandExecutor extends PaperCommand implements CommandBuilder<CommandSourceStack> {
 
-    public CommandExecutor(QuiptPlugin plugin, String cmd) {
+    public PaperCommandExecutor(QuiptPlugin plugin, String cmd) {
         super(plugin, cmd);
     }
 
@@ -34,14 +37,18 @@ public abstract class CommandExecutor extends Command {
         return LiteralArgumentBuilder.literal(name);
     }
 
+    public <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
+        return RequiredArgumentBuilder.argument(name, type);
+    }
+
     public static class Builder {
-        CommandExecutor cmd;
+        PaperCommandExecutor cmd;
         String desc = "";
         String[] aliases = new String[]{};
 
 
         @CheckReturnValue
-        public Builder(CommandExecutor executor) {
+        public Builder(PaperCommandExecutor executor) {
             this.cmd = executor;
         }
 

@@ -25,6 +25,7 @@ dependencies {
 
     implementation project(":modules:core")
     implementation project(":modules:bot")
+    implementation "com.mojang:brigadier:$brigadier_version"
 }
 
 publishing {
