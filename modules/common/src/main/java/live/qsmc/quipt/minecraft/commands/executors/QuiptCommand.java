@@ -45,8 +45,8 @@ import static net.kyori.adventure.text.Component.text;
 
 public class QuiptCommand<S> extends CommonCommand<S> {
 
-//    private final Registry<QuiptSubCommand<S>> SUB_COMMANDS;
-    private final Map<String, QuiptSubCommand<S>> SUB_COMMANDS = new HashMap<>();
+    private final Registry<QuiptSubCommand<S>> SUB_COMMANDS;
+//    private final Map<String, QuiptSubCommand<S>> SUB_COMMANDS = new HashMap<>();
     private final String repoUrl = "https://repo.qsmc.live/service/rest/";
     private final String version = "v1";
     private long lastUpdate = 0;
@@ -55,7 +55,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
     @SuppressWarnings("unchecked")
     public QuiptCommand(Command<S> command, MinecraftIntegration<?,?> integration) {
         super(command, integration);
-//        SUB_COMMANDS = Quipt.INSTANCE.registries().register(String.valueOf(integration.identifier("quipt_sub_commands")), () -> null);
+        SUB_COMMANDS = Quipt.INSTANCE.registries().register(String.valueOf(integration.identifier("quipt_sub_commands")), () -> null);
         register("list", ListSubCommand.class);
         register("help", HelpSubCommand.class);
         register("dump", DumpSubCommand.class);
@@ -64,14 +64,14 @@ public class QuiptCommand<S> extends CommonCommand<S> {
     }
 
     public Map<String, QuiptSubCommand<S>> subCommands() {
-        return Map.copyOf(SUB_COMMANDS);
+        return SUB_COMMANDS.toMap();
     }
 
 
     private <C extends QuiptSubCommand<S>> void register(String cmd, Class<C> clazz) {
         try {
             QuiptSubCommand<S> instance = clazz.getDeclaredConstructor(QuiptCommand.class, String.class).newInstance(this, cmd);
-            SUB_COMMANDS.put(cmd, instance);
+            SUB_COMMANDS.register(cmd, instance);
         } catch (Exception e) {
             throw new RuntimeException("Failed to register sub-command: " + cmd, e);
         }
@@ -86,7 +86,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
             .then(builder.literal("help")
                 .executes(context -> command().showUsage(context, ""))
                 .then(builder.argument("cmd", StringArgumentType.string())
-                    .suggests((context, b) -> command().onlySimilar(SUB_COMMANDS.keySet().toArray(new String[0]), "cmd", context, b))
+                    .suggests((context, b) -> command().onlySimilar(SUB_COMMANDS.keys().toArray(new String[0]), "cmd", context, b))
                     .executes(new HelpSubCommand<>(this, "help"))))
             .then(builder.literal("update")
                 .requires(source -> command().hasPermission(source, ""))
@@ -376,6 +376,10 @@ public class QuiptCommand<S> extends CommonCommand<S> {
 //            if (continuationToken == null) versions.clear();
             try {
                 HttpResponse<String> rawResponse = NetworkUtils.get(HttpConfig.DEFAULTS, repoUrl + version + "/search" + (continuationToken == null ? "" : "?continuationToken=" + continuationToken));
+                if(rawResponse.body().isEmpty()){
+                    integration().logger().error("Update","Failed to fetch update information: Empty response from repository");
+                    return;
+                }
                 try {
                     JSONObject json = new JSONObject(rawResponse.body());
                     JSONArray items = json.getJSONArray("items");

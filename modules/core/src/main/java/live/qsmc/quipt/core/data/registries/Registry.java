@@ -56,7 +56,7 @@ public class Registry<T> {
      * @return the internal map of the registry
      */
     public Map<String, T> toMap() {
-        return registry;
+        return Map.copyOf(registry);
     }
 
     /**
