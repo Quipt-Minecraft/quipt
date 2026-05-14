@@ -26,10 +26,10 @@ public class Party extends ConfigObject {
         members = new ConfigMap<>(integration);
     }
 
-    public MinecraftIntegration<?> integration() {
+    public MinecraftIntegration<?,?> integration() {
         if(!(integration instanceof MinecraftIntegration))
             throw new IllegalStateException("Integration is not a MinecraftIntegration");
-        return (MinecraftIntegration<?>) integration;
+        return (MinecraftIntegration<?,?>) integration;
     }
 
 

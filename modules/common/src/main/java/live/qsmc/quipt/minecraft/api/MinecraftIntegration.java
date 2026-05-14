@@ -8,11 +8,12 @@ import live.qsmc.quipt.minecraft.events.party.Party;
 
 import java.io.File;
 
-public abstract class MinecraftIntegration<T> extends QuiptIntegration {
+public abstract class MinecraftIntegration<T, I> extends QuiptIntegration {
 
     private PartyConfig parties = null;
     private final Metadata metadata;
     private final String name;
+    private final String id;
     private final String version;
     private final File folder;
     private final T instance;
@@ -21,12 +22,17 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
         this.metadata = metadata;
         this.instance = instance;
         this.name = metadata.value("name", String.class);
+        this.id = metadata.value("id", String.class);
         this.version = metadata.value("version", String.class);
         this.folder = metadata.value("folder", File.class);
     }
 
     public T instance() {
         return instance;
+    }
+
+    public String id() {
+        return id;
     }
 
     public Metadata metadata() {
@@ -62,6 +68,9 @@ public abstract class MinecraftIntegration<T> extends QuiptIntegration {
         }
         return parties;
     }
+
+    public abstract I identifier(String id);
+
 
     public abstract File addons();
 }

@@ -7,6 +7,7 @@ import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.files.QuiptConfig;
 import live.qsmc.quipt.core.data.JsonSerializable;
 import live.qsmc.quipt.core.data.annotations.Nullable;
+import live.qsmc.quipt.core.data.registries.Registries;
 import live.qsmc.quipt.core.data.registries.Registry;
 import live.qsmc.quipt.core.data.registries.RegistryKey;
 import live.qsmc.quipt.core.utils.net.ApiResponse;
@@ -44,6 +45,7 @@ import static net.kyori.adventure.text.Component.text;
 
 public class QuiptCommand<S> extends CommonCommand<S> {
 
+//    private final Registry<QuiptSubCommand<S>> SUB_COMMANDS;
     private final Map<String, QuiptSubCommand<S>> SUB_COMMANDS = new HashMap<>();
     private final String repoUrl = "https://repo.qsmc.live/service/rest/";
     private final String version = "v1";
@@ -51,8 +53,9 @@ public class QuiptCommand<S> extends CommonCommand<S> {
     private final Map<String, Map<String, Map<String, Map<String, List<VersionData>>>>> versions = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public QuiptCommand(Command<S> command, MinecraftIntegration<?> integration) {
+    public QuiptCommand(Command<S> command, MinecraftIntegration<?,?> integration) {
         super(command, integration);
+//        SUB_COMMANDS = Quipt.INSTANCE.registries().register(String.valueOf(integration.identifier("quipt_sub_commands")), () -> null);
         register("list", ListSubCommand.class);
         register("help", HelpSubCommand.class);
         register("dump", DumpSubCommand.class);

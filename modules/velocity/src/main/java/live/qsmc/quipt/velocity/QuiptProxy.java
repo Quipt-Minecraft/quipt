@@ -10,6 +10,8 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Namespaced;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -36,6 +38,7 @@ public abstract class QuiptProxy {
             JSONObject data = new JSONObject();
             data.put("name", description.getName());
             data.put("version", description.getVersion());
+            data.put("id", description.getId());
             data.put("folder", dataDirectory.toFile());
             Metadata metadata = Metadata.of(data);
             integration = new VelocityIntegration(metadata, description) {
@@ -63,7 +66,7 @@ public abstract class QuiptProxy {
         return integration;
     }
 
-    public abstract static class VelocityIntegration extends MinecraftIntegration<PluginDescription> {
+    public abstract static class VelocityIntegration extends MinecraftIntegration<PluginDescription, Key> {
 
 
         public VelocityIntegration(Metadata metadata, PluginDescription instance) {
@@ -73,6 +76,13 @@ public abstract class QuiptProxy {
         @Override
         public File addons() {
             return new File("plugins");
+        }
+
+        @Override
+        public Key identifier(String name) {
+            if(name.contains(":"))
+                return Key.key(name);
+            return Key.key(id(), name);
         }
 
     }

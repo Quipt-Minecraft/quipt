@@ -7,6 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -31,6 +32,7 @@ public abstract class QuiptMod implements ModInitializer {
         JSONObject data = new JSONObject();
         data.put("name", fabricMetadata.getName());
         data.put("version", fabricMetadata.getVersion().getFriendlyString());
+        data.put("id", fabricMetadata.getId());
         data.put("folder", new File("config/" + fabricMetadata.getId()));
         return Metadata.of(data);
     }
@@ -39,13 +41,10 @@ public abstract class QuiptMod implements ModInitializer {
         return integration;
     }
 
-    public static class FabricIntegration extends MinecraftIntegration<ModContainer> {
-
-        private String id;
+    public static class FabricIntegration extends MinecraftIntegration<ModContainer, Identifier> {
 
         public FabricIntegration(Metadata metadata, ModContainer instance) {
             super(metadata, instance);
-            id = instance.getMetadata().getId();
         }
 
         @Override
@@ -53,12 +52,14 @@ public abstract class QuiptMod implements ModInitializer {
             return new File("mods");
         }
 
-        public String id() {
-            return id;
-        }
-
         public void enable() {
             logger().log("Initialization", "Initializing " + id() + ".");
+        }
+
+        public Identifier identifier(String id) {
+            if(id.contains(":"))
+                return Identifier.tryParse(id);
+            return Identifier.of(id(), id);
         }
     }
 }

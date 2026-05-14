@@ -1,10 +1,10 @@
 package live.qsmc.quipt.fabric;
 
+import live.qsmc.quipt.fabric.commands.executors.FabricCommonCommandExecutor;
 import live.qsmc.quipt.minecraft.commands.executors.QuiptCommand;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.data.annotations.Nullable;
 import live.qsmc.quipt.fabric.commands.FabricCommandExecutor;
-import live.qsmc.quipt.fabric.commands.executors.*;
 import live.qsmc.quipt.fabric.net.PluginMessageEvent;
 import live.qsmc.quipt.fabric.net.PluginMessagePacket;
 import live.qsmc.quipt.minecraft.server.ResourcePackHandler;
