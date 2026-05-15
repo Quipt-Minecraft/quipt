@@ -3,6 +3,7 @@ package live.qsmc.quipt.core;
 
 import live.qsmc.quipt.core.config.ConfigManager;
 import live.qsmc.quipt.core.heartbeat.Heartbeat;
+import live.qsmc.quipt.core.utils.TaskScheduler;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -21,6 +22,10 @@ public abstract class QuiptIntegration {
      * Config manager instance for this integration
      */
     private ConfigManager configs = null;
+    /**
+     * Flag to track if shutdown has been initiated
+     */
+    private boolean isShuttingDown = false;
 
 
 
@@ -54,6 +59,43 @@ public abstract class QuiptIntegration {
     public abstract String version();
     public abstract File folder();
     public abstract void enable();
+
+    /**
+     * Gracefully shuts down the integration
+     */
+    public void shutdown() {
+        if (isShuttingDown) {
+            return; // Already shutting down
+        }
+        isShuttingDown = true;
+
+        logger().log("Quipt", "Initiating shutdown for {}...", name());
+
+        try {
+            // Shutdown heartbeat to stop all scheduled flutters
+            heartbeat.shutdown();
+        } catch (Exception e) {
+            logger().error("Quipt", "Error shutting down heartbeat", e);
+        }
+
+        try {
+            // Shutdown the task scheduler
+            TaskScheduler.shutdown();
+        } catch (Exception e) {
+            logger().error("Quipt", "Error shutting down task scheduler", e);
+        }
+
+        logger().log("Quipt", "Shutdown complete for {}", name());
+    }
+
+    /**
+     * Checks if shutdown has been initiated
+     *
+     * @return true if shutdown is in progress
+     */
+    public boolean isShuttingDown() {
+        return isShuttingDown;
+    }
 
 
     public class Logger {

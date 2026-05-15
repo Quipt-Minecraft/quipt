@@ -7,8 +7,10 @@ import live.qsmc.quipt.core.data.annotations.Nullable;
 import live.qsmc.quipt.fabric.commands.FabricCommandExecutor;
 import live.qsmc.quipt.fabric.net.PluginMessageEvent;
 import live.qsmc.quipt.fabric.net.PluginMessagePacket;
+import live.qsmc.quipt.fabric.listener.FabricLifecycleListener;
 import live.qsmc.quipt.minecraft.server.ResourcePackHandler;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -104,6 +106,9 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
         PayloadTypeRegistry.playC2S().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(PluginMessagePacket.CHANNEL_ID, this);
+
+        // Register server lifecycle listener for graceful shutdown
+        ServerLifecycleEvents.SERVER_STOPPING.register(new FabricLifecycleListener());
     }
 
     @Override
@@ -121,3 +126,5 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
         return packHandler;
     }
 }
+
+

@@ -17,6 +17,7 @@ public class Heartbeat implements Runnable {
     private final List<Integer> flutters_remove_queue = new ArrayList<>();
     private final QuiptIntegration integration;
     private int last_id = 0;
+    private boolean isShuttingDown = false;
 
     public Heartbeat(QuiptIntegration integration) {
         this.integration = integration;
@@ -49,8 +50,22 @@ public class Heartbeat implements Runnable {
             }
         }
 
-        TaskScheduler.scheduleAsyncTask(this, 0, TimeUnit.SECONDS);
+        // Don't reschedule if we're shutting down
+        if (!isShuttingDown && !TaskScheduler.isShuttingDown()) {
+            TaskScheduler.scheduleAsyncTask(this, 0, TimeUnit.SECONDS);
+        }
 
+    }
+
+    /**
+     * Initiates graceful shutdown of the heartbeat
+     */
+    public void shutdown() {
+        isShuttingDown = true;
+        // Clear all flutters
+        flutters.clear();
+        flutters_add_queue.clear();
+        flutters_remove_queue.clear();
     }
 
     public FlutterTask flutter(Flutter flutter) {

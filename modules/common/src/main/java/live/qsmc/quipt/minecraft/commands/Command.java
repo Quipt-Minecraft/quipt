@@ -98,7 +98,7 @@ public abstract class Command<S> {
         }
         for (String v : values) {
             if (v == null) continue;
-            if (v.toLowerCase().startsWith(input.toLowerCase())) {
+            if (v.toLowerCase().startsWith(input.toLowerCase()) || v.equalsIgnoreCase(input)) {
                 builder.suggest(v);
             }
         }
