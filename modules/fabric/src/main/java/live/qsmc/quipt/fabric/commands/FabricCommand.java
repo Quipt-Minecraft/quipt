@@ -1,25 +1,32 @@
 package live.qsmc.quipt.fabric.commands;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedCommandNode;
-import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import live.qsmc.quipt.fabric.QuiptMod;
-import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
 import net.kyori.adventure.text.Component;
 import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 
-import static net.kyori.adventure.text.Component.text;
-
-public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.Command<ServerCommandSource> {
+public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.Command<ServerCommandSource, Permission> {
 
     private final QuiptMod mod;
 
     public FabricCommand(QuiptMod mod, String cmd) {
-        super(cmd);
+        super(mod.integration(), cmd);
         this.mod = mod;
+    }
+
+    public Permission permission(String id){
+        if(permissions().get(id).isEmpty())
+            permissions().register(id, new Permission.Atom(Identifier.of(id)));
+        return permissions().get(id).get();
+    }
+
+    public Permission permission(int id){
+        String idStr = String.valueOf(id);
+        if(permissions().get(idStr).isEmpty())
+            permissions().register(idStr, new Permission.Level(PermissionLevel.fromLevel(id)));
+        return permissions().get(idStr).get();
     }
 
     public QuiptMod mod() {
@@ -32,20 +39,8 @@ public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.C
     }
 
     @Override
-    public boolean hasPermission(ServerCommandSource source, String permission) {
-        if (permission.isEmpty()) return true;
-        return source.getPermissions().hasPermission(new Permission.Atom(Identifier.of(permission)));
+    public boolean hasPermission(ServerCommandSource source, Permission permission) {
+        return source.getPermissions().hasPermission(permission);
     }
 
-    public int showUsage(CommandContext<ServerCommandSource> context, Permission perm) {
-        ServerCommandSource sender = context.getSource();
-        StringBuilder args = new StringBuilder();
-        for(ParsedCommandNode<ServerCommandSource> node : context.getNodes()){
-            CommandNode<?> newNode = node.getNode();
-            if(newNode instanceof LiteralCommandNode){
-                args.append(newNode.getName()).append(".");
-            }
-        }
-        return logError(context, sender.getPermissions().hasPermission(perm) ? MessageUtils.get("cmd." + args + "usage") : MessageUtils.get("cmd.error.no_perm", perm));
-    }
 }

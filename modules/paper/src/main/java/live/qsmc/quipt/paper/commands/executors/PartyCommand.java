@@ -27,10 +27,10 @@ public class PartyCommand extends PaperCommandExecutor {
     public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name())
             .requires(source -> source.getSender().hasPermission("quipt.party"))
-            .executes(context -> showUsage(context, "quipt.party"))
+            .executes(context -> showUsage(context, permission("quipt.party")))
             .then(literal("create")
                 .requires(source -> source.getSender().hasPermission("quipt.party.create"))
-                .executes(context -> showUsage(context, "quipt.party.create"))
+                .executes(context -> showUsage(context, permission("quipt.party.create")))
                 .then(argument("partyName", StringArgumentType.word())
                     .executes(context -> {
                         if (!context.getSource().getSender().hasPermission("quipt.party.create"))
@@ -85,7 +85,7 @@ public class PartyCommand extends PaperCommandExecutor {
                     })))
             .then(literal("join")
                 .requires(source -> source.getSender().hasPermission("quipt.party.join"))
-                .executes(context -> showUsage(context, "quipt.party.join"))
+                .executes(context -> showUsage(context, permission("quipt.party.join")))
                 .then(argument("partyName", new PartyArgumentType(plugin(), "partyName"))
                     .executes(context -> {
                         if (!context.getSource().getSender().hasPermission("quipt.party.join"))
@@ -118,7 +118,7 @@ public class PartyCommand extends PaperCommandExecutor {
                         }))))
             .then(literal("remove")
                 .requires(source -> source.getSender().hasPermission("quipt.party.remove"))
-                .executes(context -> showUsage(context, "quipt.party.remove"))
+                .executes(context -> showUsage(context, permission("quipt.party.remove")))
                 .then(argument("partyName", new PartyArgumentType(plugin(), "partyName"))
                     .executes(context -> {
                         if (!context.getSource().getSender().hasPermission("quipt.party.remove"))

@@ -8,4 +8,6 @@ public interface CommandBuilder<S> {
     LiteralArgumentBuilder<S> literal(String name);
     <T> RequiredArgumentBuilder<S, T> argument(String name, ArgumentType<T> type);
     LiteralArgumentBuilder<S> arguments();
+
+
 }

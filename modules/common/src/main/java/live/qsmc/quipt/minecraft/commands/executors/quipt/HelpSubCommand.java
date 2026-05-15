@@ -8,9 +8,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.Map;
 
-public class HelpSubCommand<S> extends QuiptSubCommand<S> {
+public class HelpSubCommand<S, P> extends QuiptSubCommand<S, P> {
 
-    public HelpSubCommand(QuiptCommand<S> root, String name) {
+    public HelpSubCommand(QuiptCommand<S, P> root, String name) {
         super(root, name);
     }
 
@@ -24,12 +24,12 @@ public class HelpSubCommand<S> extends QuiptSubCommand<S> {
     @Override
     public int run(CommandContext<S> context) {
         String cmd = StringArgumentType.getString(context, "cmd");
-        Map<String, QuiptSubCommand<S>> subCommands = root.subCommands();
+        Map<String, QuiptSubCommand<S, P>> subCommands = root.subCommands();
         if (cmd == null || cmd.isEmpty())
             return root.command().logError(context, "No command specified");
         if (!subCommands.containsKey(cmd))
             return root.command().logError(context, "Unknown sub-command: " + cmd);
-        QuiptSubCommand<S> executor = subCommands.get(cmd);
+        QuiptSubCommand<S, P> executor = subCommands.get(cmd);
         return root.command().log(context, executor.help(), NamedTextColor.GREEN, 1);
     }
 }

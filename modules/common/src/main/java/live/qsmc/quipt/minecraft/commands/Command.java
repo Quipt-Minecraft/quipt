@@ -6,7 +6,11 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.core.data.registries.Registry;
+import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
+import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -16,13 +20,24 @@ import java.util.concurrent.CompletableFuture;
 
 import static net.kyori.adventure.text.Component.text;
 
-public abstract class Command<S> {
+public abstract class Command<S, P> {
 
     private final String cmd;
+    private final Registry<P> permissions;
 
-    public Command(String cmd) {
+    public Command(MinecraftIntegration<?,?> integration, String cmd) {
         this.cmd = cmd;
+        this.permissions = Quipt.INSTANCE.registries().register(integration.id() + ":" + cmd + ":permissions", () -> null);
     }
+
+    public abstract P permission(String id);
+
+    public abstract P permission(int id);
+
+    public Registry<P> permissions() {
+        return permissions;
+    }
+
 
     public String name() {
         return cmd;
@@ -30,7 +45,7 @@ public abstract class Command<S> {
 
     public abstract void sendMessage(S source, Component message);
 
-    public abstract boolean hasPermission(S source, String permission);
+    public abstract boolean hasPermission(S source, P permission);
 
     public int logError(CommandContext<S> context, String message) {
         return logError(context, text(message));
@@ -59,7 +74,6 @@ public abstract class Command<S> {
     }
 
     private String getUsageKey(CommandContext<S> context) {
-        S sender = context.getSource();
         StringBuilder args = new StringBuilder();
         for(ParsedCommandNode<S> node : context.getNodes()){
             CommandNode<?> newNode = node.getNode();
@@ -74,7 +88,7 @@ public abstract class Command<S> {
         return MessageUtils.get(getUsageKey(context));
     }
 
-    public int showUsage(CommandContext<S> context, String perm) {
+    public int showUsage(CommandContext<S> context, P perm) {
         return logError(context, hasPermission(context.getSource(), perm) ? MessageUtils.get(getUsageKey(context)) : MessageUtils.get("cmd.error.no_perm", perm));
     }
 

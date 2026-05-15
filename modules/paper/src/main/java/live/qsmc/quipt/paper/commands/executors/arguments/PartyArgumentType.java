@@ -9,6 +9,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import live.qsmc.quipt.minecraft.events.party.Party;
 import live.qsmc.quipt.paper.QuiptPlugin;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -40,5 +41,15 @@ public class PartyArgumentType extends CustomArgumentConverter<@NotNull Party, @
             i=i+1;
         }
         return onlySimilar(values, input, (CommandContext<CommandSourceStack>) context, builder);
+    }
+
+    @Override
+    public Permission permission(String id) {
+        return null;
+    }
+
+    @Override
+    public Permission permission(int id) {
+        return null;
     }
 }

@@ -5,18 +5,19 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.permission.PermissionSubject;
 import live.qsmc.quipt.velocity.QuiptProxy;
 import net.kyori.adventure.text.Component;
 
 import static net.kyori.adventure.text.Component.text;
 
-public abstract class VelocityCommand extends live.qsmc.quipt.minecraft.commands.Command<CommandSource> {
+public abstract class VelocityCommand extends live.qsmc.quipt.minecraft.commands.Command<CommandSource, String> {
 
     private final QuiptProxy proxy;
     private final String cmd;
 
     public VelocityCommand(QuiptProxy proxy, String cmd) {
-        super(cmd);
+        super(proxy.integration(), cmd);
         this.proxy = proxy;
         this.cmd = cmd;
     }

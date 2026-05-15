@@ -7,9 +7,9 @@ import live.qsmc.quipt.minecraft.commands.executors.QuiptCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-public class ListSubCommand<S> extends QuiptSubCommand<S> {
+public class ListSubCommand<S, P> extends QuiptSubCommand<S, P> {
 
-    public ListSubCommand(QuiptCommand<S> root, String name) {
+    public ListSubCommand(QuiptCommand<S, P> root, String name) {
         super(root, name);
     }
 

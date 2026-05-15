@@ -43,9 +43,9 @@ import java.util.zip.ZipFile;
 
 import static net.kyori.adventure.text.Component.text;
 
-public class QuiptCommand<S> extends CommonCommand<S> {
+public class QuiptCommand<S, P> extends CommonCommand<S, P> {
 
-    private final Registry<QuiptSubCommand<S>> SUB_COMMANDS;
+    private final Registry<QuiptSubCommand<S, P>> SUB_COMMANDS;
 //    private final Map<String, QuiptSubCommand<S>> SUB_COMMANDS = new HashMap<>();
     private final String repoUrl = "https://repo.qsmc.live/service/rest/";
     private final String version = "v1";
@@ -53,7 +53,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
     private final Map<String, Map<String, Map<String, Map<String, List<VersionData>>>>> versions = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public QuiptCommand(Command<S> command, MinecraftIntegration<?,?> integration) {
+    public QuiptCommand(Command<S, P> command, MinecraftIntegration<?,?> integration) {
         super(command, integration);
         SUB_COMMANDS = Quipt.INSTANCE.registries().register(String.valueOf(integration.identifier("quipt_sub_commands")), () -> null);
         register("list", ListSubCommand.class);
@@ -63,14 +63,14 @@ public class QuiptCommand<S> extends CommonCommand<S> {
         register("update", UpdateSubCommand.class);
     }
 
-    public Map<String, QuiptSubCommand<S>> subCommands() {
+    public Map<String, QuiptSubCommand<S, P>> subCommands() {
         return SUB_COMMANDS.toMap();
     }
 
 
-    private <C extends QuiptSubCommand<S>> void register(String cmd, Class<C> clazz) {
+    private <C extends QuiptSubCommand<S, P>> void register(String cmd, Class<C> clazz) {
         try {
-            QuiptSubCommand<S> instance = clazz.getDeclaredConstructor(QuiptCommand.class, String.class).newInstance(this, cmd);
+            QuiptSubCommand<S, P> instance = clazz.getDeclaredConstructor(QuiptCommand.class, String.class).newInstance(this, cmd);
             SUB_COMMANDS.register(cmd, instance);
         } catch (Exception e) {
             throw new RuntimeException("Failed to register sub-command: " + cmd, e);
@@ -79,18 +79,18 @@ public class QuiptCommand<S> extends CommonCommand<S> {
 
     public LiteralArgumentBuilder<S> arguments(CommandBuilder<S> builder) {
         return builder.literal(command().name())
-            .executes(context -> command().showUsage(context, ""))
+            .executes(context -> command().showUsage(context, command().permission(4)))
             .then(builder.literal("list")
-                .requires(source -> command().hasPermission(source, ""))
+                .requires(source -> command().hasPermission(source, command().permission(4)))
                 .executes(new ListSubCommand<>(this, "list")))
             .then(builder.literal("help")
-                .executes(context -> command().showUsage(context, ""))
+                .executes(context -> command().showUsage(context, command().permission(4)))
                 .then(builder.argument("cmd", StringArgumentType.string())
                     .suggests((context, b) -> command().onlySimilar(SUB_COMMANDS.keys().toArray(new String[0]), "cmd", context, b))
                     .executes(new HelpSubCommand<>(this, "help"))))
             .then(builder.literal("update")
-                .requires(source -> command().hasPermission(source, ""))
-                .executes(context -> command().showUsage(context, ""))
+                .requires(source -> command().hasPermission(source, command().permission(4)))
+                .executes(context -> command().showUsage(context, command().permission(4)))
                 .then(builder.argument("repository", StringArgumentType.word())
                     .suggests((context, suggestions) -> {
                         checkUpdate();
@@ -98,7 +98,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
                         String input = suggestions.getInput().substring(suggestions.getStart());
                         return command().onlySimilar(repos, input, context, suggestions);
                     })
-                    .executes(context -> command().showUsage(context, ""))
+                    .executes(context -> command().showUsage(context, command().permission(4)))
                     .then(builder.argument("group", StringArgumentType.word())
                         .suggests((context, suggestions) -> {
                             String repository = StringArgumentType.getString(context, "repository");
@@ -107,7 +107,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
                             String input = suggestions.getInput().substring(suggestions.getStart());
                             return command().onlySimilar(groups, input, context, suggestions);
                         })
-                        .executes(context -> command().showUsage(context, ""))
+                        .executes(context -> command().showUsage(context, command().permission(4)))
                         .then(builder.argument("name", StringArgumentType.word())
                             .suggests((context, suggestions) -> {
                                 String repository = StringArgumentType.getString(context, "repository");
@@ -118,7 +118,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
                                 return command().onlySimilar(options, input, context, suggestions);
 
                             })
-                            .executes(context -> command().showUsage(context, ""))
+                            .executes(context -> command().showUsage(context, command().permission(4)))
                             .then(builder.argument("version", StringArgumentType.word())
                                 .suggests((context, suggestions) -> {
                                     String repository = StringArgumentType.getString(context, "repository");
@@ -129,7 +129,7 @@ public class QuiptCommand<S> extends CommonCommand<S> {
                                     String input = suggestions.getInput().substring(suggestions.getStart());
                                     return command().onlySimilar(options, input, context, suggestions);
                                 })
-                                .executes(context -> command().showUsage(context, ""))
+                                .executes(context -> command().showUsage(context, command().permission(4)))
                                 .then(builder.argument("artifact", StringArgumentType.word())
                                     .suggests((context, suggestions) -> {
                                         String repository = StringArgumentType.getString(context, "repository");
@@ -224,14 +224,14 @@ public class QuiptCommand<S> extends CommonCommand<S> {
                                         return com.mojang.brigadier.Command.SINGLE_SUCCESS;
                                     })))))))
             .then(builder.literal("account")
-                .requires(sender -> command().hasPermission(sender, ""))
-                .executes(context -> command().showUsage(context, ""))
+                .requires(sender -> command().hasPermission(sender, command().permission(4)))
+                .executes(context -> command().showUsage(context, command().permission(4)))
                 .then(builder.literal("help")
-                    .requires(sender -> command().hasPermission(sender, ""))
-                    .executes(context -> command().showUsage(context, "")))
+                    .requires(sender -> command().hasPermission(sender, command().permission(4)))
+                    .executes(context -> command().showUsage(context, command().permission(4))))
                 .then(builder.literal("token")
-                    .requires(sender -> command().hasPermission(sender, ""))
-                    .executes(context -> command().showUsage(context, ""))
+                    .requires(sender -> command().hasPermission(sender, command().permission(4)))
+                    .executes(context -> command().showUsage(context, command().permission(4)))
                     .then(builder.argument("access_token", StringArgumentType.string())
                         .executes(context -> {
                             try {
@@ -253,12 +253,12 @@ public class QuiptCommand<S> extends CommonCommand<S> {
 
                         })))
                 .then(builder.literal("register")
-                    .requires(context -> command().hasPermission(context, ""))
-                    .executes(context -> command().showUsage(context, ""))
+                    .requires(context -> command().hasPermission(context, command().permission(4)))
+                    .executes(context -> command().showUsage(context, command().permission(4)))
                     .then(builder.argument("username", StringArgumentType.string())
-                        .executes(context -> command().showUsage(context, ""))
+                        .executes(context -> command().showUsage(context, command().permission(4)))
                         .then(builder.argument("password", StringArgumentType.string())
-                            .executes(context -> command().showUsage(context, ""))
+                            .executes(context -> command().showUsage(context, command().permission(4)))
                             .then(builder.argument("email", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     JSONObject request = new JSONObject();
@@ -279,8 +279,8 @@ public class QuiptCommand<S> extends CommonCommand<S> {
                                     }
                                 }))))))
             .then(builder.literal("dump")
-                .requires(sender -> command().hasPermission(sender, ""))
-                .executes(context -> command().showUsage(context, ("")))
+                .requires(sender -> command().hasPermission(sender, command().permission(4)))
+                .executes(context -> command().showUsage(context, command().permission(4)))
                 .then(builder.literal("registries")
                     .executes(context -> {
                         QuiptConfig config = Quipt.INSTANCE.configs().config(QuiptConfig.class);

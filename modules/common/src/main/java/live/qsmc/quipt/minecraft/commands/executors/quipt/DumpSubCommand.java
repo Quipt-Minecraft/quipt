@@ -7,15 +7,15 @@ import live.qsmc.quipt.minecraft.commands.executors.QuiptCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-public class DumpSubCommand<S> extends QuiptSubCommand<S> {
+public class DumpSubCommand<S, P> extends QuiptSubCommand<S, P> {
 
-    public DumpSubCommand(QuiptCommand<S> root, String name) {
+    public DumpSubCommand(QuiptCommand<S, P> root, String name) {
         super(root, name);
     }
 
     @Override
     public int run(CommandContext<S> context) {
-        return command.showUsage(context, "");
+        return command.showUsage(context, root.command().permission(4));
     }
 
     @Override

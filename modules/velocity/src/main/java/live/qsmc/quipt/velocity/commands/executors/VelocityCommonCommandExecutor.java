@@ -8,9 +8,9 @@ import live.qsmc.quipt.minecraft.commands.CommonCommand;
 import live.qsmc.quipt.velocity.QuiptProxy;
 import live.qsmc.quipt.velocity.commands.VelocityCommandExecutor;
 
-public class VelocityCommonCommandExecutor<C extends CommonCommand<CommandSource>> extends VelocityCommandExecutor {
+public class VelocityCommonCommandExecutor<C extends CommonCommand<CommandSource, String>> extends VelocityCommandExecutor {
 
-    private final CommonCommand<CommandSource> common;
+    private final CommonCommand<CommandSource, String> common;
 
     public VelocityCommonCommandExecutor(QuiptProxy proxy, Class<C> commonClass, String cmd) {
         super(proxy, cmd);
@@ -24,6 +24,16 @@ public class VelocityCommonCommandExecutor<C extends CommonCommand<CommandSource
     @Override
     public LiteralArgumentBuilder<CommandSource> arguments() {
         return common.arguments(this);
+    }
+
+    public String permission(String id){
+        if(permissions().get(id).isEmpty())
+            permissions().register(id, id);
+        return permissions().get(id).get();
+    }
+
+    public String permission(int id){
+        return permission(String.valueOf(id));
     }
 }
 

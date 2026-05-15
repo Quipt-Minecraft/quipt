@@ -10,27 +10,29 @@ import live.qsmc.quipt.minecraft.commands.CommandBuilder;
 import live.qsmc.quipt.minecraft.commands.CommonCommand;
 import live.qsmc.quipt.minecraft.commands.executors.quipt.*;
 
-import java.util.Iterator;import static net.kyori.adventure.text.Component.text;
+import java.util.Iterator;
 
-public class WebhookCommand<S> extends CommonCommand<S> {
+import static net.kyori.adventure.text.Component.text;
 
-    public WebhookCommand(Command<S> command, MinecraftIntegration<?,?> integration) {
+public class WebhookCommand<S, P> extends CommonCommand<S, P> {
+
+    public WebhookCommand(Command<S, P> command, MinecraftIntegration<?,?> integration) {
         super(command, integration);
     }
 
     @Override
     public LiteralArgumentBuilder<S> arguments(CommandBuilder<S> builder) {
         return builder.literal(command().name())
-            .requires(sender -> command().hasPermission(sender, ""))
-            .executes(context -> command().showUsage(context, "lastlife.admin"))
+            .requires(sender -> command().hasPermission(sender, command().permission(4)))
+            .executes(context -> command().showUsage(context, command().permission(4)))
             .then(builder.literal("add")
-                .executes(context -> command().showUsage(context, "lastlife.admin"))
+                .executes(context -> command().showUsage(context, command().permission(4)))
                 .then(builder.argument("id", StringArgumentType.word())
                     .then(builder.argument("token", StringArgumentType.word())
                         .then(builder.argument("channel", StringArgumentType.word())
                             .executes(context -> {
                                 S sender = context.getSource();
-                                if (!command().hasPermission(sender, ""))
+                                if (!command().hasPermission(sender, command().permission(4)))
                                     return command().logError(context, "You do not have permission to use this command.");
 
                                 String id = StringArgumentType.getString(context, "id");
@@ -50,11 +52,11 @@ public class WebhookCommand<S> extends CommonCommand<S> {
                                 return 1;
                             })))))
             .then(builder.literal("remove")
-                .executes(context -> command().showUsage(context, "lastlife.admin"))
+                .executes(context -> command().showUsage(context, command().permission(4)))
                 .then(builder.argument("id", StringArgumentType.word())
                     .executes(context -> {
                         S sender = context.getSource();
-                        if (!command().hasPermission(sender, ""))
+                        if (!command().hasPermission(sender, command().permission(4)))
                             return command().logError(context, "You do not have permission to use this command.");
 
                         String id = StringArgumentType.getString(context, "id");

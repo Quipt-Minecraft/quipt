@@ -24,7 +24,7 @@ public class ResourcePackCommand extends PaperCommandExecutor {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return literal(name())
-                .executes(context -> showUsage(context, "quipt.admin.resourcepack"))
+                .executes(context -> showUsage(context, permission("quipt.admin.resourcepack")))
                 .then(literal("update")
                         .executes(context -> {
                             QuiptPaper.instance().packHandler().updatePack();
