@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 public abstract class QuiptProxy {
 
@@ -36,8 +37,8 @@ public abstract class QuiptProxy {
         server.getPluginManager().fromInstance(this).ifPresentOrElse(container -> {
             description = container.getDescription();
             JSONObject data = new JSONObject();
-            data.put("name", description.getName());
-            data.put("version", description.getVersion());
+            data.put("name", description.getName().orElse(description().getId()));
+            data.put("version", description.getVersion().or(()-> Optional.of("unknown")).orElseThrow());
             data.put("id", description.getId());
             data.put("folder", dataDirectory.toFile());
             Metadata metadata = Metadata.of(data);
