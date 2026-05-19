@@ -15,7 +15,11 @@ public class VelocityCommonCommandExecutor<C extends CommonCommand<CommandSource
     public VelocityCommonCommandExecutor(QuiptProxy proxy, Class<C> commonClass, String cmd) {
         super(proxy, cmd);
         try {
-            this.common = commonClass.getConstructor(Command.class, MinecraftIntegration.class).newInstance(this, proxy);
+            // The CommonCommand constructor expects (Command, MinecraftIntegration).
+            // Pass this executor as the Command and the proxy's integration instance
+            // (not the proxy itself) as the MinecraftIntegration parameter.
+            this.common = commonClass.getConstructor(Command.class, MinecraftIntegration.class)
+                    .newInstance(this, proxy.integration());
         } catch (Exception e) {
             throw new RuntimeException("Failed to instantiate common command", e);
         }
