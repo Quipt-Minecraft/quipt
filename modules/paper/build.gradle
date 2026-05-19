@@ -88,7 +88,11 @@ modrinth {
     versionNumber = "${version}"
     versionType = "${build_status}"
     gameVersions = outlet.mcVersions()
-    uploadFile = jar
+    // Upload the final shaded (fat) jar which includes bundled modules
+    uploadFile = shadowJar
     loaders = [project.name]
     syncBodyFrom = rootProject.file("readme.md").text
 }
+
+// Ensure the Modrinth upload runs after the shaded jar has been created
+tasks.modrinth.dependsOn(shadowJar)

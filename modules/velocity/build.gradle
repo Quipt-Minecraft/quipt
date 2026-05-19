@@ -61,3 +61,22 @@ tasks {
         }
     }
 }
+
+modrinth {
+    String test = System.getenv("MODRINTH_TOKEN")
+    System.out.println(test)
+    token = System.getenv("MODRINTH_TOKEN")
+    changelog = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+    projectId = "${modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${build_status}"
+    gameVersions = outlet.mcVersions()
+    // Upload the final shaded (fat) jar which contains bundled modules
+    uploadFile = shadowJar
+    loaders = [project.name]
+    syncBodyFrom = rootProject.file("readme.md").text
+}
+
+// Ensure the Modrinth upload runs after the shaded jar has been created
+tasks.modrinth.dependsOn(shadowJar)
+

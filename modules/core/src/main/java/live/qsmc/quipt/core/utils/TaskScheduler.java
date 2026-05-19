@@ -14,7 +14,13 @@ public class TaskScheduler {
         throw new IllegalAccessError("Utility class");
     }
 
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    // Use a daemon thread factory so scheduled threads won't prevent JVM exit if shutdown is missed
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("Quipt-Scheduler");
+        return t;
+    });
     private static boolean isShuttingDown = false;
 
     /**

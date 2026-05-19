@@ -159,7 +159,7 @@ public class QuiptCommand<S, P> extends CommonCommand<S, P> {
 
                                         String nameAndVersion = (groupSuffix.equals(name) ? name : groupSuffix + "-" + name) + "-" + version;
                                         // Run async to avoid blocking the server thread
-                                        new Thread(() -> {
+                                        Thread downloadThread = new Thread(() -> {
                                             try {
                                                 // Download selected artifact to a temp file first to avoid corrupting
                                                 // the existing jar if the download is interrupted mid-stream.
@@ -219,7 +219,10 @@ public class QuiptCommand<S, P> extends CommonCommand<S, P> {
                                             } catch (Exception e) {
                                                 command().sendMessage(source, text("Update failed: " + e.getMessage(), NamedTextColor.RED));
                                             }
-                                        }).start();
+                                        });
+                                        downloadThread.setDaemon(true);
+                                        downloadThread.setName("Quipt-Update-Downloader");
+                                        downloadThread.start();
 
                                         return com.mojang.brigadier.Command.SINGLE_SUCCESS;
                                     })))))))

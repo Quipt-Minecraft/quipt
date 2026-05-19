@@ -44,3 +44,4 @@ bin/
 ### Cache ###
 /.idea/
 /modules/*/run/
+/wiki/

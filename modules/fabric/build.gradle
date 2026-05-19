@@ -68,6 +68,9 @@ modrinth {
     syncBodyFrom = rootProject.file("readme.md").text
 }
 
+// Ensure remapped jar is produced before uploading to Modrinth
+tasks.modrinth.dependsOn(remapJar)
+
 test {
     useJUnitPlatform()
     failOnNoDiscoveredTests = false
