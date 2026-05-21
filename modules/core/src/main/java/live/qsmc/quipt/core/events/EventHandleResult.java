@@ -3,27 +3,32 @@ package live.qsmc.quipt.core.events;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventHandleResult<E extends Event<D>, D extends Event.Data, R> {
+public class EventHandleResult {
+
 
     private boolean cancelled = false;
 
-    List<R> results = new ArrayList<>();
+    List<EventProperties> results = new ArrayList<>();
 
-    public void process(EventListener<E, D, R> listener, E event) {
-        R result = listener.process(event);
+    EventHandleResult(){
+
+    }
+
+    public void process(EventListener<?,?> listener, Event<?> event) {
+        EventProperties result = listener.process(event);
         if (result != null)
             results.add(result);
     }
 
-    public boolean isCancelled() {
+    public boolean cancelled() {
         return cancelled;
     }
 
-    public void setCancelled(boolean cancelled) {
+    public void cancel(boolean cancelled) {
         this.cancelled = cancelled;
     }
 
-    public List<R> results() {
+    public List<EventProperties> results() {
         return results;
     }
 }

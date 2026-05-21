@@ -1,7 +1,7 @@
 package live.qsmc.quipt.core.events;
 
 
-public abstract class EventListener<E extends Event<D>, D extends Event.Data, R> {
+public abstract class EventListener<E extends Event<D>, D extends EventData> {
 
     private final Class<E> eventClass;
 
@@ -13,11 +13,12 @@ public abstract class EventListener<E extends Event<D>, D extends Event.Data, R>
         return eventClass;
     }
 
-    public abstract R handle(E event);
+    public abstract void handle(E event);
 
-    public R process(Event<?> event) {
+    public EventProperties process(Event<?> event) {
         if (eventClass.isInstance(event)) {
-            return handle(eventClass.cast(event));
+            handle(eventClass.cast(event));
+            return event.properties();
         }
         return null;
     }

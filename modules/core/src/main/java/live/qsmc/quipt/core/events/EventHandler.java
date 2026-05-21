@@ -6,7 +6,7 @@ import live.qsmc.quipt.core.data.registries.Registry;
 
 public class EventHandler {
 
-    protected Registry<EventListener<?,?,?>> listeners;
+    protected Registry<EventListener<?,?>> listeners;
 
     public EventHandler(QuiptIntegration integration) {
         this(integration, "default");
@@ -16,16 +16,20 @@ public class EventHandler {
         listeners = Quipt.INSTANCE.registries().register(integration.name() + ":" + key + ":listeners", () -> null);
     }
 
-    public void register(EventListener<?,?,?> listener) {
+    public void register(EventListener<?,?> listener) {
         listeners.register(listener.toString(), listener);
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends Event<D>, D extends Event.Data, R> EventHandleResult<E, D, R> handle(E event) {
-        EventHandleResult<E, D, R> result = new EventHandleResult<>();
+    public EventHandleResult handle(Event<?> event) {
+        EventHandleResult result = new EventHandleResult();
         listeners.forEach((key, listener) -> {
+            // Stop processing if event is cancellable and has been cancelled
+            if (event instanceof Event.Cancellable cancellable && cancellable.cancelled()) {
+                return;
+            }
             if (listener.eventClass().equals(event.getClass()))
-                result.process((EventListener<E,D,R>) listener, event);
+                result.process(listener, event);
         });
         return result;
     }
