@@ -1,5 +1,5 @@
 plugins {
-    id "fabric-loom"
+   id "net.fabricmc.fabric-loom"
 }
 
 
@@ -14,9 +14,8 @@ loom {
 dependencies {
 
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
 
     testImplementation platform("org.junit:junit-bom:$junit_version")
@@ -35,7 +34,7 @@ dependencies {
     implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version")
     implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version")
 
-    modImplementation include("net.kyori:adventure-platform-fabric:6.8.0")
+    implementation include("net.kyori:adventure-platform-fabric:6.8.0")
 
     implementation project(":modules:core")
     include project(":modules:core")
@@ -63,13 +62,13 @@ modrinth {
     versionNumber = "${version}"
     versionType = "${build_status}"
     gameVersions = outlet.mcVersions()
-    uploadFile = remapJar
+    uploadFile = jar
     loaders = [project.name]
     syncBodyFrom = rootProject.file("readme.md").text
 }
 
 // Ensure remapped jar is produced before uploading to Modrinth
-tasks.modrinth.dependsOn(remapJar)
+tasks.modrinth.dependsOn(jar)
 
 test {
     useJUnitPlatform()
@@ -79,11 +78,11 @@ test {
 jar {
     archiveClassifier = "dev"
 }
-
-remapJar {
-    inputFile = jar.archiveFile
-    archiveClassifier = ""
-}
+//
+//remapJar {
+//    inputFile = jar.archiveFile
+//    archiveClassifier = ""
+//}
 
 
 

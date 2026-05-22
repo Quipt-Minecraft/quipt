@@ -1,11 +1,11 @@
 package live.qsmc.quipt.fabric.blocks.abstracts;
 
-import live.qsmc.quipt.fabric.blocks.abstracts.properties.BlockProperty;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public interface QuiptBlock {
     Block block();
 
-    BlockProperty<?>[] properties();
+    BlockBehaviour.Properties properties();
 
 }

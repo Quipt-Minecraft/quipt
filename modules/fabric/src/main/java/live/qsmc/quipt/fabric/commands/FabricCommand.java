@@ -2,12 +2,13 @@ package live.qsmc.quipt.fabric.commands;
 
 import live.qsmc.quipt.fabric.QuiptMod;
 import net.kyori.adventure.text.Component;
-import net.minecraft.command.permission.Permission;
-import net.minecraft.command.permission.PermissionLevel;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.Identifier;
 
-public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.Command<ServerCommandSource, Permission> {
+public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.Command<CommandSourceStack, Permission> {
 
     private final QuiptMod mod;
 
@@ -18,14 +19,14 @@ public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.C
 
     public Permission permission(String id){
         if(permissions().get(id).isEmpty())
-            permissions().register(id, new Permission.Atom(Identifier.of(id)));
+            permissions().register(id, new Permission.Atom(Identifier.parse(id)));
         return permissions().get(id).get();
     }
 
     public Permission permission(int id){
         String idStr = String.valueOf(id);
         if(permissions().get(idStr).isEmpty())
-            permissions().register(idStr, new Permission.Level(PermissionLevel.fromLevel(id)));
+            permissions().register(idStr, new Permission.HasCommandLevel(PermissionLevel.byId(id)));
         return permissions().get(idStr).get();
     }
 
@@ -34,13 +35,23 @@ public abstract class FabricCommand extends live.qsmc.quipt.minecraft.commands.C
     }
 
     @Override
-    public void sendMessage(ServerCommandSource source, Component message) {
-        source.sendMessage(message);
+    public void sendMessage(CommandSourceStack source, Component message) {
+        net.minecraft.network.chat.Component minecraftComponent =
+            net.minecraft.network.chat.ComponentSerialization.CODEC
+                .parse(
+                    com.mojang.serialization.JsonOps.INSTANCE,
+                    com.google.gson.JsonParser.parseString(
+                        net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson()
+                            .serialize(message)
+                    )
+                )
+                .getOrThrow();
+        source.sendSystemMessage(minecraftComponent);
     }
 
     @Override
-    public boolean hasPermission(ServerCommandSource source, Permission permission) {
-        return source.getPermissions().hasPermission(permission);
+    public boolean hasPermission(CommandSourceStack source, Permission permission) {
+        return source.permissions().hasPermission(permission);
     }
 
 }

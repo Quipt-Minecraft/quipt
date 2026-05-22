@@ -1,7 +1,8 @@
 package live.qsmc.quipt.fabric.particles;
 
-import net.minecraft.particle.ParticleEffect;
 
-public interface QuiptParticleEffect extends ParticleEffect {
+import net.minecraft.core.particles.ParticleOptions;
+
+public interface QuiptParticleEffect extends ParticleOptions {
     float getScale();
 }

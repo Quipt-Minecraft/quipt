@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -59,7 +59,7 @@ public abstract class QuiptMod implements ModInitializer {
         public Identifier identifier(String id) {
             if(id.contains(":"))
                 return Identifier.tryParse(id);
-            return Identifier.of(id(), id);
+            return Identifier.fromNamespaceAndPath(id(), id);
         }
     }
 }

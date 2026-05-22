@@ -1,13 +1,13 @@
 package live.qsmc.quipt.fabric.blocks.abstracts.properties;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class BlockEnumProperty<T extends Enum<T> & StringIdentifiable> extends BlockProperty<T> {
+public class BlockEnumProperty<T extends Enum<T> & StringRepresentable> extends BlockProperty<T> {
     private final List<T> values;
     private final Map<String, T> byName;
     private final int[] enumOrdinalToPropertyOrdinal;
@@ -28,7 +28,7 @@ public class BlockEnumProperty<T extends Enum<T> & StringIdentifiable> extends B
             ImmutableMap.Builder<String, T> builder = ImmutableMap.builder();
 
             for (T enum2 : values) {
-                String string = enum2.asString();
+                String string = enum2.getSerializedName();
                 builder.put(string, enum2);
             }
 
@@ -38,20 +38,20 @@ public class BlockEnumProperty<T extends Enum<T> & StringIdentifiable> extends B
 
 
     @Override
-    public List<T> getValues() {
+    public List<T> getPossibleValues() {
         return this.values;
     }
 
     @Override
-    public Optional<T> parse(String name) {
+    public Optional<T> getValue(String name) {
         return Optional.ofNullable((T) this.byName.get(name));
     }
 
-    public String name(T enum_) {
-        return enum_.asString();
+    public String getName(T enum_) {
+        return enum_.getSerializedName();
     }
 
-    public int ordinal(T enum_) {
+    public int getInternalIndex(T enum_) {
         return this.enumOrdinalToPropertyOrdinal[enum_.ordinal()];
     }
 
@@ -65,12 +65,12 @@ public class BlockEnumProperty<T extends Enum<T> & StringIdentifiable> extends B
     }
 
     @Override
-    public int computeHashCode() {
-        int i = super.computeHashCode();
+    public int generateHashCode() {
+        int i = super.generateHashCode();
         return 31 * i + this.values.hashCode();
     }
 
-    public static <T extends Enum<T> & StringIdentifiable> BlockEnumProperty<T> of(String name, Class<T> type, T defaultValue) {
+    public static <T extends Enum<T> & StringRepresentable> BlockEnumProperty<T> of(String name, Class<T> type, T defaultValue) {
         
         return of(name, type, defaultValue, type.getEnumConstants());
     }
@@ -79,11 +79,11 @@ public class BlockEnumProperty<T extends Enum<T> & StringIdentifiable> extends B
 
    
     @SafeVarargs
-    public static <T extends Enum<T> & StringIdentifiable> BlockEnumProperty<T> of(String name, Class<T> type, T defaultValue, T... values) {
+    public static <T extends Enum<T> & StringRepresentable> BlockEnumProperty<T> of(String name, Class<T> type, T defaultValue, T... values) {
         return of(name, type, List.of(values), defaultValue);
     }
     
-    public static <T extends Enum<T> & StringIdentifiable> BlockEnumProperty<T> of(String name, Class<T> type, List<T> values, T defaultValue) {
+    public static <T extends Enum<T> & StringRepresentable> BlockEnumProperty<T> of(String name, Class<T> type, List<T> values, T defaultValue) {
         return new BlockEnumProperty<>(name, type, values, defaultValue);
     }
 }

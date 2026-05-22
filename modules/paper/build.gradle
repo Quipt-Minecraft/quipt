@@ -25,7 +25,7 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "ch.qos.logback:logback-classic:$logback_version"
 
-    compileOnly "io.papermc.paper:paper-api:${minecraft_version}-${paperweight_build}"
+    compileOnly "io.papermc.paper:paper-api:${minecraft_version}.build.${paper_build_number}-${paper_build_channel}"
     implementation "org.json:json:$json_version"
 
     implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"

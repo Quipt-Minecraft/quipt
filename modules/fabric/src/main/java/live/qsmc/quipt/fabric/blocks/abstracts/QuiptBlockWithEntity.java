@@ -1,10 +1,11 @@
 package live.qsmc.quipt.fabric.blocks.abstracts;
 
-import net.minecraft.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
-public abstract class QuiptBlockWithEntity extends BlockWithEntity implements QuiptBlock {
+public abstract class QuiptBlockWithEntity extends BaseEntityBlock implements QuiptBlock {
 
-    protected QuiptBlockWithEntity(Settings settings) {
+    protected QuiptBlockWithEntity(BlockBehaviour.Properties settings) {
         super(settings);
     }
 }

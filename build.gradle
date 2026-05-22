@@ -4,7 +4,7 @@ import groovy.text.SimpleTemplateEngine
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom' version '1.14-SNAPSHOT' apply false
+    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.gradleup.shadow' version '8.3.6' apply false

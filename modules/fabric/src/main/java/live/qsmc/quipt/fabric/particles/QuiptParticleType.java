@@ -1,6 +1,7 @@
 package live.qsmc.quipt.fabric.particles;
 
-import net.minecraft.particle.ParticleType;
+
+import net.minecraft.core.particles.ParticleType;
 
 public abstract class QuiptParticleType<T extends QuiptParticleEffect> extends ParticleType<T> {
 

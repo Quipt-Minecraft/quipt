@@ -26,7 +26,7 @@ public class BlockIntProperty extends BlockProperty<Integer> {
     }
 
     @Override
-    public List<Integer> getValues() {
+    public List<Integer> getPossibleValues() {
         return this.values;
     }
 
@@ -40,8 +40,8 @@ public class BlockIntProperty extends BlockProperty<Integer> {
     }
 
     @Override
-    public int computeHashCode() {
-        return 31 * super.computeHashCode() + this.values.hashCode();
+    public int generateHashCode() {
+        return 31 * super.generateHashCode() + this.values.hashCode();
     }
 
     /**
@@ -61,7 +61,7 @@ public class BlockIntProperty extends BlockProperty<Integer> {
     }
 
     @Override
-    public Optional<Integer> parse(String name) {
+    public Optional<Integer> getValue(String name) {
         try {
             int i = Integer.parseInt(name);
             return i >= this.min && i <= this.max ? Optional.of(i) : Optional.empty();
@@ -70,11 +70,11 @@ public class BlockIntProperty extends BlockProperty<Integer> {
         }
     }
 
-    public String name(Integer integer) {
+    public String getName(Integer integer) {
         return integer.toString();
     }
 
-    public int ordinal(Integer integer) {
+    public int getInternalIndex(Integer integer) {
         return integer <= this.max ? integer - this.min : -1;
     }
 }

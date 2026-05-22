@@ -1,9 +1,9 @@
 package live.qsmc.quipt.fabric.commands;
 
 import live.qsmc.quipt.fabric.QuiptMod;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
-public abstract class SubCommandExecutor extends FabricCommand implements com.mojang.brigadier.Command<ServerCommandSource> {
+public abstract class SubCommandExecutor extends FabricCommand implements com.mojang.brigadier.Command<CommandSourceStack> {
 
     private final FabricCommand root;
 

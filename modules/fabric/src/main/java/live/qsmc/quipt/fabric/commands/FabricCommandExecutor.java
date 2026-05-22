@@ -7,30 +7,30 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import live.qsmc.quipt.fabric.QuiptMod;
 import live.qsmc.quipt.minecraft.commands.CommandBuilder;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
-public abstract class FabricCommandExecutor extends FabricCommand implements CommandBuilder<ServerCommandSource> {
+public abstract class FabricCommandExecutor extends FabricCommand implements CommandBuilder<CommandSourceStack> {
 
 
     public FabricCommandExecutor(QuiptMod mod, String cmd) {
         super(mod, cmd);
     }
 
-    public LiteralCommandNode<ServerCommandSource> execute() {
+    public LiteralCommandNode<CommandSourceStack> execute() {
         return arguments().build();
     }
 
-    public abstract LiteralArgumentBuilder<ServerCommandSource> arguments();
+    public abstract LiteralArgumentBuilder<CommandSourceStack> arguments();
 
-    public LiteralArgumentBuilder<ServerCommandSource> builder() {
+    public LiteralArgumentBuilder<CommandSourceStack> builder() {
         return literal(name());
     }
 
-    public LiteralArgumentBuilder<ServerCommandSource> literal(String name) {
+    public LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
-    public <T> RequiredArgumentBuilder<ServerCommandSource, T> argument(String name, ArgumentType<T> type) {
+    public <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 
@@ -43,7 +43,7 @@ public abstract class FabricCommandExecutor extends FabricCommand implements Com
 
         public void register() {
             CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-                LiteralArgumentBuilder<ServerCommandSource> builder = cmd.arguments();
+                LiteralArgumentBuilder<CommandSourceStack> builder = cmd.arguments();
                 dispatcher.register(builder);
             });
         }

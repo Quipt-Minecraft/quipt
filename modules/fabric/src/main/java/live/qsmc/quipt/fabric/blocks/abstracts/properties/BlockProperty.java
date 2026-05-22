@@ -1,6 +1,7 @@
 package live.qsmc.quipt.fabric.blocks.abstracts.properties;
 
-import net.minecraft.state.property.Property;
+
+import net.minecraft.world.level.block.state.properties.Property;
 
 public abstract class BlockProperty<T extends Comparable<T>> extends Property<T> {
 

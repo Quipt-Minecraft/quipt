@@ -6,12 +6,12 @@ import live.qsmc.quipt.minecraft.commands.CommonCommand;
 import live.qsmc.quipt.fabric.QuiptMod;
 import live.qsmc.quipt.fabric.commands.FabricCommandExecutor;
 import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
-import net.minecraft.command.permission.Permission;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.commands.CommandSourceStack;
 
-public class FabricCommonCommandExecutor<C extends CommonCommand<ServerCommandSource, Permission>> extends FabricCommandExecutor {
+public class FabricCommonCommandExecutor<C extends CommonCommand<CommandSourceStack, Permission>> extends FabricCommandExecutor {
 
-    private final CommonCommand<ServerCommandSource, Permission> common;
+    private final CommonCommand<CommandSourceStack, Permission> common;
 
     public FabricCommonCommandExecutor(QuiptMod mod, Class<C> commonClass, String cmd) {
         super(mod, cmd);
@@ -23,7 +23,7 @@ public class FabricCommonCommandExecutor<C extends CommonCommand<ServerCommandSo
     }
 
     @Override
-    public LiteralArgumentBuilder<ServerCommandSource> arguments() {
+    public LiteralArgumentBuilder<CommandSourceStack> arguments() {
         return common.arguments(this);
     }
 }

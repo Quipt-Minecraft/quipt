@@ -15,7 +15,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 import static net.kyori.adventure.text.Component.text;
 
@@ -25,7 +25,7 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
 
     private ResourcePackHandler packHandler = null;
 
-    public static Identifier BUNGEE_CHANNEL = Identifier.of("bungeecord", "main");
+    public static Identifier BUNGEE_CHANNEL = Identifier.fromNamespaceAndPath("bungeecord", "main");
 
 
 
@@ -102,10 +102,10 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
         //Load other Quipt mods
         FabricLoader.getInstance().getEntrypointContainers("quipt", QuiptMod.class)
                 .forEach(container -> container.getEntrypoint().run(container));
-        PayloadTypeRegistry.playS2C().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
-        PayloadTypeRegistry.playC2S().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
+//        PayloadTypeRegistry.clientboundPlay().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
+//        PayloadTypeRegistry.serverboundPlay().register(PluginMessagePacket.CHANNEL_ID, PluginMessagePacket.CODEC);
 
-        ServerPlayNetworking.registerGlobalReceiver(PluginMessagePacket.CHANNEL_ID, this);
+//        ServerPlayNetworking.registerGlobalReceiver(PluginMessagePacket.CHANNEL_ID, this);
 
         // Register server lifecycle listener for graceful shutdown
         ServerLifecycleEvents.SERVER_STOPPING.register(new FabricLifecycleListener());

@@ -1,57 +1,57 @@
 package live.qsmc.quipt.fabric.particles;
 
-import net.minecraft.client.particle.BillboardParticle;
-import net.minecraft.client.particle.SpriteProvider;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.Mth;
 
-public abstract class AbstractQuiptParticle<T extends QuiptParticleEffect> extends BillboardParticle {
-    private final SpriteProvider spriteProvider;
+public abstract class AbstractQuiptParticle<T extends QuiptParticleEffect> extends SingleQuadParticle {
+    private final SpriteSet SpriteSet;
 
-    protected AbstractQuiptParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, T parameters, SpriteProvider spriteProvider) {
-        super(world, x, y, z, velocityX, velocityY, velocityZ, spriteProvider.getFirst());
-        this.velocityMultiplier = 0.96F;
-        this.ascending = true;
-        this.spriteProvider = spriteProvider;
-        this.velocityX *= 0.1F;
-        this.velocityY *= 0.1F;
-        this.velocityZ *= 0.1F;
-        this.scale *= 0.75F * parameters.getScale();
+    protected AbstractQuiptParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, T parameters, SpriteSet SpriteSet) {
+        super(world, x, y, z, velocityX, velocityY, velocityZ, SpriteSet.first());
+        this.friction = 0.96F;
+        this.speedUpWhenYMotionIsBlocked = true;
+        this.SpriteSet = SpriteSet;
+        this.xd *= 0.1F;
+        this.yd *= 0.1F;
+        this.zd *= 0.1F;
+        this.quadSize *= 0.75F * parameters.getScale();
         int i = (int)((double)8.0F / (this.random.nextDouble() * 0.8 + 0.2));
-        this.maxAge = (int)Math.max((float)i * parameters.getScale(), 1.0F);
-        this.updateSprite(spriteProvider);
+        this.lifetime = (int)Math.max((float)i * parameters.getScale(), 1.0F);
+        this.setSpriteFromAge(SpriteSet);
     }
 
     protected float darken(float colorComponent, float multiplier) {
         return (this.random.nextFloat() * 0.2F + 0.8F) * colorComponent * multiplier;
     }
 
-    public BillboardParticle.RenderType getRenderType() {
-        return RenderType.PARTICLE_ATLAS_OPAQUE;
+    public SingleQuadParticle.Layer getLayer() {
+        return SingleQuadParticle.Layer.OPAQUE;
     }
 
     public float getSize(float tickProgress) {
-        return this.scale * MathHelper.clamp(((float)this.age + tickProgress) / (float)this.maxAge * 32.0F, 0.0F, 1.0F);
+        return this.quadSize * Mth.clamp(((float)this.age + tickProgress) / (float)this.lifetime * 32.0F, 0.0F, 1.0F);
     }
 
     public void tick() {
         super.tick();
-        this.updateSprite(this.spriteProvider);
+        this.setSpriteFromAge(this.SpriteSet);
     }
 }
 
-//protected AbstractQuiptParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, T parameters, SpriteProvider spriteProvider) {
+//protected AbstractQuiptParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, T parameters, SpriteSet SpriteSet) {
 //        super(world, x, y, z, velocityX, velocityY, velocityZ);
 //        this.velocityMultiplier = 0.96F;
 //        this.ascending = true;
-//        this.spriteProvider = spriteProvider;
+//        this.SpriteSet = SpriteSet;
 //        this.velocityX *= (double)0.1F;
 //        this.velocityY *= (double)0.1F;
 //        this.velocityZ *= (double)0.1F;
 //        this.scale *= 0.75F * parameters.getScale();
 //        int i = (int)((double)8.0F / (this.random.nextDouble() * 0.8 + 0.2));
 //        this.maxAge = (int)Math.max((float)i * parameters.getScale(), 1.0F);
-//        this.setSpriteForAge(spriteProvider);
+//        this.setSpriteForAge(SpriteSet);
 //    }
 //
 //    protected float darken(float colorComponent, float multiplier) {
@@ -63,6 +63,6 @@ public abstract class AbstractQuiptParticle<T extends QuiptParticleEffect> exten
 //    }
 //
 //    public float getSize(float tickDelta) {
-//        return this.scale * MathHelper.clamp(((float)this.age + tickDelta) / (float)this.maxAge * 32.0F, 0.0F, 1.0F);
+//        return this.scale * Mth.clamp(((float)this.age + tickDelta) / (float)this.maxAge * 32.0F, 0.0F, 1.0F);
 //    }
 //}

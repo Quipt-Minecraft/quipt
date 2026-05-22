@@ -13,7 +13,7 @@ public class BlockBooleanProperty extends BlockProperty<Boolean> {
     }
 
     @Override
-    public List<Boolean> getValues() {
+    public List<Boolean> getPossibleValues() {
         return values;
     }
 
@@ -23,7 +23,7 @@ public class BlockBooleanProperty extends BlockProperty<Boolean> {
     }
 
     @Override
-    public Optional<Boolean> parse(String name) {
+    public Optional<Boolean> getValue(String name) {
         return switch (name) {
             case "true" -> Optional.of(true);
             case "false" -> Optional.of(false);
@@ -31,11 +31,11 @@ public class BlockBooleanProperty extends BlockProperty<Boolean> {
         };
     }
 
-    public String name(Boolean boolean_) {
+    public String getName(Boolean boolean_) {
         return boolean_.toString();
     }
 
-    public int ordinal(Boolean boolean_) {
+    public int getInternalIndex(Boolean boolean_) {
         return boolean_ ? 0 : 1;
     }
 }

@@ -1,12 +1,13 @@
 package live.qsmc.quipt.fabric.blocks.abstracts;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.PillarBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
-public abstract class QuiptPillarBlock extends PillarBlock implements QuiptBlock {
+public abstract class QuiptPillarBlock extends RotatedPillarBlock implements QuiptBlock {
 
 
-    public QuiptPillarBlock(Settings settings) {
+    public QuiptPillarBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
