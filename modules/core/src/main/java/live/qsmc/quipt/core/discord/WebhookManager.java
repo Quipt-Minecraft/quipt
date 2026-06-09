@@ -1,17 +1,19 @@
-package live.qsmc.quipt.core.config.files;
+package live.qsmc.quipt.core.discord;
 
 import live.qsmc.quipt.core.config.objects.ConfigMap;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.Config;
 import live.qsmc.quipt.core.config.ConfigTemplate;
 import live.qsmc.quipt.core.config.ConfigValue;
-import live.qsmc.quipt.core.data.exceptions.SimpleQuiptException;
-import live.qsmc.quipt.core.discord.Webhook;
 import live.qsmc.quipt.core.discord.embed.Embed;
+import live.qsmc.quipt.core.utils.net.HttpConfig;
+import live.qsmc.quipt.core.utils.net.HttpHeaders;
+import live.qsmc.quipt.core.utils.net.NetworkUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,7 +21,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @ConfigTemplate(name = "webhooks", ext = ConfigTemplate.Extension.JSON)
-public class WebhookConfig extends Config {
+public class WebhookManager extends Config {
 
     @ConfigValue
     public ConfigMap<Webhook> webhooks;
@@ -32,7 +34,7 @@ public class WebhookConfig extends Config {
      * @param extension   The extension of the config
      * @param integration The plugin that owns this config
      */
-    public WebhookConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
+    public WebhookManager(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
         webhooks = new ConfigMap<>(integration);
     }
@@ -75,10 +77,10 @@ public class WebhookConfig extends Config {
      *
      * @param webhookName The name of the webhook
      * @param embed       The embed to send
-     * @throws SimpleQuiptException If the request fails
+     * @throws FileNotFoundException If the request fails
      */
-    public void send(String webhookName, Embed embed) throws SimpleQuiptException {
-        send(get(webhookName), embed);
+    public HttpResponse<String> send(String webhookName, Embed embed) throws FileNotFoundException {
+        return send(get(webhookName), embed);
     }
 
     /**
@@ -86,12 +88,12 @@ public class WebhookConfig extends Config {
      *
      * @param hook  The webhook to send to
      * @param embed The embed to send
-     * @throws SimpleQuiptException If the request fails
+     * @throws FileNotFoundException If the request fails
      */
-    public void send(Webhook hook, Embed embed) throws SimpleQuiptException {
+    public HttpResponse<String> send(Webhook hook, Embed embed) throws FileNotFoundException {
         JSONObject data = new JSONObject();
         data.put("embeds", new JSONArray().put(embed.json()));
-        send(hook, data);
+        return send(hook, data);
     }
 
     /**
@@ -99,10 +101,10 @@ public class WebhookConfig extends Config {
      *
      * @param webhookName The name of the webhook
      * @param data        The data to send
-     * @throws SimpleQuiptException If the request fails
+     * @throws FileNotFoundException If the request fails
      */
-    public void send(String webhookName, JSONObject data) throws SimpleQuiptException {
-        send(get(webhookName), data);
+    public HttpResponse<String> send(String webhookName, JSONObject data) throws FileNotFoundException {
+        return send(get(webhookName), data);
     }
 
     /**
@@ -110,10 +112,10 @@ public class WebhookConfig extends Config {
      *
      * @param webhookName The webhook to send to
      * @param message The data to send
-     * @throws SimpleQuiptException If the request fails
+     * @throws FileNotFoundException If the request fails
      */
-    public void send(String webhookName, String message) throws SimpleQuiptException {
-        send(get(webhookName), message);
+    public HttpResponse<String> send(String webhookName, String message) throws FileNotFoundException {
+        return send(get(webhookName), message);
     }
 
     /**
@@ -121,13 +123,12 @@ public class WebhookConfig extends Config {
      *
      * @param hook    The webhook to send to
      * @param message The data to send
-     * @throws SimpleQuiptException If the request fails
+     * @throws FileNotFoundException If the request fails
      */
-    public void send(Webhook hook, String message) throws SimpleQuiptException {
+    public HttpResponse<String> send(Webhook hook, String message) throws FileNotFoundException {
         JSONObject data = new JSONObject();
         data.put("content", message);
-        send(hook, data);
-
+        return send(hook, data);
     }
 
     /**
@@ -135,35 +136,9 @@ public class WebhookConfig extends Config {
      *
      * @param hook The webhook to send to
      * @param data The data to send
-     * @throws SimpleQuiptException If the request fails
+     * @throws FileNotFoundException If the request fails
      */
-    public void send(Webhook hook, JSONObject data) throws SimpleQuiptException {
-        HttpRequest request = HttpRequest.newBuilder(URI.create(hook.url())).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(data.toString())).build();
-
-        final HttpClient client = HttpClient.newHttpClient();
-
-        final HttpResponse<String> response;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            throw new SimpleQuiptException("Failed to send http request!");
-        }
-
-        final int statusCode = response.statusCode();
-        if (!(statusCode >= 200 && statusCode < 300)) {
-            throw new SimpleQuiptException("Http status code " + statusCode + "! Response was: '" + response.body() + "'.");
-        }
-
-        // From JDK 21 the HttpClient class extends AutoCloseable, but as we want to support Minecraft versions
-        //  that use JDK 17, where HttpClient doesn't extend AutoCloseable, we need to check if it's
-        //  an instance of AutoCloseable before trying to close it.
-        //noinspection ConstantValue
-        if (client instanceof AutoCloseable) {
-            try {
-                ((AutoCloseable) client).close();
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            }
-        }
+    public HttpResponse<String> send(Webhook hook, JSONObject data) throws FileNotFoundException {
+        return NetworkUtils.post(HttpConfig.defaults(HttpHeaders.CONTENT_TYPE("application/json")), hook.url(), data);
     }
 }

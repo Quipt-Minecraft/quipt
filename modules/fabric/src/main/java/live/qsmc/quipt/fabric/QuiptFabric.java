@@ -8,6 +8,7 @@ import live.qsmc.quipt.fabric.commands.FabricCommandExecutor;
 import live.qsmc.quipt.fabric.net.PluginMessageEvent;
 import live.qsmc.quipt.fabric.net.PluginMessagePacket;
 import live.qsmc.quipt.fabric.listener.FabricLifecycleListener;
+import live.qsmc.quipt.minecraft.commands.executors.WebhookCommand;
 import live.qsmc.quipt.minecraft.server.ResourcePackHandler;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -99,6 +100,7 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
         initialize(FabricLoader.getInstance().getModContainer("quipt").get());
 //        new FabricCommandExecutor.Builder(new UpdateCommand(this)).register();
         new FabricCommandExecutor.Builder(new FabricCommonCommandExecutor<>(this, QuiptCommand.class, "quipt")).register();
+        new FabricCommandExecutor.Builder(new FabricCommonCommandExecutor<>(this, WebhookCommand.class, "webhooks")).register();
         //Load other Quipt mods
         FabricLoader.getInstance().getEntrypointContainers("quipt", QuiptMod.class)
                 .forEach(container -> container.getEntrypoint().run(container));
@@ -109,6 +111,8 @@ public class QuiptFabric extends QuiptMod implements ServerPlayNetworking.PlayPa
 
         // Register server lifecycle listener for graceful shutdown
         ServerLifecycleEvents.SERVER_STOPPING.register(new FabricLifecycleListener());
+
+
     }
 
     @Override

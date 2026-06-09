@@ -1,8 +1,11 @@
 package live.qsmc.quipt.core.utils.net;
 
+
 import java.util.Base64;
 
 public class HttpHeaders {
+
+    public static HttpHeader CONTENT_TYPE(String value) { return new HttpHeader("Content-Type", value); }
 
     public static HttpHeader EXPECT(String value) {
         return new HttpHeader("Expect", value);

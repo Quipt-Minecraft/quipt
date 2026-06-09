@@ -57,6 +57,8 @@ public class NetworkUtils {
         return get(config, url, HttpResponse.BodyHandlers.ofString());
     }
 
+
+
     /**
      * Perform a GET request and decode the response body using a custom
      * {@link HttpResponse.BodyHandler}. This is useful for binary data
@@ -72,6 +74,42 @@ public class NetworkUtils {
      */
     public static <T> HttpResponse<T> get(HttpConfig config, String url, HttpResponse.BodyHandler<T> responseBodyHandler) throws FileNotFoundException {
         return request(config, url, HttpMethod.GET, null, responseBodyHandler);
+    }
+
+    /**
+     * Perform a PATCH request with an optional JSON body, decoding the response
+     * as a String using the default {@link HttpResponse.BodyHandlers#ofString()} handler.
+     * <p>
+     * The {@code body} parameter is null-safe. If it is {@code null}, an empty
+     * request body is sent.
+     *
+     * @param config request configuration (headers, timeout, etc.)
+     * @param url    absolute URL to post to
+     * @param body   JSON payload or {@code null}
+     * @return the completed HTTP response with a String body
+     * @throws RuntimeException if the request fails or is interrupted
+     */
+    public static HttpResponse<String> patch(HttpConfig config, String url, @Nullable JSONObject body) throws FileNotFoundException {
+        return patch(config, url, body, HttpResponse.BodyHandlers.ofString());
+    }
+
+    /**
+     * Perform a PATCH request with an optional JSON body and a custom
+     * {@link HttpResponse.BodyHandler} for the response.
+     * <p>
+     * The {@code body} parameter is null-safe. If it is {@code null}, an empty
+     * request body is sent.
+     *
+     * @param config              request configuration (headers, timeout, etc.)
+     * @param url                 absolute URL to post to
+     * @param body                JSON payload or {@code null}
+     * @param responseBodyHandler handler that controls how the response body is produced
+     * @param <T>                 the type produced by the handler
+     * @return the completed HTTP response with a body of type {@code T}
+     * @throws RuntimeException if the request fails or is interrupted
+     */
+    public static <T> HttpResponse<T> patch(HttpConfig config, String url, @Nullable JSONObject body, HttpResponse.BodyHandler<T> responseBodyHandler) throws FileNotFoundException {
+        return request(config, url, HttpMethod.PATCH, body, responseBodyHandler);
     }
 
     /**
@@ -135,52 +173,27 @@ public class NetworkUtils {
             builder.header(header.name, header.value);
         switch (method) {
             case GET -> builder.GET();
-            case POST -> {
-                if(body instanceof File file){
+            case POST, PUT, PATCH -> {
+
+                if (body instanceof File file) {
                     try {
-                        String boundry = UUID.randomUUID().toString();
+                        String boundary = UUID.randomUUID().toString();
                         byte[] fileBytes = Files.readAllBytes(file.toPath());
                         String fileName = file.getName();
                         String mimeType = Files.probeContentType(file.toPath());
 
-                        String bodyStart = "--" + boundry + "\r\n" +
+                        String bodyStart = "--" + boundary + "\r\n" +
                             "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
                             "Content-Type: " + mimeType + "\r\n\r\n";
-                        String bodyEnd = "\r\n--" + boundry + "--";
+                        String bodyEnd = "\r\n--" + boundary + "--";
                         byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
-
-                        builder.header("Content-Type", "multipart/form-data; boundary=" + boundry)
-                            .POST(HttpRequest.BodyPublishers.ofByteArray(bodyBytes));
+                        builder.header("Content-Type", "multipart/form-data; boundary=" + boundary).method(method.name(), HttpRequest.BodyPublishers.ofByteArray(bodyBytes));
                     } catch (IOException e) {
                         //todo better error handling
                         throw new RuntimeException(e);
                     }
-                } else{
-                    builder.POST(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
-                }
-            }
-            case PUT ->{
-                if(body instanceof File file){
-                    try {
-                        String boundry = UUID.randomUUID().toString();
-                        byte[] fileBytes = Files.readAllBytes(file.toPath());
-                        String fileName = file.getName();
-                        String mimeType = Files.probeContentType(file.toPath());
-
-                        String bodyStart = "--" + boundry + "\r\n" +
-                            "Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n" +
-                            "Content-Type: " + mimeType + "\r\n\r\n";
-                        String bodyEnd = "\r\n--" + boundry + "--";
-                        byte[] bodyBytes = concat(bodyStart.getBytes(), fileBytes, bodyEnd.getBytes());
-
-                        builder.header("Content-Type", "multipart/form-data; boundary=" + boundry)
-                            .PUT(HttpRequest.BodyPublishers.ofByteArray(bodyBytes));
-                    } catch (IOException e) {
-                        //todo better error handling
-                        throw new RuntimeException(e);
-                    }
-                } else{
-                    builder.PUT(HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
+                } else {
+                    builder.method(method.name(), HttpRequest.BodyPublishers.ofString(body != null ? body.toString() : ""));
                 }
             }
             case DELETE -> builder.DELETE();

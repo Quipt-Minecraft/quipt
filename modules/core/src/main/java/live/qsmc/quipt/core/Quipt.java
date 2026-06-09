@@ -1,8 +1,9 @@
 package live.qsmc.quipt.core;
 
+import live.qsmc.quipt.core.charity.CharityManager;
 import live.qsmc.quipt.core.config.factories.GenericFactory;
 import live.qsmc.quipt.core.config.files.QuiptConfig;
-import live.qsmc.quipt.core.config.files.WebhookConfig;
+import live.qsmc.quipt.core.discord.WebhookManager;
 import live.qsmc.quipt.core.data.registries.Registries;
 import live.qsmc.quipt.core.data.registries.Registry;
 import live.qsmc.quipt.core.discord.Webhook;
@@ -27,6 +28,8 @@ public class Quipt extends QuiptIntegration {
     private QuiptServer server = null;
 
     private EventHandler eventHandler = null;
+
+    private CharityManager charities = null;
 
     public Quipt(){
         this.integrationRegistry = registries().register("integrations", () -> null);
@@ -91,13 +94,13 @@ public class Quipt extends QuiptIntegration {
         return true;
     }
 
-    public WebhookConfig webhooks(){
-        if(configs().config(WebhookConfig.class) == null){
+    public WebhookManager webhooks(){
+        if(configs().config(WebhookManager.class) == null){
             logger().log("Webhooks", "Initializing Webhook Config...");
             configs().factory(new GenericFactory<>(Webhook.class));
-            configs().register(WebhookConfig.class);
+            configs().register(WebhookManager.class);
         }
-        return configs().config(WebhookConfig.class);
+        return configs().config(WebhookManager.class);
     }
 
     public EventHandler events(){
@@ -111,5 +114,13 @@ public class Quipt extends QuiptIntegration {
 
     public Collection<QuiptIntegration> integrations() {
         return integrationRegistry.toMap().values();
+    }
+
+    public CharityManager charities() {
+        if(charities == null){
+            logger().log("Charities", "Initializing Charity Manager...");
+            charities = new CharityManager();
+        }
+        return charities;
     }
 }

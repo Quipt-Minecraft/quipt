@@ -1,5 +1,6 @@
 package live.qsmc.quipt.core.utils.net;
 
+
 import java.time.Duration;
 
 /**
