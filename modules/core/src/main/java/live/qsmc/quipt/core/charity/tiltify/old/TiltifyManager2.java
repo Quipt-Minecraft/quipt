@@ -1,10 +1,13 @@
-package live.qsmc.quipt.core.charity.tiltify;
+package live.qsmc.quipt.core.charity.tiltify.old;
 
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
+import live.qsmc.quipt.core.charity.CharityDonation;
 import live.qsmc.quipt.core.charity.CharityPlatform;
+import live.qsmc.quipt.core.charity.ProcessResult;
+import live.qsmc.quipt.core.charity.tiltify.TiltifyDonation;
 import live.qsmc.quipt.core.config.files.TiltifyConfig;
-import live.qsmc.quipt.core.events.charity.DonationUpdateEvent;
+import live.qsmc.quipt.core.charity.event.DonationUpdateEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,8 +22,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Manages Tiltify donation data with caching and periodic updates.
  */
-public class TiltifyManager extends CharityPlatform {
+public class TiltifyManager2 /*extends CharityPlatform<TiltifyDonation> */{
 
+    /*
     private static final long CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
     private final QuiptIntegration integration;
     private final TiltifyClient client;
@@ -33,8 +37,8 @@ public class TiltifyManager extends CharityPlatform {
     private JSONObject cachedTeamData = null;
     private boolean isUpdating = false;
 
-    public TiltifyManager(QuiptIntegration integration) {
-        super("tiltify", "Tiltify");
+    public TiltifyManager2(QuiptIntegration integration) {
+        super(integration, "tiltify", "Tiltify", TiltifyDonation.class);
         this.integration = integration;
         this.config = integration.configs().config(TiltifyConfig.class);
         this.tokenManager = new TiltifyTokenManager(this);
@@ -71,7 +75,7 @@ public class TiltifyManager extends CharityPlatform {
 
     /**
      * Manually trigger an update of donation data.
-     */
+     //
     public void update() {
         if (isUpdating) {
             return;
@@ -146,9 +150,13 @@ public class TiltifyManager extends CharityPlatform {
 
 
                         integration.logger().log("Tiltify", "New donation detected: " + donorName + " donated $" + amount);
-                        Quipt.INSTANCE.events().handle(new DonationUpdateEvent(new DonationUpdateEvent.Data(this, donorName, participant, donation.optString("donor_comment", null), amount.doubleValue(), cachedTeamData)));
+
+                        process()
+
+                        Quipt.INSTANCE.events().handle(new DonationUpdateEvent(new DonationUpdateEvent.Data(this, donationData)));
                         config.cached_donations.put(donationId, donation);
-                        config.save();
+                        config.save();;
+
                     }
                 }
 
@@ -162,7 +170,7 @@ public class TiltifyManager extends CharityPlatform {
      * Returns cached value if fresh, otherwise triggers an update.
      *
      * @return Total donations in cents
-     */
+     //
     public long getTotalDonationsInCents() {
         if (cacheExpired()) {
             update();
@@ -174,7 +182,7 @@ public class TiltifyManager extends CharityPlatform {
      * Gets the current total donations as a BigDecimal (in dollars).
      *
      * @return Total donations in dollars
-     */
+     //
     public BigDecimal getTotalDonations() {
         if (cacheExpired()) {
             update();
@@ -186,7 +194,7 @@ public class TiltifyManager extends CharityPlatform {
      * Gets the current total donations formatted as a string.
      *
      * @return Formatted donation amount (e.g., "$1,234.56")
-     */
+     //
     public String totalFormatted() {
         BigDecimal amount = getTotalDonations();
         return String.format("$%,.2f", amount);
@@ -196,7 +204,7 @@ public class TiltifyManager extends CharityPlatform {
      * Gets the full team data object.
      *
      * @return JSONObject containing team data, or null if not available
-     */
+     //
     public JSONObject teamData() {
         if (cacheExpired()) {
             update();
@@ -208,7 +216,7 @@ public class TiltifyManager extends CharityPlatform {
      * Gets the last time the donation data was updated.
      *
      * @return Instant of last update
-     */
+     //
     public Instant lastUpdate() {
         return Instant.ofEpochMilli(lastUpdateTime);
     }
@@ -217,14 +225,14 @@ public class TiltifyManager extends CharityPlatform {
      * Checks if the cached data is still fresh.
      *
      * @return true if cache has expired, false otherwise
-     */
+     //
     private boolean cacheExpired() {
         return System.currentTimeMillis() - lastUpdateTime > CACHE_DURATION_MS;
     }
 
     /**
      * Saves current donation data to config.
-     */
+     //
     private void saveCache() {
         JSONObject data = new JSONObject();
         data.put("totalDonations", cachedTotalDonations.toPlainString());
@@ -237,7 +245,7 @@ public class TiltifyManager extends CharityPlatform {
 
     /**
      * Loads cached donation data from config.
-     */
+     //
     private void loadCache() {
         try {
             JSONObject data = config.getCachedData();
@@ -263,7 +271,7 @@ public class TiltifyManager extends CharityPlatform {
      *
      * @param value The value to extract (can be String, Number, etc.)
      * @return BigDecimal amount, or null if invalid
-     */
+     //
     private BigDecimal extractAmount(Object value) {
         if (value == null) {
             return null;
@@ -284,7 +292,7 @@ public class TiltifyManager extends CharityPlatform {
     /**
      * Shuts down the background update scheduler.
      * Call this on server shutdown.
-     */
+     //
     public void shutdown() {
         scheduler.shutdown();
         try {
@@ -301,7 +309,7 @@ public class TiltifyManager extends CharityPlatform {
      * Gets the token manager for OAuth authentication.
      *
      * @return TiltifyTokenManager instance
-     */
+     //
     public TiltifyTokenManager tokenManager() {
         return tokenManager;
     }
@@ -310,7 +318,7 @@ public class TiltifyManager extends CharityPlatform {
      * Checks if OAuth is authenticated.
      *
      * @return true if valid token exists
-     */
+     //
     public boolean isOAuthAuthenticated() {
         return tokenManager.isAuthenticated();
     }
@@ -319,9 +327,16 @@ public class TiltifyManager extends CharityPlatform {
      * Gets time until OAuth token expires.
      *
      * @return milliseconds until expiration, or 0 if no token
-     */
+     //
     public long getTokenExpirationTime() {
         return tokenManager.getTimeUntilExpiration();
     }
+
+    @Override
+    public ProcessResult<TiltifyDonation> process(TiltifyDonation donation) {
+        return null;
+    }
+
+    */
 }
 

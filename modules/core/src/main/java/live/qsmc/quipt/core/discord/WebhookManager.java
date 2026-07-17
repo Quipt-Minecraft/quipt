@@ -1,23 +1,20 @@
 package live.qsmc.quipt.core.discord;
 
-import live.qsmc.quipt.core.config.objects.ConfigMap;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.Config;
 import live.qsmc.quipt.core.config.ConfigTemplate;
 import live.qsmc.quipt.core.config.ConfigValue;
+import live.qsmc.quipt.core.config.objects.ConfigMap;
 import live.qsmc.quipt.core.discord.embed.Embed;
 import live.qsmc.quipt.core.utils.net.HttpConfig;
 import live.qsmc.quipt.core.utils.net.HttpHeaders;
+import live.qsmc.quipt.core.utils.net.HttpMethod;
 import live.qsmc.quipt.core.utils.net.NetworkUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @ConfigTemplate(name = "webhooks", ext = ConfigTemplate.Extension.JSON)
@@ -140,5 +137,22 @@ public class WebhookManager extends Config {
      */
     public HttpResponse<String> send(Webhook hook, JSONObject data) throws FileNotFoundException {
         return NetworkUtils.post(HttpConfig.defaults(HttpHeaders.CONTENT_TYPE("application/json")), hook.url(), data);
+    }
+
+    public HttpResponse<String> edit(Webhook hook, long messageId, JSONObject data) throws FileNotFoundException {
+        return NetworkUtils.patch(
+            HttpConfig.defaults(HttpHeaders.CONTENT_TYPE("application/json")),
+            hook.url() + "/messages/" + messageId,
+            data
+        );
+    }
+
+    public HttpResponse<String> delete(Webhook hook, String messageId){
+
+        try {
+            return NetworkUtils.request(HttpConfig.defaults(HttpHeaders.CONTENT_TYPE("application/json")), hook.url() + "/messages/" + messageId, HttpMethod.DELETE, null, HttpResponse.BodyHandlers.ofString());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
