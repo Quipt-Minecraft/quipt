@@ -1,8 +1,8 @@
-package live.qsmc.quipt.discord2.api.message;
+package live.qsmc.quipt.discord.api.message;
 
 import live.qsmc.quipt.core.data.Wrapper;
-import live.qsmc.quipt.discord2.api.guild.QuiptGuild;
-import live.qsmc.quipt.discord2.api.user.QuiptUser;
+import live.qsmc.quipt.discord.api.guild.QuiptGuild;
+import live.qsmc.quipt.discord.api.user.QuiptUser;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.time.OffsetDateTime;

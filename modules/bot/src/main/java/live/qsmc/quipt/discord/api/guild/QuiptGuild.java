@@ -8,23 +8,32 @@
 
 package live.qsmc.quipt.discord.api.guild;
 
+import live.qsmc.quipt.core.data.Wrapper;
 import live.qsmc.quipt.discord.api.guild.channel.QuiptTextChannel;
+import live.qsmc.quipt.discord.api.user.QuiptUser;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class QuiptGuild {
+public class QuiptGuild extends Wrapper<Guild> {
 
-    private final Guild guild;
+    private final Map<User, QuiptUser> userCache = new HashMap<>();
 
     public QuiptGuild(Guild guild) {
-        this.guild = guild;
+        super(guild);
     }
 
     public List<QuiptTextChannel> getTextChannels() {
         List<QuiptTextChannel> channels = new ArrayList<>();
-        guild.getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
+        data().getTextChannels().forEach(channel -> channels.add(new QuiptTextChannel(channel)));
         return channels;
+    }
+
+    public QuiptUser user(User author) {
+        return userCache.computeIfAbsent(author, QuiptUser::new);
     }
 }

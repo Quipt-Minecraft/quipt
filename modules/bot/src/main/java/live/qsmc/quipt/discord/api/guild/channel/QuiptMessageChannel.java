@@ -1,4 +1,4 @@
-package live.qsmc.quipt.discord2.api.guild.channel;
+package live.qsmc.quipt.discord.api.guild.channel;
 
 import live.qsmc.quipt.core.discord.embed.Embed;
 import live.qsmc.quipt.core.data.Wrapper;

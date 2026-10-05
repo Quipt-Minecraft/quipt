@@ -1,4 +1,4 @@
-package live.qsmc.quipt.discord2.config;
+package live.qsmc.quipt.discord.config;
 
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.Config;

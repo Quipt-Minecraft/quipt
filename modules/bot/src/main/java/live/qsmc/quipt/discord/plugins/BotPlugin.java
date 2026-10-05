@@ -1,13 +1,13 @@
-package live.qsmc.quipt.discord2.plugins;
+package live.qsmc.quipt.discord.plugins;
 
 import live.qsmc.quipt.core.QuiptIntegration;
-import live.qsmc.quipt.discord2.Bot;
+import live.qsmc.quipt.discord.BotModule;
 
 public abstract class BotPlugin extends QuiptIntegration {
 
     private String name = null;
-    private ClassLoader classLoader = this.getClass().getClassLoader();
-    private BotPluginLoader pluginLoader;
+    private final ClassLoader classLoader = this.getClass().getClassLoader();
+    private final BotPluginLoader pluginLoader;
 
 
     public BotPlugin(BotPluginLoader pluginLoader){
@@ -25,7 +25,7 @@ public abstract class BotPlugin extends QuiptIntegration {
         this.name = name;
     }
 
-    public Bot bot(){
+    public BotModule bot(){
         return pluginLoader.bot();
     }
 

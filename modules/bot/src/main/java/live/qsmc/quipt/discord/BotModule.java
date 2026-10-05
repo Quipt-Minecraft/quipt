@@ -1,9 +1,9 @@
-package live.qsmc.quipt.discord2;
+package live.qsmc.quipt.discord;
 
 import live.qsmc.quipt.core.QuiptIntegration;
-import live.qsmc.quipt.discord2.api.QDA;
-import live.qsmc.quipt.discord2.config.BotConfig;
-import live.qsmc.quipt.discord2.plugins.BotPluginLoader;
+import live.qsmc.quipt.discord.api.QDA;
+import live.qsmc.quipt.discord.config.BotConfig;
+import live.qsmc.quipt.discord.plugins.BotPluginLoader;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -11,32 +11,22 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.io.File;
 
-public class Bot extends QuiptIntegration {
-    private static Bot instance = null;
+public abstract class BotModule extends QuiptIntegration {
 
     private JDA jda;
     private QDA qda;
     private BotPluginLoader pluginLoader;
 
-    public static Bot instance(){
-        if(instance == null){
-            instance = new Bot();
-        }
-        return instance;
-    }
-    @Override
-    public String name() {
-        return "QuickBot";
-    }
 
-    @Override
-    public String version() {
-        return "1.0.0";
-    }
+    public abstract String name();
+
+    public abstract String version();
+
+    public abstract String id();
 
     @Override
     public File folder() {
-        return new File("bot-data");
+        return new File(id() + "-data");
     }
 
     @Override

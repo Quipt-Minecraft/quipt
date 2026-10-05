@@ -1,8 +1,8 @@
-package live.qsmc.quipt.discord2.plugins;
+package live.qsmc.quipt.discord.plugins;
 
 
 import live.qsmc.quipt.core.events.EventHandler;
-import live.qsmc.quipt.discord2.Bot;
+import live.qsmc.quipt.discord.BotModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +13,11 @@ import java.util.*;
 
 public class BotPluginLoader {
 
-    private final Bot bot;
+    private final BotModule bot;
     private final Map<BotPlugin, ClassLoader> plugins = new HashMap<>();
-    private EventHandler eventHandler;
+    private final EventHandler eventHandler;
 
-    public BotPluginLoader(Bot bot) {
+    public BotPluginLoader(BotModule bot) {
         this.bot = bot;
         eventHandler = new EventHandler(bot);
         initialize();
@@ -27,7 +27,7 @@ public class BotPluginLoader {
         return eventHandler;
     }
 
-    public Bot bot() {
+    public BotModule bot() {
         return bot;
     }
 

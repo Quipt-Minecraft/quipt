@@ -8,22 +8,35 @@
 
 package live.qsmc.quipt.discord.api;
 
+import live.qsmc.quipt.core.data.Wrapper;
 import live.qsmc.quipt.discord.api.guild.QuiptGuild;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class QDA {
-    private final JDA jda;
+public class QDA extends Wrapper<JDA> {
+
+    private final GuildManager guilds = new GuildManager();
+
     public QDA(JDA jda){
-        this.jda = jda;
+        super(jda);
     }
 
-    public List<QuiptGuild> getGuilds(){
-        List<QuiptGuild> guilds = new ArrayList<>();
-        jda.getGuilds().forEach(guild -> guilds.add(new QuiptGuild(guild)));
+    public GuildManager guilds(){
         return guilds;
+    }
+
+    public static class GuildManager {
+        public Map<Guild, QuiptGuild> guilds = new HashMap<>();
+
+        public QuiptGuild get(Guild guild){
+            return guilds.computeIfAbsent(guild, QuiptGuild::new);
+        }
+
+        public Collection<QuiptGuild> all(){
+            return guilds.values();
+        }
     }
 
 

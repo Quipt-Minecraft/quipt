@@ -1,4 +1,4 @@
-package live.qsmc.quipt.discord2.api.user;
+package live.qsmc.quipt.discord.api.user;
 
 import live.qsmc.quipt.core.data.Wrapper;
 import net.dv8tion.jda.api.entities.User;
