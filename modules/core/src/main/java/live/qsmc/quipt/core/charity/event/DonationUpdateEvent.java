@@ -9,7 +9,7 @@ import live.qsmc.quipt.core.events.EventData;
 
 import java.util.List;
 
-public class DonationUpdateEvent<P extends CharityPlatform<D>, D extends CharityDonation> extends Event<DonationUpdateEvent.Data<D>> {
+public class DonationUpdateEvent<P extends CharityPlatform<D, ?>, D extends CharityDonation> extends Event<DonationUpdateEvent.Data<D>> {
 
     P platform;
 

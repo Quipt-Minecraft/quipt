@@ -5,7 +5,7 @@ import live.qsmc.quipt.core.events.EventListener;
 
 import java.util.List;
 
-public class DonationEventListener<P extends CharityPlatform<D>, D extends CharityDonation> extends EventListener<DonationUpdateEvent<P, D>, DonationUpdateEvent.Data<D>> {
+public class DonationEventListener<P extends CharityPlatform<D, ?>, D extends CharityDonation> extends EventListener<DonationUpdateEvent<P, D>, DonationUpdateEvent.Data<D>> {
 
     public DonationEventListener(Class<DonationUpdateEvent<P, D>> clazz) {
         super(clazz);

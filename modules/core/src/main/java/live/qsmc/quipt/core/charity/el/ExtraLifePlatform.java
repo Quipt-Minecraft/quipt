@@ -23,7 +23,7 @@ import java.util.List;
 import static live.qsmc.quipt.core.charity.ProcessResult.Type.INVALID;
 import static live.qsmc.quipt.core.charity.ProcessResult.Type.SUCCESS;
 
-public class ExtraLifePlatform extends CharityPlatform<ExtraLifeDonation> implements Flutter  {
+public class ExtraLifePlatform extends CharityPlatform<ExtraLifeDonation, ExtraLifeConfig> implements Flutter  {
 
     public static final int MAX_LIMIT = 100;
 
@@ -32,16 +32,14 @@ public class ExtraLifePlatform extends CharityPlatform<ExtraLifeDonation> implem
     private int offset = 0;
 
     public ExtraLifePlatform(QuiptIntegration integration) {
-        super(integration, "extralife", "Extra Life", ExtraLifeDonation.class);
+        super(integration, "extralife", "Extra Life", ExtraLifeDonation.class, ExtraLifeConfig.class);
 
-        ExtraLifeConfig config = Quipt.INSTANCE.configs().register(ExtraLifeConfig.class);
 
-        GET = HttpConfig.defaults(HttpHeaders.ETAG(config.etag));
+
+        GET = HttpConfig.defaults(HttpHeaders.ETAG(config().etag));
+        integration().heartbeat().flutter(this);
         Quipt.INSTANCE.logger().log("ExtraLifeFlutter", "Initialized");
-    }
 
-    private ExtraLifeConfig config() {
-        return Quipt.INSTANCE.configs().config(ExtraLifeConfig.class);
     }
 
     @Override
@@ -86,6 +84,7 @@ public class ExtraLifePlatform extends CharityPlatform<ExtraLifeDonation> implem
     }
 
     private void sync(int diff) throws FileNotFoundException {
+
         String url = config().api_endpoint + "teams/" + config().team_id + "/donations?limit=" + (diff) + (offset > 0 ? "&offset=" + (offset + 1) : "");
         HttpResponse<String> donationsResponse = NetworkUtils.get(NetworkUtils.DEFAULT, url);
         if (donationsResponse.statusCode() != 200 && donationsResponse.statusCode() != 304) {
@@ -99,7 +98,8 @@ public class ExtraLifePlatform extends CharityPlatform<ExtraLifeDonation> implem
         List<ProcessResult<ExtraLifeDonation>> results = new ArrayList<>();
         for (int i = 0; i < donationsArray.length(); i++) {
             JSONObject donationJson = donationsArray.getJSONObject(i);
-            ExtraLifeDonation donation = this.donation(donationJson);
+            ExtraLifeDonation donation = this.donation(donationJson, donationJson.getString("donationID"));
+
             if (config().processed(donation)) {
                 Quipt.INSTANCE.logger().warn("DonationFlutter", "Skipping already processed donation: " + donation.donationID);
                 offset = offset + 1;

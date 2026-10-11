@@ -1,9 +1,13 @@
 package live.qsmc.quipt.core;
 
+import live.qsmc.quipt.core.charity.el.ExtraLifePlatform;
 import live.qsmc.quipt.core.events.*;
 import live.qsmc.quipt.core.utils.TestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IntegrationTests {
 
@@ -11,12 +15,20 @@ public class IntegrationTests {
     public static QuiptIntegration TEST_INTEGRATION;
 
     @BeforeAll
-    public static void setupQuipt() {
+    public static void setupQuipt() throws InterruptedException {
         QUIPT = Quipt.INSTANCE;
         QUIPT.enable();
         TEST_INTEGRATION = TestUtils.getTestIntegration();
         QUIPT.enable(TEST_INTEGRATION);
     }
+
+//    @Test
+//    public void testLastLife() throws InterruptedException {
+//        ExtraLifePlatform charity = QUIPT.charities().initialize(TEST_INTEGRATION, "extralife", ExtraLifePlatform.class);
+//        Thread.sleep(5000L);
+//        charity.config().save();
+//        assertFalse(charity.config().processed.isEmpty());
+//    }
 
     @Test
     public void testEvents(){

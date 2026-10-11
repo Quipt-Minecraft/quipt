@@ -21,8 +21,7 @@ public interface JsonSerializable {
                 field.setAccessible(true);
                 try {
                     Object value = field.get(this);
-                    if (value == null)
-                        continue;
+                    if (value == null) continue;
                     if (value instanceof JsonSerializable data) {
                         if (json.has(field.getName())) {
                             continue; // Skip if already processed to prevent infinite recursion
@@ -50,19 +49,21 @@ public interface JsonSerializable {
                 if (json.has(field.getName())) {
                     try {
                         Object value = json.get(field.getName());
-                        Class<?> fieldType = field.getType();
-                        if (JsonSerializable.class.isAssignableFrom(fieldType) && value instanceof JSONObject obj) {
-                            value = fieldType.getDeclaredConstructor().newInstance();
-                            ((JsonSerializable) value).fromJson(obj);
-                        }
-                        if(double.class.isAssignableFrom(fieldType) && value instanceof Number number){
-                            value = number.doubleValue();
-                        }
-                        if(fieldType.isAnonymousClass()){
-                            System.out.println("Anonymous class detected for field: " + field.getName() + ", value: " + value);
+                        if (value != null && !value.equals(JSONObject.NULL)) {
+                            Class<?> fieldType = field.getType();
+                            if (JsonSerializable.class.isAssignableFrom(fieldType) && value instanceof JSONObject obj) {
+                                value = fieldType.getDeclaredConstructor().newInstance();
+                                ((JsonSerializable) value).fromJson(obj);
+                            }
+                            if (double.class.isAssignableFrom(fieldType) && value instanceof Number number) {
+                                value = number.doubleValue();
+                            }
+                            if (fieldType.isAnonymousClass()) {
+                                System.out.println("Anonymous class detected for field: " + field.getName() + ", value: " + value);
 
+                            }
+                            setField(field, this, value);
                         }
-                        setField(field, this, value);
                     } catch (Exception e) {
                         throw new RuntimeException("Failed to set field: " + field.getName(), e);
                     }
@@ -84,8 +85,7 @@ public interface JsonSerializable {
 
     default void setField(Field field, Object target, Object value) throws IllegalAccessException {
         if (field.getType().isEnum() && value instanceof String) {
-            @SuppressWarnings("unchecked")
-            Class<? extends Enum> enumClass = (Class<? extends Enum>) field.getType();
+            @SuppressWarnings("unchecked") Class<? extends Enum> enumClass = (Class<? extends Enum>) field.getType();
             field.set(target, convertStringToEnum((String) value, enumClass));
         } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
             if (value instanceof String) {
@@ -93,7 +93,7 @@ public interface JsonSerializable {
             } else {
                 field.set(target, value);
             }
-        } else if (field.getType() == double.class || field.getType() == Double.class){
+        } else if (field.getType() == double.class || field.getType() == Double.class) {
             if (value instanceof String string) {
                 field.set(target, Double.parseDouble(string));
             } else {

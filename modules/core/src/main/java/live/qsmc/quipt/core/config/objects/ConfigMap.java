@@ -93,7 +93,9 @@ public class ConfigMap<T extends ConfigObject> extends ConfigObject {
     public JSONObject json() {
         JSONObject json = new JSONObject();
         for (String key : configMap.keySet()) {
+            if(key == null) continue;
             json.put(key, configMap.get(key).json());
+
         }
         return json;
     }

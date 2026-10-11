@@ -20,12 +20,12 @@ public class CharityManager {
         platforms.register("extralife", ExtraLifePlatform::new);
     }
 
-    public final <T extends CharityPlatform<?>> T initialize(QuiptIntegration integration, String platformName, Class<T> platformClass) {
+    public final <T extends CharityPlatform<?, ?>> T initialize(QuiptIntegration integration, String platformName, Class<T> platformClass) {
         Optional<CharityInitializer> platform = platforms.get(platformName);
         return platform.map(charityInitializer -> platformClass.cast(charityInitializer.apply(integration))).orElse(null);
     }
 
-    public interface CharityInitializer extends Function<QuiptIntegration, CharityPlatform<?>> {
+    public interface CharityInitializer extends Function<QuiptIntegration, CharityPlatform<?, ?>> {
 
     }
 
