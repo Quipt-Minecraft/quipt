@@ -1,9 +1,6 @@
 package live.qsmc.quipt.core.events;
 
-public class TestEventListenerTwo extends EventListener<TestEventTwo, TestEventDataTwo>{
-    public TestEventListenerTwo() {
-        super(TestEventTwo.class);
-    }
+public class TestEventListenerTwo extends EventListener<TestEventTwo, TestEventDataTwo> {
 
     @Override
     public void handle(TestEventTwo event) {
