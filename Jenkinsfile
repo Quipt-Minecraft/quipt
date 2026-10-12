@@ -69,10 +69,5 @@ pipeline {
                 }
             }
         }
-        stage('Modrinth') {
-            steps {
-                sh './gradlew :modules:paper:modrinth :modules:velocity:modrinth :modules:fabric:modrinth'
-            }
-        }
     }
 }

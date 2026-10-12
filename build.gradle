@@ -26,11 +26,11 @@ def branchName = {
 }()
 
 group = "live.qsmc.quipt"
-version = "${project_version}-${build_status}.${build_number}-${branchName}"
+version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
 
 allprojects {
     group = "live.qsmc.quipt"
-    version = "${project_version}-${build_status}.${build_number}-${branchName}"
+    version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
 
     repositories {
         mavenCentral()
@@ -58,7 +58,7 @@ subprojects {
 }
 
 configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" ||  it.name == "paper" ||  it.name == "fabric" }) {
-    version = "${project_version}-${build_status}.${build_number}-${branchName}-MC${minecraft_version}"
+    version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}") + "-MC${minecraft_version}"
 }
 
 
