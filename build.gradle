@@ -12,12 +12,25 @@ plugins {
     id 'xyz.jpenilla.run-velocity' version '3.0.2' apply false
 }
 
+def branchName = {
+    def branch = System.getenv("BRANCH_NAME")
+    if (!branch) {
+        try {
+            branch = ["git", "rev-parse", "--abbrev-ref", "HEAD"].execute().text.trim()
+        } catch (ignored) {
+            branch = "local"
+        }
+    }
+    if (!branch || branch == "HEAD") branch = "local"
+    return branch.replaceAll("[^a-zA-Z0-9._-]", "-")
+}()
+
 group = "live.qsmc.quipt"
-version = "${project_version}-${build_status}.${build_number}"
+version = "${project_version}-${build_status}.${build_number}-${branchName}"
 
 allprojects {
     group = "live.qsmc.quipt"
-    version = "${project_version}-${build_status}.${build_number}"
+    version = "${project_version}-${build_status}.${build_number}-${branchName}"
 
     repositories {
         mavenCentral()
@@ -45,7 +58,7 @@ subprojects {
 }
 
 configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" ||  it.name == "paper" ||  it.name == "fabric" }) {
-    version = "${project_version}-${build_status}.${build_number}-MC${minecraft_version}"
+    version = "${project_version}-${build_status}.${build_number}-${branchName}-MC${minecraft_version}"
 }
 
 

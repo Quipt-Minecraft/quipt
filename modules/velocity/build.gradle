@@ -63,8 +63,6 @@ tasks {
 }
 
 modrinth {
-    String test = System.getenv("MODRINTH_TOKEN")
-    System.out.println(test)
     token = System.getenv("MODRINTH_TOKEN")
     changelog = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
     projectId = "${modrinth_id}"
