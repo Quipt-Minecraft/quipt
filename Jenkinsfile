@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'BRANCH', defaultValue: 'v2.0', description: 'Branch to build and publish')
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build and publish')
     }
     environment {
         BRANCH_NAME = "${params.BRANCH}"
@@ -67,6 +67,11 @@ pipeline {
                         )
                     }
                 }
+            }
+        }
+        stage('Modrinth') {
+            steps {
+                sh './gradlew :modules:paper:modrinth :modules:velocity:modrinth :modules:fabric:modrinth'
             }
         }
     }
