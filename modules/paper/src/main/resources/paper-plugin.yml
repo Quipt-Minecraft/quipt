@@ -1,0 +1,7 @@
+name: "${name}-paper"
+version: "${project_version}"
+author: "${author}"
+api-version: "${minecraft_version}"
+main: live.qsmc.quipt.paper.QuiptPaper
+loader: live.qsmc.quipt.paper.QuiptLoader
+

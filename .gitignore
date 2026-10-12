@@ -40,12 +40,10 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Cache ###
 /.idea/
-/paper/run/
-/fabric/run/
-/.run/
-/fabric/server/
-/fabric/client/
-/fabric/src/main/generated/
-/logs/
-/core/tests/
+/modules/*/run/
+/wiki/
+/last_life
+/fluxbot

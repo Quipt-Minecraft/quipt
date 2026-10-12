@@ -1,245 +1,92 @@
 import dex.plugins.outlet.v2.util.ReleaseType
 import groovy.text.SimpleTemplateEngine
-import org.gradle.api.artifacts.component.ProjectComponentSelector
-
 
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom' version '1.11-SNAPSHOT' apply false
+    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT' apply false
     id 'io.github.dexman545.outlet' version '1.6.1' apply false
-    id "com.modrinth.minotaur" version "2.+" apply false
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
-    id("xyz.jpenilla.run-paper") version "2.3.1" apply false
-
-//    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
+    id 'com.gradleup.shadow' version '8.3.6' apply false
+    id 'xyz.jpenilla.run-paper' version '3.0.2' apply false
+    id 'xyz.jpenilla.run-velocity' version '3.0.2' apply false
 }
 
-group = "com.quiptmc"
-version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+def branchName = {
+    def branch = System.getenv("BRANCH_NAME")
+    if (!branch) {
+        try {
+            branch = ["git", "rev-parse", "--abbrev-ref", "HEAD"].execute().text.trim()
+        } catch (ignored) {
+            branch = "local"
+        }
+    }
+    if (!branch || branch == "HEAD") branch = "local"
+    return branch.replaceAll("[^a-zA-Z0-9._-]", "-")
+}()
 
-repositories {
-    mavenCentral()
-
-}
-
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
-}
+group = "live.qsmc.quipt"
+version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
 
 allprojects {
-    group = "com.quiptmc"
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
+    group = "live.qsmc.quipt"
+    version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
 
     repositories {
         mavenCentral()
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://libraries.minecraft.net/" }
     }
 }
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
-//    jar {
-//        // Include the content of the 'include' configuration in the JAR
-//        from {
-//            sourceSets.main.output
-//        }
-//
-//        exclude {
-//            it.file in configurations.runtimeClasspath.files
-//        }
-//
-//        // Avoid duplicate files when merging JARs
-//        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    }
 
-
-
-    publishing {
-        publications {
-            create("mavenJava", MavenPublication) {
-                artifactId = project.name
-                from components.java
-            }
-        }
-        repositories {
-            maven {
-                // Replace OWNER and REPOSITORY with your GitHub username or organization name and the repository name
-                url "https://maven.pkg.github.com/Quipt-Minecraft/quipt"
-                credentials {
-                    username = "QuickScythe"
-                    password = System.getenv("PACKAGES_TOKEN")
-                }
-            }
-        }
-
+    java {
+        toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
     }
-    dependencies {
-        implementation "org.json:json:$json_version"
-        implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
     }
+
+
+
+
 }
 
-configure(subprojects.findAll {it.name == "paper"}) {
+configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" ||  it.name == "paper" ||  it.name == "fabric" }) {
+    version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}") + "-MC${minecraft_version}"
+}
+
+
+configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" || it.name == "velocity" }) {
     apply plugin: 'com.modrinth.minotaur'
     apply plugin: 'io.github.dexman545.outlet'
-
-    apply plugin: "xyz.jpenilla.run-paper"
-    apply plugin: 'com.github.johnrengelman.shadow'
-
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
-
-
-
-    tasks {
-        runServer {
-            minecraftVersion("${minecraft_version}")
-        }
-
-    }
 
     outlet {
         mcVersionRange = supported_minecraft_versions
         allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
     }
-
-    modrinth {
-
-        token = System.getenv("MODRINTH_TOKEN")
-        def log = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
-        projectId = "${modrinth_id}"
-        versionNumber = "${version}"
-        versionType = "${build_status}"
-        gameVersions = outlet.mcVersions()
-        uploadFile = jar
-        loaders = [project.name]
-        syncBodyFrom = rootProject.file("readme.md").text
-        dependencies {}
-    }
-
-
-}
-
-
-configure(subprojects.findAll {it.name == "fabric"}) {
-
-    apply plugin: 'fabric-loom'
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${minecraft_version}"
-        mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-        modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    }
-}
-
-configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" }) {
-    apply plugin: 'com.modrinth.minotaur'
-    apply plugin: 'io.github.dexman545.outlet'
-//    apply plugin: 'com.matthewprenger.cursegradle'
-//    apply plugin: 'com.github.johnrengelman.shadow'
-
-
-    version = "${project_version}-MC${minecraft_version}-${build_status}.${build_number}"
-
-
-    outlet {
-        mcVersionRange = supported_minecraft_versions
-        allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
-    }
-
-
-//    tasks.build {
-//        dependsOn tasks.shadowJar
-//    }
-
-
-
-
     tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
-
-
-    tasks.register('discord') {
-        doLast {
-            try {
-                var channel = System.getenv("DISCORD_CHANNEL")
-                var token = System.getenv("DISCORD_TOKEN")
-                URL url = uri("https://discord.com/api/webhooks/$channel/$token").toURL()
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection()
-                connection.setRequestMethod("POST")
-                connection.setRequestProperty("Content-Type", "application/json; utf-8")
-                connection.setRequestProperty("Accept", "application/json")
-                connection.setDoOutput(true)
-
-
-                // Read the file and process the template variables
-                String jsonTemplate = rootProject.file("modrinth.json").text
-
-                // Create a template engine and bind the variables
-                def engine = new SimpleTemplateEngine()
-                def template = engine.createTemplate(jsonTemplate)
-                def binding = [
-                        project    : project,
-                        rootProject: rootProject,
-                        version    : version,
-                        modrinth_id: modrinth_id
-                ]
-
-                // Process the template with the bindings
-                String jsonInputString = template.make(binding).toString()
-
-                try (OutputStream os = connection.getOutputStream()) {
-                    byte[] input = jsonInputString.getBytes("utf-8")
-                    os.write(input, 0, input.length)
-                }
-
-                int responseCode = connection.getResponseCode()
-                System.out.println("Response Code: " + responseCode)
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
-        }
-    }
-    tasks.modrinth.dependsOn discord
-
 }
 
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.name
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            name = 'localRepo'
-            url = layout.buildDirectory.dir("repo")
-        }
-    }
-}
-
-
-
-
-
-
-//tasks.modrinth.dependsOn sendDataToUrl
-
-def targetJavaVersion = 21
 java {
     withSourcesJar()
     withJavadocJar()
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+}
+
+tasks.register("preparePublish") {
+    group = "publishing"
+    description = "Generates Maven metadata for all submodule publications."
+    subprojects.each { sub ->
+        String subProjectName = "${sub.name.charAt(0).toUpperCase()}${sub.name.substring(1).toLowerCase()}"
+        dependsOn sub.tasks.matching { t ->
+            t.name == "generateMetadataFileFor${subProjectName}Publication" ||
+                    t.name == "generatePomFileFor${subProjectName}Publication"
+        }
     }
 }

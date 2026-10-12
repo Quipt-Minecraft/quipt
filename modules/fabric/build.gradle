@@ -1,0 +1,102 @@
+plugins {
+   id "net.fabricmc.fabric-loom"
+}
+
+
+loom {
+    mods {
+        "quipt" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation include("org.json:json:$json_version")
+    implementation include("org.eclipse.jgit:org.eclipse.jgit:$jgit_version")
+    implementation include("jakarta.servlet:jakarta.servlet-api:5.0.0")
+    implementation include("org.eclipse.jetty:jetty-server:$jetty_server_version")
+    implementation include("org.eclipse.jetty:jetty-servlet:$jetty_servlet_version")
+    implementation include("com.fasterxml.jackson.core:jackson-core:$jackson_version")
+    implementation include("com.fasterxml.jackson.core:jackson-annotations:$jackson_version")
+    implementation include("com.fasterxml.jackson.core:jackson-databind:$jackson_version")
+    implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson_version")
+    implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version")
+    implementation include("com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jackson_version")
+
+    implementation include("net.kyori:adventure-platform-fabric:6.8.0")
+
+    implementation project(":modules:core")
+    include project(":modules:core")
+
+    implementation project(":modules:common")
+    include project(":modules:common")
+
+    implementation project(":modules:bot")
+    include project(":modules:bot")
+}
+
+publishing {
+    publications {
+        create("fabric", MavenPublication) {
+            from(components["java"])  // provides Gradle metadata/component info
+
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    changelog = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+    projectId = "${modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${build_status}"
+    gameVersions = outlet.mcVersions()
+    uploadFile = jar
+    loaders = [project.name]
+    syncBodyFrom = rootProject.file("readme.md").text
+}
+
+// Ensure remapped jar is produced before uploading to Modrinth
+tasks.modrinth.dependsOn(jar)
+
+test {
+    useJUnitPlatform()
+    failOnNoDiscoveredTests = false
+}
+
+jar {
+    archiveClassifier = "dev"
+}
+//
+//remapJar {
+//    inputFile = jar.archiveFile
+//    archiveClassifier = ""
+//}
+
+
+
+processResources {
+    inputs.property "version", project_version
+    inputs.property "minecraft_version", minecraft_version
+    inputs.property "loader_version", loader_version
+    inputs.property "supported_minecraft_versions", supported_minecraft_versions
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project_version,
+                "minecraft_version": minecraft_version,
+                "loader_version": loader_version,
+                "supported_minecraft_versions": supported_minecraft_versions
+    }
+}

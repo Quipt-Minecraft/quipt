@@ -1,0 +1,48 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = "com.quiptmc.discord.Bot"
+}
+
+repositories {
+    maven {
+        url "https://repo.vanillaflux.com/repository/quipt/"
+    }
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+    implementation "net.dv8tion:JDA:$jda_version"
+    implementation "org.json:json:$json_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "com.sparkjava:spark-core:$spark_version"
+    implementation "mysql:mysql-connector-java:$sql_version"
+    implementation "org.jfree:jfreechart:$jfree_version"
+
+    implementation project(":modules:core")
+}
+
+publishing {
+    publications {
+        create("bot", MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.register('runBot', JavaExec) {
+    mainClass = application.mainClass
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005']
+    dependsOn tasks.build
+}

@@ -1,0 +1,42 @@
+jar {
+    dependsOn(":modules:core:jar")
+    dependsOn(":modules:bot:jar")
+}
+
+java {
+    withSourcesJar()
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testImplementation "ch.qos.logback:logback-classic:$logback_version"
+
+    implementation "org.json:json:$json_version"
+    implementation "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
+
+    implementation "org.eclipse.jetty:jetty-server:$jetty_server_version"
+    implementation "org.eclipse.jetty:jetty-servlet:$jetty_servlet_version"
+
+    implementation "net.kyori:adventure-api:$adventure_api_version"
+    implementation "net.kyori:adventure-text-serializer-gson:$adventure_api_version"
+    implementation "net.kyori:adventure-text-serializer-plain:$adventure_api_version"
+
+    implementation project(":modules:core")
+    implementation project(":modules:bot")
+    implementation "com.mojang:brigadier:$brigadier_version"
+}
+
+publishing {
+    publications {
+        create("common", MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

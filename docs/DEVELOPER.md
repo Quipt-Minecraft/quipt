@@ -3,7 +3,7 @@
 This guide shows how to extend QUIPT, use its APIs, and integrate with your server code. Examples below focus on the Paper environment, but core concepts are platform-agnostic.
 
 Initialization on Paper
-- Entry point: com.quiptmc.paper.Initializer (JavaPlugin)
+- Entry point: paper.live.qsmc.Initializer (JavaPlugin)
 - QUIPT is constructed via PaperIntegration and initialized on enable().
 
 Events and Listeners
@@ -38,7 +38,7 @@ Heartbeat and Scheduling
 - Use TaskScheduler for async tasks, e.g., TaskScheduler.scheduleAsyncTask(runnable, delay, unit).
 
 Integration Lifecycle
-- com.quiptmc.core.QuiptIntegration provides:
+- core.live.qsmc.QuiptIntegration provides:
   - enable() and shutdown()/destroy() coordination
   - logger() for structured logging
   - dataFolder() for persistent storage

@@ -1,0 +1,6 @@
+{
+  "id": "quiptproxy",
+  "name": "QuiptProxy",
+  "version": "${version}",
+  "main": "live.qsmc.quipt.velocity.QuiptVelocity"
+}

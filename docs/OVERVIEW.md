@@ -26,9 +26,9 @@ This document gives a high-level view of the architecture and how the pieces fit
   5) Event listeners, placeholders, message systems, and sessions are activated.
 
 - Notable Classes
-  - com.quiptmc.core.QuiptIntegration: Base integration lifecycle, logging, API manager, graceful shutdown.
-  - com.quiptmc.core.server.QuiptServer: Embedded Jetty server with simple handler routing and address config.
-  - com.quiptmc.paper.Initializer: Paper plugin entry. Wires configs, listeners, QuiptServer, ResourcePackHandler, and Discord bot.
+  - core.live.qsmc.QuiptIntegration: Base integration lifecycle, logging, API manager, graceful shutdown.
+  - server.core.live.qsmc.QuiptServer: Embedded Jetty server with simple handler routing and address config.
+  - paper.live.qsmc.Initializer: Paper plugin entry. Wires configs, listeners, QuiptServer, ResourcePackHandler, and Discord bot.
   - com.quiptmc.minecraft.utils.*: In-game utilities for messages, placeholders, sessions.
   - com.quiptmc.discord.*: Discord bot bootstrap, API models, plugin loader.
 

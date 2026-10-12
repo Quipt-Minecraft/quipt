@@ -1,0 +1,80 @@
+plugins {
+    id("java-library")
+    id("xyz.jpenilla.run-velocity")
+    id("com.gradleup.shadow")
+}
+
+configurations {
+    bundle
+    implementation.extendsFrom(bundle)
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.papermc.io/repository/maven-public/"
+    }
+}
+
+dependencies {
+    compileOnly("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
+
+    bundle project(":modules:common")
+    bundle project(":modules:core")
+    implementation "org.json:json:$json_version"
+}
+
+publishing {
+    publications {
+        create("velocity", MavenPublication) {
+            artifactId = project.name
+            artifact(tasks.named('shadowJar'))
+        }
+    }
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
+}
+
+tasks {
+  runVelocity {
+    velocityVersion("3.5.0-SNAPSHOT")
+  }
+    shadowJar {
+        configurations = [project.configurations.bundle]
+        archiveClassifier.set("")
+    }
+    build {
+        dependsOn(shadowJar)
+    }
+    processResources {
+        def pluginProperties = [version: project_version]
+        inputs.properties pluginProperties
+        filteringCharset 'UTF-8'
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        from(rootProject.file('gradle.properties'))
+
+        filesMatching('velocity-plugin.json') {
+            expand pluginProperties
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    changelog = System.getenv("CHANGELOG") ?: rootProject.file("changelog.md").text
+    projectId = "${modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${build_status}"
+    gameVersions = outlet.mcVersions()
+    // Upload the final shaded (fat) jar which contains bundled modules
+    uploadFile = shadowJar
+    loaders = [project.name]
+    syncBodyFrom = rootProject.file("readme.md").text
+}
+
+// Ensure the Modrinth upload runs after the shaded jar has been created
+tasks.modrinth.dependsOn(shadowJar)
+
