@@ -45,3 +45,5 @@ bin/
 /.idea/
 /modules/*/run/
 /wiki/
+/last_life
+/fluxbot
