@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Represents metadata stored in a JSON object.
  */
-public class Metadata {
+public class Metadata implements JsonSerializable {
 
     private final JSONObject data;
 

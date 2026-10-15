@@ -2,6 +2,7 @@ package live.qsmc.quipt.minecraft.api;
 
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
+import live.qsmc.quipt.core.data.Metadata;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
@@ -9,6 +10,8 @@ import net.kyori.adventure.text.Component;
 import java.util.UUID;
 
 public abstract class MinecraftPlayer extends ConfigObject implements Audience {
+
+    Metadata metadata = new Metadata();
 
     public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
         super(integration);
