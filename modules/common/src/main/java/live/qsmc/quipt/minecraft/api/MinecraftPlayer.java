@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public abstract class MinecraftPlayer extends ConfigObject implements Audience {
 
-    Metadata metadata = new Metadata();
+    public Metadata metadata = new Metadata();
 
     public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
         super(integration);
