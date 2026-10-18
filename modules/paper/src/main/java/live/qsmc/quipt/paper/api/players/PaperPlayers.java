@@ -17,30 +17,33 @@ public class PaperPlayers {
 
 //    private final Registry<PaperPlayer> players;
     private final MinecraftIntegration<JavaPlugin, NamespacedKey> integration;
-    private final PlayerConfig config;
 
     public PaperPlayers(MinecraftIntegration<JavaPlugin, NamespacedKey> integration){
-        this.config = integration.configs().register(PlayerConfig.class);
+        integration.configs().register(PlayerConfig.class);
 //        players = Quipt.INSTANCE.registries().register("players", ()->null);
         this.integration = integration;
     }
 
+    private PlayerConfig config(){
+        return integration.configs().config(PlayerConfig.class);
+    }
+
     public PaperPlayer of(Player player){
-        if(!config.players.contains(player.getUniqueId().toString()))
+        if(!config().players.contains(player.getUniqueId().toString()))
             return register(player);
-        return config.players.get(player.getUniqueId().toString());
+        return config().players.get(player.getUniqueId().toString());
 //        return players.get(player.getUniqueId().toString()).orElse(register(player));
     }
 
     private PaperPlayer register(Player player){
         PaperPlayer playerData = new PaperPlayer(integration, player);
-        config.players.put(playerData);
-        config.save();
+        config().players.put(playerData);
+        config().save();
         return playerData;
     }
 
     public void save(){
-        config.save();
+        config().save();
     }
 
     @ConfigTemplate(name = "players", ext = ConfigTemplate.Extension.JSON)
