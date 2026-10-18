@@ -16,7 +16,6 @@ import static net.kyori.adventure.text.Component.text;
 
 public class QuiptPaper extends QuiptPlugin {
 
-    private PaperPlayers players = null;
 
     private ResourcePackHandler packHandler = null;
 
@@ -95,17 +94,19 @@ public class QuiptPaper extends QuiptPlugin {
         if (config != null && config.enabled) {
             packHandler().start();
         }
-        new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, QuiptCommand.class, "quipt")).register();
-        new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, WebhookCommand.class, "webhook")).register();
+
         integration().logger().log("Paper", "QuiptPaper for Paper enabled!");
     }
 
-    public PaperPlayers players() {
-        if (players == null) {
-            integration().logger().log("Players", "Initializing players...");
-            players = new PaperPlayers(integration());
-        }
-        return players;
+    @Override
+    public void commands() {
+        new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, QuiptCommand.class, "quipt")).register();
+        new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, WebhookCommand.class, "webhook")).register();
+    }
+
+    @Override
+    public void listeners() {
+
     }
 
     public ResourcePackHandler packHandler() {

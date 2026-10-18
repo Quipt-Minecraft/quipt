@@ -3,6 +3,7 @@ package live.qsmc.quipt.paper;
 import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.paper.api.players.PaperPlayers;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
@@ -13,9 +14,14 @@ public abstract class QuiptPlugin extends JavaPlugin {
 
     PaperIntegration integration = null;
 
+    private PaperPlayers players = null;
+
+
 
     @Override
     public void onEnable() {
+        listeners();
+        commands();
         JSONObject data = new JSONObject();
         data.put("name", getPluginMeta().getName());
         data.put("version", getPluginMeta().getVersion());
@@ -35,7 +41,19 @@ public abstract class QuiptPlugin extends JavaPlugin {
         return integration;
     }
 
+    public abstract void listeners();
+
+    public abstract void commands();
+
     public abstract void enable();
+
+    public PaperPlayers players() {
+        if (players == null) {
+            integration().logger().log("Players", "Initializing players...");
+            players = new PaperPlayers(integration());
+        }
+        return players;
+    }
 
     public static abstract class PaperIntegration extends MinecraftIntegration<JavaPlugin, NamespacedKey> {
 
