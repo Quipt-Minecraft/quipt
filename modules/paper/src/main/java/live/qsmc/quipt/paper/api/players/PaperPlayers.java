@@ -63,6 +63,7 @@ public class PaperPlayers {
         public PlayerConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
             super(file, name, extension, integration);
             players = new ConfigMap<>(integration);
+            players.id = "players";
         }
     }
 }
