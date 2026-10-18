@@ -1,16 +1,9 @@
 package live.qsmc.quipt.minecraft.api;
 
 import live.qsmc.quipt.core.Quipt;
-import live.qsmc.quipt.core.QuiptIntegration;
-import live.qsmc.quipt.core.config.Config;
-import live.qsmc.quipt.core.config.ConfigTemplate;
-import live.qsmc.quipt.core.config.ConfigValue;
-import live.qsmc.quipt.core.config.objects.ConfigMap;
+import live.qsmc.quipt.minecraft.config.files.PlayerConfig;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
-
-import java.io.File;
-import java.util.function.Function;
 
 public abstract class PlayerManager<I, K, P extends Audience, O extends MinecraftPlayer> {
 
@@ -19,7 +12,7 @@ public abstract class PlayerManager<I, K, P extends Audience, O extends Minecraf
     private final PlayerFactory<P, O> playerFactory;
 
 
-    private final PlayerConfig config;
+    private final PlayerConfig<O> config;
 
     public PlayerManager(MinecraftIntegration<I, K> integration, PlayerFactory<P, O> playerFactory){
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
@@ -42,23 +35,5 @@ public abstract class PlayerManager<I, K, P extends Audience, O extends Minecraf
         config.save();
     }
 
-    @ConfigTemplate(name = "players", ext = ConfigTemplate.Extension.JSON)
-    public class PlayerConfig extends Config {
 
-        @ConfigValue
-        public ConfigMap<O> players;
-
-        /**
-         * Creates a new config file
-         *
-         * @param file        The file to save to
-         * @param name        The name of the config
-         * @param extension   The extension of the config
-         * @param integration The plugin that owns this config
-         */
-        public PlayerConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
-            super(file, name, extension, integration);
-            players = new ConfigMap<>(integration);
-        }
-    }
 }
