@@ -1,7 +1,9 @@
 package live.qsmc.quipt.minecraft.api;
 
 import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.core.config.factories.ConfigStringFactory;
 import live.qsmc.quipt.core.config.factories.GenericFactory;
+import live.qsmc.quipt.core.config.objects.ConfigObject;
 import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.config.files.PlayerConfig;
 import net.kyori.adventure.audience.Audience;
@@ -13,16 +15,16 @@ public abstract class PlayerManager<I, K, P extends Audience, O extends Minecraf
 
 
     private final MinecraftIntegration<I, K> integration;
-    private final Function<P, O> playerFactory;
+    private final Function<P, O> playerConverter;
 
 
     private final PlayerConfig<O> config;
 
-    public PlayerManager(MinecraftIntegration<I, K> integration, Function<P, O> playerFactory, Class<O> minecraftPlayerClass){
-        Quipt.INSTANCE.configs().factory(new GenericFactory<>(minecraftPlayerClass));
+    public PlayerManager(MinecraftIntegration<I, K> integration, Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
+        Quipt.INSTANCE.configs().factory(playerConfigFactory);
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
         this.integration = integration;
-        this.playerFactory = playerFactory;
+        this.playerConverter = playerConverter;
     }
 
     public O of(P player){
@@ -30,7 +32,7 @@ public abstract class PlayerManager<I, K, P extends Audience, O extends Minecraf
     }
 
     private O register(P player){
-        O playerData = playerFactory.apply(player);
+        O playerData = playerConverter.apply(player);
         config.players.put(playerData);
         config.save();
         return playerData;

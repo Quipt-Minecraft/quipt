@@ -1,11 +1,13 @@
 package live.qsmc.quipt.minecraft.api;
 
+import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
 import live.qsmc.quipt.core.data.Metadata;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import org.json.JSONObject;
 
 import java.util.UUID;
 
@@ -17,6 +19,12 @@ public abstract class MinecraftPlayer extends ConfigObject implements Audience {
         super(integration);
         super.id = uuid.toString();
     }
+
+    @Deprecated
+    public MinecraftPlayer(JSONObject json) {
+        super(Quipt.INSTANCE, json);
+    }
+
 
 //    public abstract int getStatistic(MinecraftStat stat);
 //    public abstract int getStatistic(MinecraftStat stat, MinecraftMaterial material);

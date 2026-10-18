@@ -3,6 +3,8 @@ package live.qsmc.quipt.paper.api.players;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
+import org.bukkit.Bukkit;
+import org.json.JSONObject;
 //import com.quiptmc2.paper.api.settings.Settings;
 
 import java.util.UUID;
@@ -13,19 +15,31 @@ public class PaperPlayer extends MinecraftPlayer {
     public long last_seen;
 //    public Settings settings;
 
-    private final org.bukkit.entity.Player player;
+    private org.bukkit.entity.Player player;
+
+
+    /**
+     * @deprecated Use {@link #PaperPlayer(org.bukkit.entity.Player)} instead.
+     * @param json Raw data
+     */
+    @Deprecated
+    public PaperPlayer(JSONObject json) {
+        super(Quipt.INSTANCE);
+        this.player = Bukkit.getServer().getPlayer(uuid);
+    }
 
     public PaperPlayer(org.bukkit.entity.Player player) {
         super(Quipt.INSTANCE, player.getUniqueId());
         this.player = player;
         this.uuid = player.getUniqueId();
         this.last_seen = System.currentTimeMillis();
-//        this.settings = new Settings(integration);
     }
 
-//    public Settings settings() {
-//        return settings;
-//    }
+    @Override
+    public void fromJson(JSONObject json) {
+        super.fromJson(json);
+        this.player = Bukkit.getServer().getPlayer(uuid);
+    }
 
     @Override
     public UUID uuid() {
