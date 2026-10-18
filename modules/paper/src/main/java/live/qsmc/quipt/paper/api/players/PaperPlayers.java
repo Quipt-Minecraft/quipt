@@ -20,7 +20,7 @@ public class PaperPlayers {
     private final PlayerConfig config;
 
     public PaperPlayers(MinecraftIntegration<JavaPlugin, NamespacedKey> integration){
-        this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
+        this.config = integration.configs().register(PlayerConfig.class);
 //        players = Quipt.INSTANCE.registries().register("players", ()->null);
         this.integration = integration;
     }

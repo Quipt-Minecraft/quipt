@@ -37,6 +37,8 @@ public class ExtraLifePlatform extends CharityPlatform<ExtraLifeDonation, ExtraL
 
 
         GET = HttpConfig.defaults(HttpHeaders.ETAG(config().etag));
+        if(config().team_id == 0)
+            return;
         integration().heartbeat().flutter(this);
         Quipt.INSTANCE.logger().log("ExtraLifeFlutter", "Initialized");
 
