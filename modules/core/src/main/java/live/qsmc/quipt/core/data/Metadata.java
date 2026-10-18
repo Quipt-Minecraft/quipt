@@ -29,6 +29,11 @@ public class Metadata implements JsonSerializable {
         this.data = data;
     }
 
+    @Override
+    public JSONObject json() {
+        return data;
+    }
+
     /**
      * Creates an empty Metadata instance.
      *
