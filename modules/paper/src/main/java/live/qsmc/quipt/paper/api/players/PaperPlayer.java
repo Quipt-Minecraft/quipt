@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public class PaperPlayer extends MinecraftPlayer {
 
-    public UUID uuid;
     public long last_seen;
 //    public Settings settings;
 
@@ -25,25 +24,24 @@ public class PaperPlayer extends MinecraftPlayer {
     @Deprecated
     public PaperPlayer(JSONObject json) {
         super(json);
-        this.player = Bukkit.getServer().getPlayer(uuid);
+        this.player = Bukkit.getServer().getPlayer(UUID.fromString(id));
     }
 
     public PaperPlayer(org.bukkit.entity.Player player) {
         super(Quipt.INSTANCE, player.getUniqueId());
         this.player = player;
-        this.uuid = player.getUniqueId();
         this.last_seen = System.currentTimeMillis();
     }
 
     @Override
     public void fromJson(JSONObject json) {
         super.fromJson(json);
-        this.player = Bukkit.getServer().getPlayer(uuid);
+        this.player = Bukkit.getServer().getPlayer(UUID.fromString(id));
     }
 
     @Override
     public UUID uuid() {
-        return uuid;
+        return UUID.fromString(id);
     }
 
     public long lastSeen() {
