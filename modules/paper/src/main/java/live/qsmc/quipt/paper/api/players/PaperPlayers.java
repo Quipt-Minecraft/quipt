@@ -38,6 +38,7 @@ public class PaperPlayers {
     private PaperPlayer register(Player player){
         PaperPlayer playerData = new PaperPlayer(integration, player);
         PlayerConfig config = config();
+        File file = config.file();
         config.players.put(playerData);
         config.save();
         return playerData;
