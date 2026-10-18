@@ -20,7 +20,7 @@ public abstract class PlayerManager<I, K, P extends Audience, O extends Minecraf
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
         this.integration = integration;
         this.playerFactory = playerFactory;
-        integration.configs().factory(new GenericFactory<>(minecraftPlayerClass));
+        Quipt.INSTANCE.configs().factory(new GenericFactory<>(minecraftPlayerClass));
     }
 
     public O of(P player){
