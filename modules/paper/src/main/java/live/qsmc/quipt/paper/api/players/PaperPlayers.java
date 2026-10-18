@@ -16,6 +16,6 @@ public class PaperPlayers extends PlayerManager<JavaPlugin, NamespacedKey, Playe
             public PaperPlayer apply(Player player) {
                 return new PaperPlayer(integration, player);
             }
-        });
+        }, PaperPlayer.class);
     }
 }

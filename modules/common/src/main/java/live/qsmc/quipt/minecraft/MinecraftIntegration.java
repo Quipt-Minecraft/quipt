@@ -26,7 +26,6 @@ public abstract class MinecraftIntegration<T, I> extends QuiptIntegration {
         this.id = metadata.value("id", String.class);
         this.version = metadata.value("version", String.class);
         this.folder = metadata.value("folder", File.class);
-        configs().factory(new GenericFactory<>(MinecraftPlayer.class));
     }
 
     public T instance() {

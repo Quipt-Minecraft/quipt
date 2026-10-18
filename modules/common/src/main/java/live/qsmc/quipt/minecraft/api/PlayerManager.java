@@ -1,6 +1,7 @@
 package live.qsmc.quipt.minecraft.api;
 
 import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.core.config.factories.GenericFactory;
 import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.config.files.PlayerConfig;
 import net.kyori.adventure.audience.Audience;
@@ -15,10 +16,11 @@ public abstract class PlayerManager<I, K, P extends Audience, O extends Minecraf
 
     private final PlayerConfig<O> config;
 
-    public PlayerManager(MinecraftIntegration<I, K> integration, PlayerFactory<P, O> playerFactory){
+    public PlayerManager(MinecraftIntegration<I, K> integration, PlayerFactory<P, O> playerFactory, Class<O> minecraftPlayerClass){
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
         this.integration = integration;
         this.playerFactory = playerFactory;
+        integration.configs().factory(new GenericFactory<>(minecraftPlayerClass));
     }
 
     public O of(P player){
