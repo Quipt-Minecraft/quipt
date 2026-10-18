@@ -1,7 +1,7 @@
 package live.qsmc.quipt.minecraft.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 
 public abstract class CommonCommand<S, P> {
 

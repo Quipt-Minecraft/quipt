@@ -2,7 +2,7 @@ package live.qsmc.quipt.velocity.commands.executors;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.velocitypowered.api.command.CommandSource;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.commands.Command;
 import live.qsmc.quipt.minecraft.commands.CommonCommand;
 import live.qsmc.quipt.velocity.QuiptProxy;

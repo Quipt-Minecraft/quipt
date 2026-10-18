@@ -4,11 +4,10 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.discord.Webhook;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.commands.Command;
 import live.qsmc.quipt.minecraft.commands.CommandBuilder;
 import live.qsmc.quipt.minecraft.commands.CommonCommand;
-import live.qsmc.quipt.minecraft.commands.executors.quipt.*;
 
 import java.util.Iterator;
 

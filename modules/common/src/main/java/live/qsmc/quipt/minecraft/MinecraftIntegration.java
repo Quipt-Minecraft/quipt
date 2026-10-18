@@ -1,8 +1,9 @@
-package live.qsmc.quipt.minecraft.api;
+package live.qsmc.quipt.minecraft;
 
 import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.factories.GenericFactory;
+import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
 import live.qsmc.quipt.minecraft.config.files.PartyConfig;
 import live.qsmc.quipt.minecraft.events.party.Party;
 
@@ -25,6 +26,7 @@ public abstract class MinecraftIntegration<T, I> extends QuiptIntegration {
         this.id = metadata.value("id", String.class);
         this.version = metadata.value("version", String.class);
         this.folder = metadata.value("folder", File.class);
+        configs().factory(new GenericFactory<>(MinecraftPlayer.class));
     }
 
     public T instance() {

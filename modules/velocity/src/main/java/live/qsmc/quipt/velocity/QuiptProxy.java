@@ -2,16 +2,14 @@ package live.qsmc.quipt.velocity;
 
 import com.google.inject.Inject;
 import live.qsmc.quipt.core.Quipt;
-import live.qsmc.quipt.core.QuiptIntegration;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import live.qsmc.quipt.core.data.Metadata;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Namespaced;
 import org.json.JSONObject;
 
 import java.io.File;

@@ -2,7 +2,7 @@ package live.qsmc.quipt.paper;
 
 import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.core.Quipt;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.paper.api.players.PaperPlayers;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;

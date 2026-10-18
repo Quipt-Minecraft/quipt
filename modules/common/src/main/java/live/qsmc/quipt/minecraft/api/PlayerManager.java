@@ -1,6 +1,7 @@
 package live.qsmc.quipt.minecraft.api;
 
 import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.config.files.PlayerConfig;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;

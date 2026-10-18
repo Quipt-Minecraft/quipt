@@ -1,6 +1,6 @@
 package live.qsmc.quipt.paper.api.players;
 
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.api.PlayerFactory;
 import live.qsmc.quipt.minecraft.api.PlayerManager;
 import org.bukkit.NamespacedKey;

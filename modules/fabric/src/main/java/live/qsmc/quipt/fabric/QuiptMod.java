@@ -2,7 +2,7 @@ package live.qsmc.quipt.fabric;
 
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.data.Metadata;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
