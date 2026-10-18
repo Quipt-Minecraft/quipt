@@ -23,6 +23,9 @@ public abstract class MinecraftPlayer extends ConfigObject implements Audience {
     @Deprecated
     public MinecraftPlayer(JSONObject json) {
         super(Quipt.INSTANCE, json);
+        if(json.has("metadata")){
+            this.metadata = Metadata.of(json.getJSONObject("metadata"));
+        }
     }
 
 
