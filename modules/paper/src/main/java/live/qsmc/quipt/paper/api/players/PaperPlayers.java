@@ -1,7 +1,6 @@
 package live.qsmc.quipt.paper.api.players;
 
 import live.qsmc.quipt.minecraft.MinecraftIntegration;
-import live.qsmc.quipt.minecraft.api.PlayerFactory;
 import live.qsmc.quipt.minecraft.api.PlayerManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -11,11 +10,6 @@ public class PaperPlayers extends PlayerManager<JavaPlugin, NamespacedKey, Playe
 
 
     public PaperPlayers(MinecraftIntegration<JavaPlugin, NamespacedKey> integration) {
-        super(integration, new PlayerFactory<>(integration) {
-            @Override
-            public PaperPlayer apply(Player player) {
-                return new PaperPlayer(integration, player);
-            }
-        }, PaperPlayer.class);
+        super(integration, PaperPlayer::new, PaperPlayer.class);
     }
 }

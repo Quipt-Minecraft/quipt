@@ -7,16 +7,18 @@ import live.qsmc.quipt.minecraft.config.files.PlayerConfig;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 
+import java.util.function.Function;
+
 public abstract class PlayerManager<I, K, P extends Audience, O extends MinecraftPlayer> {
 
 
     private final MinecraftIntegration<I, K> integration;
-    private final PlayerFactory<P, O> playerFactory;
+    private final Function<P, O> playerFactory;
 
 
     private final PlayerConfig<O> config;
 
-    public PlayerManager(MinecraftIntegration<I, K> integration, PlayerFactory<P, O> playerFactory, Class<O> minecraftPlayerClass){
+    public PlayerManager(MinecraftIntegration<I, K> integration, Function<P, O> playerFactory, Class<O> minecraftPlayerClass){
         Quipt.INSTANCE.configs().factory(new GenericFactory<>(minecraftPlayerClass));
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
         this.integration = integration;

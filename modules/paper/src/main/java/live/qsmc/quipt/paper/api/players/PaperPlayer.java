@@ -1,5 +1,6 @@
 package live.qsmc.quipt.paper.api.players;
 
+import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
 //import com.quiptmc2.paper.api.settings.Settings;
@@ -14,8 +15,8 @@ public class PaperPlayer extends MinecraftPlayer {
 
     private final org.bukkit.entity.Player player;
 
-    public PaperPlayer(QuiptIntegration integration, org.bukkit.entity.Player player) {
-        super(integration, player.getUniqueId());
+    public PaperPlayer(org.bukkit.entity.Player player) {
+        super(Quipt.INSTANCE, player.getUniqueId());
         this.player = player;
         this.uuid = player.getUniqueId();
         this.last_seen = System.currentTimeMillis();
