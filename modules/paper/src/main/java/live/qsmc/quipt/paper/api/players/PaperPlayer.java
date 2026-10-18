@@ -24,7 +24,7 @@ public class PaperPlayer extends MinecraftPlayer {
      */
     @Deprecated
     public PaperPlayer(JSONObject json) {
-        super(Quipt.INSTANCE);
+        super(json);
         this.player = Bukkit.getServer().getPlayer(uuid);
     }
 

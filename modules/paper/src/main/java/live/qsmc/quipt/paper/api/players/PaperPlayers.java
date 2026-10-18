@@ -20,6 +20,7 @@ public class PaperPlayers extends PlayerManager<JavaPlugin, NamespacedKey, Playe
             }
 
             @Override
+            @Deprecated
             public PaperPlayer createFromJson(QuiptIntegration integration, JSONObject json) {
                 return new PaperPlayer(json);
             }
