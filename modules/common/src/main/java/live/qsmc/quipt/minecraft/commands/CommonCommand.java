@@ -6,9 +6,9 @@ import live.qsmc.quipt.minecraft.MinecraftIntegration;
 public abstract class CommonCommand<S, P> {
 
     private final Command<S, P> command;
-    private final MinecraftIntegration<?,?> integration;
+    private final MinecraftIntegration<?,?,?,?,?> integration;
 
-    public CommonCommand(Command<S, P> command, MinecraftIntegration<?,?> integration) {
+    public CommonCommand(Command<S, P> command, MinecraftIntegration<?,?,?,?,?> integration) {
         this.command = command;
         this.integration = integration;
     }
@@ -17,7 +17,7 @@ public abstract class CommonCommand<S, P> {
         return command;
     }
 
-    public MinecraftIntegration<?,?> integration() {
+    public MinecraftIntegration<?,?,?,?,?> integration() {
         return integration;
     }
 

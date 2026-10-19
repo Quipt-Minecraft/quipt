@@ -50,7 +50,7 @@ public class PartyCommand extends PaperCommandExecutor {
                         return logError(context, "You do not have permission to use this command.");
                     if (!(context.getSource().getSender() instanceof Player target))
                         return logError(context, "Only players can leave parties.");
-                    PaperPlayer paperPlayer = QuiptPaper.instance().players().of(target);
+                    PaperPlayer paperPlayer = QuiptPaper.instance().integration().players().of(target);
                     Party party = plugin().integration().parties().get(paperPlayer).orElse(null);
                     if (party == null)
                         return logError(context, "You are not in a party.");
@@ -71,7 +71,7 @@ public class PartyCommand extends PaperCommandExecutor {
                         PlayerSelectorArgumentResolver targetResolver = context.getArgument("target", PlayerSelectorArgumentResolver.class);
                         List<Player> targets = targetResolver.resolve(context.getSource());
                         for (Player target : targets) {
-                            PaperPlayer paperTarget = QuiptPaper.instance().players().of(target);
+                            PaperPlayer paperTarget = QuiptPaper.instance().integration().players().of(target);
 
                             Party party = plugin().integration().parties().get(paperTarget).orElse(null);
                             if (party == null) {
@@ -94,7 +94,7 @@ public class PartyCommand extends PaperCommandExecutor {
                             return logError(context, "Only players can join parties.");
                         try {
                             Party party = context.getArgument("partyName", Party.class);
-                            party.join(QuiptPaper.instance().players().of(target));
+                            party.join(QuiptPaper.instance().integration().players().of(target));
                         } catch (NullPointerException e) {
                             return logError(context, "Party not found.");
                         }
@@ -112,7 +112,7 @@ public class PartyCommand extends PaperCommandExecutor {
                             List<Player> targets = targetResolver.resolve(context.getSource());
                             for (Player target : targets) {
                                 context.getSource().getSender().sendMessage(MessageUtils.get("quipt.party.join.other", target.getName(), party.id()));
-                                party.join(QuiptPaper.instance().players().of(target));
+                                party.join(QuiptPaper.instance().integration().players().of(target));
                             }
                             return Command.SINGLE_SUCCESS;
                         }))))

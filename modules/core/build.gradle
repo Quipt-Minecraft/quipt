@@ -2,6 +2,8 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:$junit_version")
     testImplementation "org.junit.jupiter:junit-jupiter"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockito_version"
 
     implementation "org.json:json:$json_version"
 //    implementation "com.zaxxer:HikariCP:$hikari_version"

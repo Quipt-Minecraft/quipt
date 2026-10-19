@@ -52,7 +52,7 @@ public class QuiptCommand<S, P> extends CommonCommand<S, P> {
     private final Map<String, Map<String, Map<String, Map<String, List<VersionData>>>>> versions = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public QuiptCommand(Command<S, P> command, MinecraftIntegration<?,?> integration) {
+    public QuiptCommand(Command<S, P> command, MinecraftIntegration<?,?,?,?,?> integration) {
         super(command, integration);
         SUB_COMMANDS = Quipt.INSTANCE.registries().register(String.valueOf(integration.identifier("quipt_sub_commands")), () -> null);
         register("list", ListSubCommand.class);

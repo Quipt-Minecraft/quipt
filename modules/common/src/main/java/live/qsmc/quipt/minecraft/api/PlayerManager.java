@@ -1,6 +1,7 @@
 package live.qsmc.quipt.minecraft.api;
 
 import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.factories.ConfigStringFactory;
 import live.qsmc.quipt.core.config.factories.GenericFactory;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
@@ -11,16 +12,16 @@ import net.kyori.adventure.identity.Identity;
 
 import java.util.function.Function;
 
-public abstract class PlayerManager<I, K, P extends Audience, O extends MinecraftPlayer> {
+public abstract class PlayerManager<P extends Audience, O extends MinecraftPlayer<P>> {
 
 
-    private final MinecraftIntegration<I, K> integration;
+    private final QuiptIntegration integration;
     private final Function<P, O> playerConverter;
 
 
     private final PlayerConfig<O> config;
 
-    public PlayerManager(MinecraftIntegration<I, K> integration, Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
+    public PlayerManager(QuiptIntegration integration, Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
         Quipt.INSTANCE.configs().factory(playerConfigFactory);
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
         this.integration = integration;

@@ -24,7 +24,7 @@ public abstract class Command<S, P> {
     private final String cmd;
     private final Registry<P> permissions;
 
-    public Command(MinecraftIntegration<?,?> integration, String cmd) {
+    public Command(MinecraftIntegration<?,?,?,?,?> integration, String cmd) {
         this.cmd = cmd;
         this.permissions = Quipt.INSTANCE.registries().register(integration.id() + ":" + cmd + ":permissions", () -> null);
     }
