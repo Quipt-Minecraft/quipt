@@ -5,12 +5,14 @@ import live.qsmc.quipt.paper.api.players.PaperPlayer;
 import live.qsmc.quipt.paper.api.players.PaperPlayers;
 import live.qsmc.quipt.tests.utils.QuiptPluginTest;
 import live.qsmc.quipt.tests.utils.QuiptTestHarness;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,6 +53,7 @@ public class PaperMockServerTest {
         UUID uuid = UUID.randomUUID();
         when(player.getUniqueId()).thenReturn(uuid);
         when(player.getName()).thenReturn("TestUser");
+        when(player.get(Identity.UUID)).thenReturn(Optional.of(uuid));
 
         PaperPlayers paperPlayers = plugin.integration().players();
         PaperPlayer paperPlayer = paperPlayers.of(player);

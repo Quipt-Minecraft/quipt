@@ -10,6 +10,8 @@ import live.qsmc.quipt.minecraft.config.files.PlayerConfig;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 public abstract class PlayerManager<P extends Audience, O extends MinecraftPlayer<P>> {
@@ -29,7 +31,10 @@ public abstract class PlayerManager<P extends Audience, O extends MinecraftPlaye
     }
 
     public O of(P player){
-        return config.players.contains(player.get(Identity.UUID).toString()) ? config.players.get(player.get(Identity.UUID).toString()) : register(player);
+        Optional<UUID> uuid = player.get(Identity.UUID);
+        return config.players.contains(uuid.orElseThrow().toString()) ?
+                config.players.get(uuid.orElseThrow().toString()) :
+                register(player);
     }
 
     private O register(P player){
