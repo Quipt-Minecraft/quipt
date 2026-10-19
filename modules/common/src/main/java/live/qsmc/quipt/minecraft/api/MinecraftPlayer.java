@@ -11,13 +11,18 @@ import org.json.JSONObject;
 
 import java.util.UUID;
 
-public abstract class MinecraftPlayer extends ConfigObject implements Audience {
+public abstract class MinecraftPlayer<A extends Audience> extends ConfigObject implements Audience {
 
     public Metadata metadata = new Metadata();
 
     public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
         super(integration);
         super.id = uuid.toString();
+    }
+
+    @Deprecated
+    public MinecraftPlayer(A audience) {
+        this(Quipt.INSTANCE, audience.get(Identity.UUID).orElseThrow());
     }
 
     @Deprecated
@@ -32,7 +37,7 @@ public abstract class MinecraftPlayer extends ConfigObject implements Audience {
 //    public abstract int getStatistic(MinecraftStat stat);
 //    public abstract int getStatistic(MinecraftStat stat, MinecraftMaterial material);
 //    public abstract int getStatistic(MinecraftStat stat, MinecraftEntityType entity);
-    public abstract void teleport(MinecraftPlayer target);
+    public abstract void teleport(MinecraftPlayer<A> target);
 
 
     public Component name(){

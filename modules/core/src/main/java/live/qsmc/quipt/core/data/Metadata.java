@@ -31,7 +31,16 @@ public class Metadata implements JsonSerializable {
 
     @Override
     public JSONObject json() {
-        return data;
+        JSONObject copy = new JSONObject();
+        for (String key : data.keySet()) {
+            Object val = data.get(key);
+            if (val instanceof Metadata nestedMeta) {
+                copy.put(key, nestedMeta.json());
+            } else {
+                copy.put(key, val);
+            }
+        }
+        return copy;
     }
 
     /**

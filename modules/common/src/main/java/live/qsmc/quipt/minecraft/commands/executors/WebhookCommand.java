@@ -15,7 +15,7 @@ import static net.kyori.adventure.text.Component.text;
 
 public class WebhookCommand<S, P> extends CommonCommand<S, P> {
 
-    public WebhookCommand(Command<S, P> command, MinecraftIntegration<?,?> integration) {
+    public WebhookCommand(Command<S, P> command, MinecraftIntegration<?,?,?,?,?> integration) {
         super(command, integration);
     }
 

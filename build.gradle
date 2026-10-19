@@ -52,6 +52,10 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 
+    tasks.withType(Test).configureEach {
+        systemProperty 'net.bytebuddy.experimental', 'true'
+    }
+
 
 
 

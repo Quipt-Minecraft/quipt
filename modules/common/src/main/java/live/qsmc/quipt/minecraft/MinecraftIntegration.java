@@ -4,12 +4,15 @@ import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.factories.GenericFactory;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
+import live.qsmc.quipt.minecraft.api.PlayerManager;
 import live.qsmc.quipt.minecraft.config.files.PartyConfig;
 import live.qsmc.quipt.minecraft.events.party.Party;
+import net.kyori.adventure.audience.Audience;
 
 import java.io.File;
+import java.util.function.Function;
 
-public abstract class MinecraftIntegration<T, I> extends QuiptIntegration {
+public abstract class MinecraftIntegration<T, I, M extends PlayerManager<P, O>, P extends Audience, O extends MinecraftPlayer<P>> extends QuiptIntegration {
 
     private PartyConfig parties = null;
     private final Metadata metadata;
@@ -18,14 +21,26 @@ public abstract class MinecraftIntegration<T, I> extends QuiptIntegration {
     private final String version;
     private final File folder;
     private final T instance;
+    private M players = null;
+    private final Function<QuiptIntegration, M> playerManager;
 
-    public MinecraftIntegration(Metadata metadata, T instance) {
+
+    public MinecraftIntegration(Metadata metadata, T instance, Function<QuiptIntegration, M> playerManager) {
         this.metadata = metadata;
         this.instance = instance;
+        this.playerManager = playerManager;
         this.name = metadata.value("name", String.class);
         this.id = metadata.value("id", String.class);
         this.version = metadata.value("version", String.class);
         this.folder = metadata.value("folder", File.class);
+    }
+
+    public M players() {
+        if (players == null) {
+            logger().log("Players", "Initializing players...");
+            players = playerManager.apply(this);
+        }
+        return players;
     }
 
     public T instance() {
