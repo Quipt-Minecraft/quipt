@@ -2,6 +2,7 @@ package live.qsmc.quipt.paper.api.players;
 
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
+import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
 import org.bukkit.Bukkit;
 import org.json.JSONObject;
@@ -25,6 +26,7 @@ public class PaperPlayer extends MinecraftPlayer {
     public PaperPlayer(JSONObject json) {
         super(json);
         this.player = Bukkit.getServer().getPlayer(UUID.fromString(id));
+        super.metadata = Metadata.of(json.optJSONObject("metadata", new JSONObject()));
     }
 
     public PaperPlayer(org.bukkit.entity.Player player) {
