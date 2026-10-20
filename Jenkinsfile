@@ -39,7 +39,6 @@ pipeline {
 
                         def pomFile = "modules/${artifactId}/build/publications/${artifactId}/pom-default.xml"
                         def iconUrl = "https://api.qsmc.live/files/download/logos/quipt.png"
-                        httpRequest httpMode: 'POST', contentType: 'APPLICATION_JSON', requestBody: '''{"embeds":[{"color":16413997,"footer":{"icon_url":"''' + iconUrl + '''","text":"quipt-''' + artifactId + " " + version + '''"},"description":"Version ''' + version + ''' of ''' + artifactId + ''' is available.","type":"rich","title":"New version available for quipt-''' + artifactId + '''!"}]}''', responseHandle: 'NONE', url: 'https://discord.com/api/webhooks/1504597008340484188/sGT_gSTrNAWSxTRHYmbnYBuL0y_biIQn8ex1-hXQbD9ALbUlV6nZkTat8einLEsxerBh', wrapAsMultipart: false
 
 
                         nexusArtifactUploader(
