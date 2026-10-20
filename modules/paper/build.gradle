@@ -114,3 +114,10 @@ modrinth {
 
 // Ensure the Modrinth upload runs after the shaded jar has been created
 tasks.modrinth.dependsOn(shadowJar)
+tasks.modrinth.doLast {
+    def uploadedVersion = tasks.modrinth.newVersion
+    if (uploadedVersion != null) {
+//        project.ext.set("modrinthNewVersion", uploadedVersion)
+        logger.lifecycle("Modrinth returned version {} (ID: {})", uploadedVersion.versionNumber, uploadedVersion.id)
+    }
+}
