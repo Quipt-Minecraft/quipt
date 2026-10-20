@@ -5,7 +5,7 @@ import live.qsmc.quipt.minecraft.commands.Command;
 import live.qsmc.quipt.minecraft.commands.CommonCommand;
 import live.qsmc.quipt.fabric.QuiptMod;
 import live.qsmc.quipt.fabric.commands.FabricCommandExecutor;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.commands.CommandSourceStack;
 

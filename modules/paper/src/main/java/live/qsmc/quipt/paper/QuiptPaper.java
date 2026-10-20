@@ -102,6 +102,7 @@ public class QuiptPaper extends QuiptPlugin {
     public void commands() {
         new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, QuiptCommand.class, "quipt")).register();
         new PaperCommandExecutor.Builder(new PaperCommonCommandExecutor<>(this, WebhookCommand.class, "webhook")).register();
+        new PaperCommandExecutor.Builder(new PartyCommand(this)).register();
     }
 
     @Override

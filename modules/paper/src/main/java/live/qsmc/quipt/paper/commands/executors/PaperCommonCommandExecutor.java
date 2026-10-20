@@ -2,14 +2,12 @@ package live.qsmc.quipt.paper.commands.executors;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.commands.Command;
 import live.qsmc.quipt.minecraft.commands.CommonCommand;
 import live.qsmc.quipt.paper.QuiptPlugin;
 import live.qsmc.quipt.paper.commands.PaperCommandExecutor;
-import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 public class PaperCommonCommandExecutor<C extends CommonCommand<CommandSourceStack, Permission>> extends PaperCommandExecutor {
 

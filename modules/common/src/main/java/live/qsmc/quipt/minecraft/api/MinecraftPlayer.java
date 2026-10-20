@@ -1,15 +1,17 @@
 package live.qsmc.quipt.minecraft.api;
 
+import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
 import live.qsmc.quipt.core.data.Metadata;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import org.json.JSONObject;
 
 import java.util.UUID;
 
-public abstract class MinecraftPlayer extends ConfigObject implements Audience {
+public abstract class MinecraftPlayer<A extends Audience> extends ConfigObject implements Audience {
 
     public Metadata metadata = new Metadata();
 
@@ -18,10 +20,24 @@ public abstract class MinecraftPlayer extends ConfigObject implements Audience {
         super.id = uuid.toString();
     }
 
+    @Deprecated
+    public MinecraftPlayer(A audience) {
+        this(Quipt.INSTANCE, audience.get(Identity.UUID).orElseThrow());
+    }
+
+    @Deprecated
+    public MinecraftPlayer(JSONObject json) {
+        super(Quipt.INSTANCE, json);
+        if(json.has("metadata")){
+            this.metadata = Metadata.of(json.getJSONObject("metadata"));
+        }
+    }
+
+
 //    public abstract int getStatistic(MinecraftStat stat);
 //    public abstract int getStatistic(MinecraftStat stat, MinecraftMaterial material);
 //    public abstract int getStatistic(MinecraftStat stat, MinecraftEntityType entity);
-    public abstract void teleport(MinecraftPlayer target);
+    public abstract void teleport(MinecraftPlayer<A> target);
 
 
     public Component name(){

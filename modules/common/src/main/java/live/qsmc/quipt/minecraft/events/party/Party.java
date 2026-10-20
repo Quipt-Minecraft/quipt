@@ -3,7 +3,7 @@ package live.qsmc.quipt.minecraft.events.party;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.objects.ConfigMap;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
 import live.qsmc.quipt.minecraft.config.files.PartyConfig;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
@@ -26,10 +26,10 @@ public class Party extends ConfigObject {
         members = new ConfigMap<>(integration);
     }
 
-    public MinecraftIntegration<?,?> integration() {
+    public MinecraftIntegration<?,?,?,?,?> integration() {
         if(!(integration instanceof MinecraftIntegration))
             throw new IllegalStateException("Integration is not a MinecraftIntegration");
-        return (MinecraftIntegration<?,?>) integration;
+        return (MinecraftIntegration<?,?,?,?,?>) integration;
     }
 
 

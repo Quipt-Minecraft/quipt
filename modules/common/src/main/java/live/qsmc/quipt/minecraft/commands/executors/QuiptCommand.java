@@ -7,14 +7,13 @@ import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.files.QuiptConfig;
 import live.qsmc.quipt.core.data.JsonSerializable;
 import live.qsmc.quipt.core.data.annotations.Nullable;
-import live.qsmc.quipt.core.data.registries.Registries;
 import live.qsmc.quipt.core.data.registries.Registry;
 import live.qsmc.quipt.core.data.registries.RegistryKey;
 import live.qsmc.quipt.core.utils.net.ApiResponse;
 import live.qsmc.quipt.core.utils.net.HttpConfig;
 import live.qsmc.quipt.core.utils.net.HttpHeaders;
 import live.qsmc.quipt.core.utils.net.NetworkUtils;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.commands.Command;
 import live.qsmc.quipt.minecraft.commands.CommandBuilder;
 import live.qsmc.quipt.minecraft.commands.CommonCommand;
@@ -53,7 +52,7 @@ public class QuiptCommand<S, P> extends CommonCommand<S, P> {
     private final Map<String, Map<String, Map<String, Map<String, List<VersionData>>>>> versions = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public QuiptCommand(Command<S, P> command, MinecraftIntegration<?,?> integration) {
+    public QuiptCommand(Command<S, P> command, MinecraftIntegration<?,?,?,?,?> integration) {
         super(command, integration);
         SUB_COMMANDS = Quipt.INSTANCE.registries().register(String.valueOf(integration.identifier("quipt_sub_commands")), () -> null);
         register("list", ListSubCommand.class);

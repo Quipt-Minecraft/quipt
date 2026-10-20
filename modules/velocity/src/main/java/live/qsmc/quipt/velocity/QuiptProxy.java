@@ -1,17 +1,18 @@
 package live.qsmc.quipt.velocity;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.proxy.Player;
 import live.qsmc.quipt.core.Quipt;
-import live.qsmc.quipt.core.QuiptIntegration;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import live.qsmc.quipt.core.data.Metadata;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
+import live.qsmc.quipt.velocity.players.ProxyPlayer;
+import live.qsmc.quipt.velocity.players.ProxyPlayers;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Namespaced;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -67,11 +68,11 @@ public abstract class QuiptProxy {
         return integration;
     }
 
-    public abstract static class VelocityIntegration extends MinecraftIntegration<PluginDescription, Key> {
+    public abstract static class VelocityIntegration extends MinecraftIntegration<PluginDescription, Key, ProxyPlayers, Player, ProxyPlayer> {
 
 
         public VelocityIntegration(Metadata metadata, PluginDescription instance) {
-            super(metadata, instance);
+            super(metadata, instance, ProxyPlayers::new);
         }
 
         @Override

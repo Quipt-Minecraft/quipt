@@ -1,68 +1,25 @@
 package live.qsmc.quipt.paper.api.players;
 
-import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
-import live.qsmc.quipt.core.config.Config;
-import live.qsmc.quipt.core.config.ConfigTemplate;
-import live.qsmc.quipt.core.config.objects.ConfigMap;
-import live.qsmc.quipt.core.data.registries.Registry;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
-import org.bukkit.NamespacedKey;
+import live.qsmc.quipt.core.config.objects.ConfigObject;
+import live.qsmc.quipt.minecraft.api.PlayerManager;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.json.JSONObject;
 
-import java.io.File;
+public class PaperPlayers extends PlayerManager<Player, PaperPlayer> {
+    public PaperPlayers(QuiptIntegration integration) {
+        super(integration, PaperPlayer::new, new ConfigObject.Factory<>() {
+            @Override
+            public String getClassName() {
+                return PaperPlayer.class.getName();
+            }
 
-public class PaperPlayers {
-
-//    private final Registry<PaperPlayer> players;
-    private final MinecraftIntegration<JavaPlugin, NamespacedKey> integration;
-
-    public PaperPlayers(MinecraftIntegration<JavaPlugin, NamespacedKey> integration){
-        integration.configs().register(PlayerConfig.class);
-//        players = Quipt.INSTANCE.registries().register("players", ()->null);
-        this.integration = integration;
-    }
-
-    private PlayerConfig config(){
-        return integration.configs().config(PlayerConfig.class);
-    }
-
-    public PaperPlayer of(Player player){
-        if(!config().players.contains(player.getUniqueId().toString()))
-            return register(player);
-        return config().players.get(player.getUniqueId().toString());
-//        return players.get(player.getUniqueId().toString()).orElse(register(player));
-    }
-
-    private PaperPlayer register(Player player){
-        PaperPlayer playerData = new PaperPlayer(integration, player);
-        PlayerConfig config = config();
-        config.players.put(playerData);
-        config.save();
-        return playerData;
-    }
-
-    public void save(){
-        config().save();
-    }
-
-    @ConfigTemplate(name = "players", ext = ConfigTemplate.Extension.JSON)
-    public static class PlayerConfig extends Config {
-
-        ConfigMap<PaperPlayer> players;
-
-        /**
-         * Creates a new config file
-         *
-         * @param file        The file to save to
-         * @param name        The name of the config
-         * @param extension   The extension of the config
-         * @param integration The plugin that owns this config
-         */
-        public PlayerConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
-            super(file, name, extension, integration);
-            players = new ConfigMap<>(integration);
-        }
+            @Override
+            @Deprecated
+            public PaperPlayer createFromJson(QuiptIntegration integration, JSONObject json) {
+                PaperPlayer player = new PaperPlayer(json);
+                return player;
+            }
+        });
     }
 }

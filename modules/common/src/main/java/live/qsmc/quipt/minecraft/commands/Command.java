@@ -8,9 +8,8 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.data.registries.Registry;
-import live.qsmc.quipt.minecraft.api.MinecraftIntegration;
+import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.utils.chat.MessageUtils;
-import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -25,7 +24,7 @@ public abstract class Command<S, P> {
     private final String cmd;
     private final Registry<P> permissions;
 
-    public Command(MinecraftIntegration<?,?> integration, String cmd) {
+    public Command(MinecraftIntegration<?,?,?,?,?> integration, String cmd) {
         this.cmd = cmd;
         this.permissions = Quipt.INSTANCE.registries().register(integration.id() + ":" + cmd + ":permissions", () -> null);
     }

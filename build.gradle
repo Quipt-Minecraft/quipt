@@ -52,6 +52,10 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 
+    tasks.withType(Test).configureEach {
+        systemProperty 'net.bytebuddy.experimental', 'true'
+    }
+
 
 
 
@@ -71,6 +75,39 @@ configure(subprojects.findAll { it.name == "paper" || it.name == "fabric" || it.
         allowedReleaseTypes = Set.of(ReleaseType.RELEASE)
     }
     tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+
+    tasks.modrinth.doLast {
+        def uploadedVersion = tasks.modrinth.newVersion
+        if (uploadedVersion != null) {
+            def str = rootProject.file("changelog.md").text
+            def max = 75
+
+            def truncatedChangelog = (str?.size() > max) ? "${str.take(max - 13)}... [Read More](https://modrinth.com/plugin/$modrinth_id/changelog)" : str
+            def modrinth_version = uploadedVersion.id
+
+            logger.lifecycle("Modrinth returned version {} (ID: {})", uploadedVersion.versionNumber, uploadedVersion.id)
+            String endpoint = "https://ptb.discord.com/api/webhooks/1562201958675255416/xeVJdJXOfsaKTQje1qMLRo6Yps5RHkWc65IzodxcRnGGsOEvXGYJB1E6yC3hj5IjfWSa"
+
+            def binding = [
+                    version: version,
+                    modrinth_id: modrinth_id,
+                    modrinth_version: modrinth_version,
+                    truncatedChangelog: groovy.json.StringEscapeUtils.escapeJava(truncatedChangelog),
+                    module: project.name
+            ]
+            def engine = new groovy.text.SimpleTemplateEngine()
+            String payload = engine.createTemplate(rootProject.file("modrinth.json")).make(binding).toString()
+
+            try {
+                String response = postJson(endpoint, payload)
+                println "Received: $response"
+            } catch (Exception e) {
+                println "Attempt failed: ${e.message}"
+            }
+        }
+    }
+
+
 }
 
 java {
@@ -89,4 +126,13 @@ tasks.register("preparePublish") {
                     t.name == "generatePomFileFor${subProjectName}Publication"
         }
     }
+}
+
+def postJson(String url, String json) {
+    HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection()
+    conn.requestMethod = 'POST'
+    conn.doOutput = true
+    conn.setRequestProperty('Content-Type', 'application/json')
+    conn.outputStream.withWriter('UTF-8') { it.write(json) }
+    return conn.inputStream.text
 }
