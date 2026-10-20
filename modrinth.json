@@ -1,19 +1,24 @@
 {
+  "content": "",
+  "tts": false,
+  "flags": 0,
   "embeds": [
     {
-      "title": "New ${project.name} version released!",
-      "description": "A new version of ${rootProject.name} for ${project.name} has been uploaded to Modrinth.",
-      "color": 1638162,
+      "color": 5763719,
+      "image": {
+        "url": "https://api.qsmc.live/files/download/logos/QUIPT_API_New_Version_Banner.png"
+      },
+      "fields": []
+    },
+    {
+      "title": "Update $version for $module",
+      "description": "Version $version can be downloaded on [Modrinth](https://modrinth.com/project/$modrinth_id/version/$modrinth_version).",
+      "timestamp": "2026-10-20T21:38:11.528Z",
+      "color": 5763719,
       "fields": [
         {
-          "name": "Version",
-          "value": "${version}",
-          "inline": true
-        },
-        {
-          "name": "Download",
-          "value": "[here](https://modrinth.com/plugin/${modrinth_id}/versions)",
-          "inline": true
+          "name": "🛠️ Change Log",
+          "value": "$truncatedChangelog"
         }
       ]
     }
