@@ -68,5 +68,13 @@ pipeline {
                 }
             }
         }
+        stage('Modrinth') {
+            when {
+                expression { env.BRANCH_NAME == 'master' }
+            }
+            steps {
+                sh './gradlew :modules:paper:modrinth :modules:velocity:modrinth :modules:fabric:modrinth'
+            }
+        }
     }
 }
