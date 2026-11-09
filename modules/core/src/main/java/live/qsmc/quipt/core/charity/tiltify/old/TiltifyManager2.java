@@ -1,24 +1,5 @@
 package live.qsmc.quipt.core.charity.tiltify.old;
 
-import live.qsmc.quipt.core.Quipt;
-import live.qsmc.quipt.core.QuiptIntegration;
-import live.qsmc.quipt.core.charity.CharityDonation;
-import live.qsmc.quipt.core.charity.CharityPlatform;
-import live.qsmc.quipt.core.charity.ProcessResult;
-import live.qsmc.quipt.core.charity.tiltify.TiltifyDonation;
-import live.qsmc.quipt.core.config.files.TiltifyConfig;
-import live.qsmc.quipt.core.charity.event.DonationUpdateEvent;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Instant;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Manages Tiltify donation data with caching and periodic updates.
  */

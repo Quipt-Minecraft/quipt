@@ -1,6 +1,8 @@
 package live.qsmc.quipt.tests;
 
 import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.core.charity.el.ExtraLifePlatform;
+import live.qsmc.quipt.core.charity.tiltify.TiltifyPlatform;
 import live.qsmc.quipt.paper.api.players.PaperPlayer;
 import live.qsmc.quipt.paper.api.players.PaperPlayers;
 import live.qsmc.quipt.tests.utils.QuiptPluginTest;
@@ -59,5 +61,20 @@ public class PaperMockServerTest {
         PaperPlayer paperPlayer = paperPlayers.of(player);
         assertNotNull(paperPlayer);
         assertEquals(uuid, paperPlayer.uuid());
+    }
+    @Test
+    public void charityTests(){
+        Player player = mock(Player.class, withSettings().lenient());
+        UUID uuid = UUID.randomUUID();
+        when(player.getUniqueId()).thenReturn(uuid);
+        when(player.getName()).thenReturn("TestUser");
+        when(player.get(Identity.UUID)).thenReturn(Optional.of(uuid));
+
+        ExtraLifePlatform extralife = Quipt.INSTANCE.charities().initialize(plugin.integration(), "extralife", ExtraLifePlatform.class);
+        TiltifyPlatform tiltify = Quipt.INSTANCE.charities().initialize(plugin.integration(), "tiltify", TiltifyPlatform.class);
+
+        extralife.config().save();
+        tiltify.config().save();
+
     }
 }

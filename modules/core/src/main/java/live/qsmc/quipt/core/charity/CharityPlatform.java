@@ -53,4 +53,21 @@ public abstract class CharityPlatform<O extends CharityDonation, C extends Confi
         }
 
     }
+
+    public void log(String message, Object... args) {
+        integration().logger().log(name(), message, args);
+    }
+
+    public void error(Throwable throwable, String message, Object... args) {
+        integration.logger().error(name(), message, throwable, args);
+    }
+
+    public void error(String message, Object... args) {
+        integration.logger().error(name(), message, args);
+
+    }
+
+    public void warn(String message) {
+        integration().logger().warn(name(), message);
+    }
 }

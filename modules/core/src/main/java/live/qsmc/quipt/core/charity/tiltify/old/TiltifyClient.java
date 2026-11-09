@@ -1,13 +1,5 @@
 package live.qsmc.quipt.core.charity.tiltify.old;
 
-import live.qsmc.quipt.core.config.files.TiltifyConfig;
-import live.qsmc.quipt.core.utils.net.HttpConfig;
-import live.qsmc.quipt.core.utils.net.HttpHeader;
-import live.qsmc.quipt.core.utils.net.NetworkUtils;
-import org.json.JSONObject;
-
-import java.net.http.HttpResponse;
-
 /**
  * Tiltify API client for fetching campaign/team donation data.
  * Handles OAuth authentication when credentials are configured.
