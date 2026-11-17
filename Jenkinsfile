@@ -5,6 +5,7 @@ pipeline {
     }
     environment {
         BRANCH_NAME = "${params.BRANCH}"
+        MODRINTH_TOKEN = credentials('modrinth_token')
     }
     stages {
         stage('Update') {
