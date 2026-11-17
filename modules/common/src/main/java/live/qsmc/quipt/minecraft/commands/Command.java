@@ -87,8 +87,16 @@ public abstract class Command<S, P> {
         return MessageUtils.get(getUsageKey(context));
     }
 
+    public int showUsage(CommandContext<S> context) {
+        return showUsage(context, true);
+    }
+
+    public int showUsage(CommandContext<S> context, boolean hasPermission) {
+        return logError(context, hasPermission ? MessageUtils.get(getUsageKey(context)) : MessageUtils.get("cmd.error.no_perm"));
+    }
+
     public int showUsage(CommandContext<S> context, P perm) {
-        return logError(context, hasPermission(context.getSource(), perm) ? MessageUtils.get(getUsageKey(context)) : MessageUtils.get("cmd.error.no_perm", perm));
+        return showUsage(context, hasPermission(context.getSource(), perm));
     }
 
     public CompletableFuture<Suggestions> onlySimilar(String[] values, String argumentName, CommandContext<S> context, SuggestionsBuilder builder) {

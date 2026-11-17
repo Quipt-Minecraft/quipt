@@ -21,8 +21,7 @@ public abstract class QuiptPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        listeners();
-        commands();
+
         JSONObject data = new JSONObject();
         data.put("name", getPluginMeta().getName());
         data.put("version", getPluginMeta().getVersion());
@@ -36,6 +35,8 @@ public abstract class QuiptPlugin extends JavaPlugin {
             }
         };
         Quipt.INSTANCE.enable(integration);
+        listeners();
+        commands();
     }
 
     public PaperIntegration integration() {
