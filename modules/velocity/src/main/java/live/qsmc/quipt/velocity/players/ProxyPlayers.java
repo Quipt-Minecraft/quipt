@@ -9,8 +9,8 @@ import org.json.JSONObject;
 import java.util.function.Function;
 
 public class ProxyPlayers extends PlayerManager<Player, ProxyPlayer> {
-    public ProxyPlayers(QuiptIntegration integration) {
-        super(integration, ProxyPlayer::new, new ConfigObject.Factory<ProxyPlayer>() {
+    public ProxyPlayers() {
+        super(ProxyPlayer::new, new ConfigObject.Factory<ProxyPlayer>() {
             @Override
             public String getClassName() {
                 return ProxyPlayer.class.getName();
