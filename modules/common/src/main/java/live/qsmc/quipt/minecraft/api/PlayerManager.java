@@ -22,9 +22,9 @@ public abstract class PlayerManager<P extends Audience, O extends MinecraftPlaye
 
     private final PlayerConfig<O> config;
 
-    public PlayerManager(Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
-        Quipt.INSTANCE.configs().factory(playerConfigFactory);
-        this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
+    public PlayerManager(QuiptIntegration integration, Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
+        integration.configs().factory(playerConfigFactory);
+        this.config = integration.configs().register(PlayerConfig.class);
         this.playerConverter = playerConverter;
     }
 
