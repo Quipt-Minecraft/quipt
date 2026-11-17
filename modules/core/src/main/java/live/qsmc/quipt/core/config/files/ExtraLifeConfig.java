@@ -3,13 +3,12 @@ package live.qsmc.quipt.core.config.files;
 
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.charity.el.ExtraLifeDonation;
-import live.qsmc.quipt.core.charity.tiltify.CharityConfig;
 import live.qsmc.quipt.core.config.ConfigTemplate;
 import live.qsmc.quipt.core.config.ConfigValue;
 
 import java.io.File;
 
-@ConfigTemplate(name = "donations", ext = ConfigTemplate.Extension.JSON)
+@ConfigTemplate(name = "extralife", ext = ConfigTemplate.Extension.JSON)
 public class ExtraLifeConfig extends CharityConfig<ExtraLifeDonation> {
 
     @ConfigValue

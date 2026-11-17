@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.classfile.instruction.LocalVariable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
@@ -124,7 +125,6 @@ public abstract class Config {
             try {
                 Object value = field.get(this);
                 if(value instanceof JsonSerializable serializable) value = serializable.json();
-                if(value instanceof ConfigObject configObject) value = configObject.json();
 
                 data.put(field.getName(), value);
             } catch (IllegalAccessException e) {
@@ -151,5 +151,16 @@ public abstract class Config {
         }
 
         return json().toString();
+    }
+
+    public void set(String variableName, Object value) {
+        try {
+            Field field = getClass().getDeclaredField(variableName);
+            field.set(this, value);
+            save();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            integration().logger().error("Config", "Failed to set field: " + variableName, e);
+            throw new RuntimeException(e);
+        }
     }
 }

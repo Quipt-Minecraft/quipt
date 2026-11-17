@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 public class PaperPlayers extends PlayerManager<Player, PaperPlayer> {
-    public PaperPlayers(QuiptIntegration integration) {
-        super(integration, PaperPlayer::new, new ConfigObject.Factory<>() {
+    public PaperPlayers() {
+        super(PaperPlayer::new, new ConfigObject.Factory<>() {
             @Override
             public String getClassName() {
                 return PaperPlayer.class.getName();

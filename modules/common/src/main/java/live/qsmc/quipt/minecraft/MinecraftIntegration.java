@@ -11,6 +11,7 @@ import net.kyori.adventure.audience.Audience;
 
 import java.io.File;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class MinecraftIntegration<T, I, M extends PlayerManager<P, O>, P extends Audience, O extends MinecraftPlayer<P>> extends QuiptIntegration {
 
@@ -22,10 +23,10 @@ public abstract class MinecraftIntegration<T, I, M extends PlayerManager<P, O>, 
     private final File folder;
     private final T instance;
     private M players = null;
-    private final Function<QuiptIntegration, M> playerManager;
+    private final Supplier<M> playerManager;
 
 
-    public MinecraftIntegration(Metadata metadata, T instance, Function<QuiptIntegration, M> playerManager) {
+    public MinecraftIntegration(Metadata metadata, T instance, Supplier<M> playerManager) {
         this.metadata = metadata;
         this.instance = instance;
         this.playerManager = playerManager;
@@ -38,7 +39,7 @@ public abstract class MinecraftIntegration<T, I, M extends PlayerManager<P, O>, 
     public M players() {
         if (players == null) {
             logger().log("Players", "Initializing players...");
-            players = playerManager.apply(this);
+            players = playerManager.get();
         }
         return players;
     }

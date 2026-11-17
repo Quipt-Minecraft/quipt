@@ -1,10 +1,11 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'BRANCH', defaultValue: 'snapshot', description: 'Branch to build and publish')
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build and publish')
     }
     environment {
         BRANCH_NAME = "${params.BRANCH}"
+        MODRINTH_TOKEN = credentials('modrinth_token')
     }
     stages {
         stage('Update') {

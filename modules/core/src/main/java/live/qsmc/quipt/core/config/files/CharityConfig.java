@@ -1,4 +1,4 @@
-package live.qsmc.quipt.core.charity.tiltify;
+package live.qsmc.quipt.core.config.files;
 
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.charity.CharityDonation;

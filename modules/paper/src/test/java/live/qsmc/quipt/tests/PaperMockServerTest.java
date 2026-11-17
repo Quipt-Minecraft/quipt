@@ -1,6 +1,9 @@
 package live.qsmc.quipt.tests;
 
 import live.qsmc.quipt.core.Quipt;
+import live.qsmc.quipt.core.charity.el.ExtraLifePlatform;
+import live.qsmc.quipt.core.charity.tiltify.TiltifyPlatform;
+import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.paper.api.players.PaperPlayer;
 import live.qsmc.quipt.paper.api.players.PaperPlayers;
 import live.qsmc.quipt.tests.utils.QuiptPluginTest;
@@ -22,6 +25,8 @@ public class PaperMockServerTest {
 
     private Server server;
     private QuiptPluginTest plugin;
+
+    private static final UUID uuid = UUID.fromString("c10946a5-3283-4ecd-9f64-77fc76ae577d");
 
     @BeforeEach
     public void setUp() {
@@ -49,15 +54,41 @@ public class PaperMockServerTest {
 
     @Test
     public void testPlayerLifecycleInServerEnvironment() {
-        Player player = mock(Player.class, withSettings().lenient());
-        UUID uuid = UUID.randomUUID();
-        when(player.getUniqueId()).thenReturn(uuid);
-        when(player.getName()).thenReturn("TestUser");
-        when(player.get(Identity.UUID)).thenReturn(Optional.of(uuid));
+        Player player = mockPlayer();
 
         PaperPlayers paperPlayers = plugin.integration().players();
         PaperPlayer paperPlayer = paperPlayers.of(player);
         assertNotNull(paperPlayer);
         assertEquals(uuid, paperPlayer.uuid());
+    }
+    @Test
+    public void charityTests(){
+
+
+        ExtraLifePlatform extralife = Quipt.INSTANCE.charities().initialize(plugin.integration(), "extralife", ExtraLifePlatform.class);
+        TiltifyPlatform tiltify = Quipt.INSTANCE.charities().initialize(plugin.integration(), "tiltify", TiltifyPlatform.class);
+
+        extralife.config().save();
+        tiltify.config().save();
+    }
+
+    @Test
+    public void testPlayerMetadata(){
+        Player player = mockPlayer();
+        PaperPlayers paperPlayers = plugin.integration().players();
+        PaperPlayer paperPlayer = paperPlayers.of(player);
+
+        Metadata data = paperPlayer.metadata;
+
+        data.put("test_key3", "test_value");
+        paperPlayers.save();
+    }
+
+    private Player mockPlayer(){
+        Player player = mock(Player.class, withSettings().lenient());
+        when(player.getUniqueId()).thenReturn(uuid);
+        when(player.getName()).thenReturn("TestUser");
+        when(player.get(Identity.UUID)).thenReturn(Optional.of(uuid));
+        return player;
     }
 }

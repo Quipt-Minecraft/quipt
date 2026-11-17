@@ -17,16 +17,14 @@ import java.util.function.Function;
 public abstract class PlayerManager<P extends Audience, O extends MinecraftPlayer<P>> {
 
 
-    private final QuiptIntegration integration;
     private final Function<P, O> playerConverter;
 
 
     private final PlayerConfig<O> config;
 
-    public PlayerManager(QuiptIntegration integration, Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
+    public PlayerManager(Function<P, O> playerConverter, ConfigObject.Factory<O> playerConfigFactory){
         Quipt.INSTANCE.configs().factory(playerConfigFactory);
         this.config = Quipt.INSTANCE.configs().register(PlayerConfig.class);
-        this.integration = integration;
         this.playerConverter = playerConverter;
     }
 
