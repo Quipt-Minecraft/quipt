@@ -46,5 +46,9 @@ public abstract class PlayerManager<P extends Audience, O extends MinecraftPlaye
         config.save();
     }
 
+    public PlayerConfig<O> config(){
+        return config;
+    }
+
 
 }
