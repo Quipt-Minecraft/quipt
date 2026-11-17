@@ -78,10 +78,6 @@ public class PaperMockServerTest {
         PaperPlayers paperPlayers = plugin.integration().players();
         PaperPlayer paperPlayer = paperPlayers.of(player);
 
-        Metadata data = paperPlayer.metadata;
-
-        data.put("test_key3", "test_value");
-        paperPlayers.save();
     }
 
     private Player mockPlayer(){

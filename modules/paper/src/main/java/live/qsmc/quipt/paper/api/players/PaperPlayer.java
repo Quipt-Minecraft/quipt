@@ -22,7 +22,7 @@ public class PaperPlayer extends MinecraftPlayer<Player> {
     @Deprecated
     public PaperPlayer(JSONObject json) {
         super(json);
-        super.metadata = Metadata.of(json.optJSONObject("metadata", new JSONObject()));
+        super.metadata = json.optJSONObject("metadata", new JSONObject());
     }
 
     public PaperPlayer(org.bukkit.entity.Player player) {

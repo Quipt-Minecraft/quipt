@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public abstract class MinecraftPlayer<A extends Audience> extends ConfigObject implements Audience {
 
-    public Metadata metadata = new Metadata();
+    public JSONObject metadata = new JSONObject();
 
     public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
         super(integration);
@@ -29,7 +29,7 @@ public abstract class MinecraftPlayer<A extends Audience> extends ConfigObject i
     public MinecraftPlayer(JSONObject json) {
         super(Quipt.INSTANCE, json);
         if(json.has("metadata")){
-            this.metadata = Metadata.of(json.getJSONObject("metadata"));
+            this.metadata = json.getJSONObject("metadata");
         }
     }
 
