@@ -15,14 +15,14 @@ public abstract class MinecraftPlayer<A extends Audience> extends ConfigObject i
 
     public JSONObject metadata = new JSONObject();
 
-    public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
-        super(integration);
+    public MinecraftPlayer(UUID uuid) {
+        super(Quipt.INSTANCE);
         super.id = uuid.toString();
     }
 
     @Deprecated
     public MinecraftPlayer(A audience) {
-        this(Quipt.INSTANCE, audience.get(Identity.UUID).orElseThrow());
+        this(audience.get(Identity.UUID).orElseThrow());
     }
 
     @Deprecated

@@ -21,8 +21,8 @@ public class FabricPlayer extends MinecraftPlayer<ServerPlayerAudience> {
         super(audience);
     }
 
-    public FabricPlayer(QuiptIntegration integration, UUID uuid) {
-        super(integration, uuid);
+    public FabricPlayer(UUID uuid) {
+        super(uuid);
     }
 
     @Override

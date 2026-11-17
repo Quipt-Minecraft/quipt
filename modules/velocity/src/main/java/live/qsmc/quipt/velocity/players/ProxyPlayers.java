@@ -10,8 +10,8 @@ import org.json.JSONObject;
 import java.util.function.Function;
 
 public class ProxyPlayers extends PlayerManager<Player, ProxyPlayer> {
-    public ProxyPlayers(QuiptIntegration integration) {
-        super(integration, ProxyPlayer::new, new ConfigObject.Factory<>() {
+    public ProxyPlayers() {
+        super(ProxyPlayer::new, ProxyPlayer::new, new ConfigObject.Factory<>() {
             @Override
             public String getClassName() {
                 return ProxyPlayer.class.getName();
@@ -20,8 +20,7 @@ public class ProxyPlayers extends PlayerManager<Player, ProxyPlayer> {
             @Override
             @Deprecated
             public ProxyPlayer createFromJson(QuiptIntegration integration, JSONObject json) {
-                ProxyPlayer player = new ProxyPlayer(json);
-                return player;
+                return new ProxyPlayer(json);
             }
         });
     }

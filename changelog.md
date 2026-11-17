@@ -1,6 +1,5 @@
 
 Player data and persistence
-- Moved player data and persistence to the individual integration modules.
 - Changed metadata field to JSONObject class instead of Metadata
 
 Versioning

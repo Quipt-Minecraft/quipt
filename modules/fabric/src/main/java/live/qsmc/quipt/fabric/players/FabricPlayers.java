@@ -17,8 +17,8 @@ import java.util.function.Function;
 public class FabricPlayers extends PlayerManager<ServerPlayerAudience, FabricPlayer> {
 
 
-    public FabricPlayers(QuiptIntegration integration) {
-        super(integration, FabricPlayer::new, new ConfigObject.Factory<>() {
+    public FabricPlayers() {
+        super(FabricPlayer::new, FabricPlayer::new, new ConfigObject.Factory<>() {
             @Override
             public String getClassName() {
                 return FabricPlayer.class.getName();
