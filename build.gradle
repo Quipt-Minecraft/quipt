@@ -25,12 +25,20 @@ def branchName = {
     return branch.replaceAll("[^a-zA-Z0-9._-]", "-")
 }()
 
+def buildNumber = {
+    def number = System.getenv("BUILD_NUMBER")
+    if (!number) {
+        number = "indev"
+    }
+    return number
+}()
+
 group = "live.qsmc.quipt"
-version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
+version = "${project_version}-${build_status}.${buildNumber}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
 
 allprojects {
     group = "live.qsmc.quipt"
-    version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
+    version = "${project_version}-${build_status}.${buildNumber}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}")
 
     repositories {
         mavenCentral()
@@ -62,7 +70,7 @@ subprojects {
 }
 
 configure(subprojects.findAll { it.name == "common" ||  it.name == "velocity" ||  it.name == "paper" ||  it.name == "fabric" }) {
-    version = "${project_version}-${build_status}.${build_number}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}") + "-MC${minecraft_version}"
+    version = "${project_version}-${build_status}.${buildNumber}" + (branchName == "master" || branchName == "origin" ? "" : "-${branchName}") + "-MC${minecraft_version}"
 }
 
 
