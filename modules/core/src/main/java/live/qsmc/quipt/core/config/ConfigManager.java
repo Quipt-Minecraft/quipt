@@ -100,11 +100,34 @@ public class ConfigManager {
         return content;
     }
 
+    public <T extends Config> void register(T config) {
+        integration.logger().log("Config Manager", "Registering config file \"" + config.name() + "\" for integration: " + integration.name() + ".");
+
+        //Variables set. Now time to load the file or default values
+        JSONObject writtenData = load(config.file(), config.ext());
+
+        write(config, writtenData);
+
+        configs.put(config.name(), config);
+        integration.logger().log(
+                "Config Manager",
+                config.write()
+                        ? "Registered {} config file"
+                        : "Failed to register {} config file",
+                config.name()
+        );
+    }
+
     private File file(ConfigTemplate templateData) throws IOException {
         File file = new File(integration.folder(), templateData.name() + "." + templateData.ext().extension());
+        return file(templateData.name(), templateData.ext());
+    }
+
+    public File file(String path, ConfigTemplate.Extension extension) throws IOException {
+        File file = new File(integration.folder(), path + "." + extension.extension());
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) {
-            integration.logger().log("Config Manager", "Config file \"" + templateData.name() + "\" does not exist. Creating...");
+            integration.logger().log("Config Manager", "Config file \"" + path + "\" does not exist. Creating...");
             integration.logger().log("Config Manager", file.createNewFile() ? "Success" : "Failure");
         }
         return file;
