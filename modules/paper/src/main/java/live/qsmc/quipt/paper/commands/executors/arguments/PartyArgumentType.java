@@ -21,8 +21,8 @@ public class PartyArgumentType extends CustomArgumentConverter<@NotNull Party, @
     }
 
     @Override
-    public @NotNull Party convert(@NotNull String s) throws CommandSyntaxException {
-        return plugin().integration().parties().get(s);
+    public @NotNull Party convert(@NotNull String s) {
+        return integration().parties().get(s);
     }
 
     @Override
@@ -34,22 +34,13 @@ public class PartyArgumentType extends CustomArgumentConverter<@NotNull Party, @
     public <S> @NotNull CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
 
         String input = builder.getInput().substring(builder.getStart());
-        String[] values = new String[plugin().integration().parties().parties.size()];
+        String[] values = new String[integration().parties().parties.size()];
         int i = 0;
-        for (Party party : plugin().integration().parties().parties.values()) {
+        for (Party party : integration().parties().parties.values()) {
             values[i] = party.id();
             i=i+1;
         }
         return onlySimilar(values, input, (CommandContext<CommandSourceStack>) context, builder);
     }
 
-    @Override
-    public Permission permission(String id) {
-        return null;
-    }
-
-    @Override
-    public Permission permission(int id) {
-        return null;
-    }
 }

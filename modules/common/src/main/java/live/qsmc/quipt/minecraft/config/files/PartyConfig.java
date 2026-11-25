@@ -10,6 +10,7 @@ import live.qsmc.quipt.minecraft.events.party.Party;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 @ConfigTemplate(name = "party", ext = ConfigTemplate.Extension.JSON)
@@ -29,6 +30,11 @@ public class PartyConfig extends Config {
     public PartyConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
         parties = new ConfigMap<>(integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 
     public Party create(String name){

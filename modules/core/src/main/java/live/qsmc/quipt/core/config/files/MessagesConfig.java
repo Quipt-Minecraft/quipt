@@ -7,6 +7,7 @@ import live.qsmc.quipt.core.config.ConfigValue;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 import static live.qsmc.quipt.core.config.ConfigTemplate.Extension.JSON;
 
@@ -18,5 +19,10 @@ public class MessagesConfig extends Config {
 
     public MessagesConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 }

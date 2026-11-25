@@ -30,9 +30,6 @@ public abstract class QuiptIntegration {
 
 
 
-    public QuiptIntegration() {
-        logger().log("Quipt", "Initializing QuiptIntegration {}...", getClass().getName());
-    }
 
     public final Logger logger() {
         return logger;

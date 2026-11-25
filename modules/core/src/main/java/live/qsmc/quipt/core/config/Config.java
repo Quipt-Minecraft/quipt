@@ -167,4 +167,6 @@ public abstract class Config {
     public ConfigTemplate.Extension ext() {
         return extension;
     }
+
+    public abstract void update(Field versionField, int storedVersion);
 }

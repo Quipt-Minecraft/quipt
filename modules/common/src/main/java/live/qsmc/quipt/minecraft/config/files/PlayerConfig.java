@@ -8,6 +8,7 @@ import live.qsmc.quipt.core.config.objects.ConfigMap;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 @ConfigTemplate(name = "players", ext = ConfigTemplate.Extension.JSON)
 public class PlayerConfig<O extends MinecraftPlayer> extends Config {
@@ -26,5 +27,10 @@ public class PlayerConfig<O extends MinecraftPlayer> extends Config {
     public PlayerConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
         players = new ConfigMap<>(integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 }

@@ -7,6 +7,7 @@ import live.qsmc.quipt.core.config.ConfigValue;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 @ConfigTemplate(name = "quipt", ext = ConfigTemplate.Extension.JSON)
 public class QuiptConfig extends Config {
@@ -30,7 +31,13 @@ public class QuiptConfig extends Config {
         super(file, name, extension, integration);
         webData = new WebData(integration);
     }
-    
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+        System.out.println("TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST");
+
+    }
+
     public static class WebData extends ConfigObject {
         public String protocol = "HTTP";
         public String host = "127.0.0.1";

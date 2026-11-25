@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.net.http.HttpResponse;
 
 @ConfigTemplate(name = "webhooks", ext = ConfigTemplate.Extension.JSON)
@@ -34,6 +35,11 @@ public class WebhookManager extends Config {
     public WebhookManager(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
         webhooks = new ConfigMap<>(integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 
     /**

@@ -38,9 +38,11 @@ public class ConfigManager {
 
     private final Class<?>[] incompatibleTypes = {short.class, char.class, Short.class, Character.class, ArrayList.class};
 
+    private final File folder;
 
     public ConfigManager(QuiptIntegration integration) {
         this.integration = integration;
+        this.folder = new File(integration.folder(), "configs");
     }
 
     public Map<String, ConfigObject.Factory<?>> factories() {
@@ -69,7 +71,7 @@ public class ConfigManager {
         if (!templateClass.isAnnotationPresent(ConfigTemplate.class))
             throw new IllegalStateException("The ConfigTemplate class " + templateClass.getName() + " must have @ConfigFile annotation present, however none are detected.");
         ConfigTemplate templateData = templateClass.getAnnotation(ConfigTemplate.class);
-        integration.logger().log("Config Manager", "Registering config file \"" + templateData.name() + "\" for integration: " + integration.name() + ".");
+        integration.logger().log("Config Manager", "Registering config file \"" + templateData.name() + "\".");
         File file;
         T content;
         try {
@@ -77,10 +79,10 @@ public class ConfigManager {
             content = templateClass.getConstructor(File.class, String.class, ConfigTemplate.Extension.class, QuiptIntegration.class).newInstance(file, templateData.name(), templateData.ext(), integration);
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException |
                  InstantiationException e) {
-            integration.logger().warn("Config Manager","Could not register config file: {} for {}.", templateClass.getName(), integration.name());
+            integration.logger().warn("Config Manager", "Could not register config file {}.", templateClass.getName());
             return null;
         } catch (IOException e) {
-            throw new IllegalStateException("Could not create config file: " + templateClass.getName() + " for " + integration.name() + ".", e);
+            throw new IllegalStateException("Could not create config file " + templateClass.getName() + ".", e);
         }
 
 
@@ -93,15 +95,15 @@ public class ConfigManager {
         integration.logger().log(
                 "Config Manager",
                 content.write()
-                        ? "Registered {} config file"
-                        : "Failed to register {} config file",
+                        ? "Registered config file \"{}\""
+                        : "Failed to register config file \"{}\"",
                 templateData.name()
         );
         return content;
     }
 
     public <T extends Config> void register(T config) {
-        integration.logger().log("Config Manager", "Registering config file \"" + config.name() + "\" for integration: " + integration.name() + ".");
+        integration.logger().log("Config Manager", "Registering config file \"" + config.name() + "\".");
 
         //Variables set. Now time to load the file or default values
         JSONObject writtenData = load(config.file(), config.ext());
@@ -112,19 +114,18 @@ public class ConfigManager {
         integration.logger().log(
                 "Config Manager",
                 config.write()
-                        ? "Registered {} config file"
-                        : "Failed to register {} config file",
+                        ? "Registered config file \"{}\""
+                        : "Failed to register config file \"{}\"",
                 config.name()
         );
     }
 
     private File file(ConfigTemplate templateData) throws IOException {
-        File file = new File(integration.folder(), templateData.name() + "." + templateData.ext().extension());
         return file(templateData.name(), templateData.ext());
     }
 
     public File file(String path, ConfigTemplate.Extension extension) throws IOException {
-        File file = new File(integration.folder(), path + "." + extension.extension());
+        File file = new File(folder, path + "." + extension.extension());
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) {
             integration.logger().log("Config Manager", "Config file \"" + path + "\" does not exist. Creating...");
@@ -133,41 +134,58 @@ public class ConfigManager {
         return file;
     }
 
-    private <T extends Config> void write(T content, JSONObject writtenData) {
-        for (Field configField : content.getContentValues()) {
+    private <T extends Config> void write(T content, JSONObject stored) {
+        for (Field field : content.getContentValues()) {
+            ConfigValue data = field.getAnnotation(ConfigValue.class);
             try {
-                if (writtenData.has(configField.getName())) {
-                    Object writtenValue = writtenData.get(configField.getName());
-                    Arrays.stream(incompatibleTypes).filter(type -> type.isAssignableFrom(configField.getType())).forEach(type -> {
-                        throw new IllegalArgumentException("Type " + type.getName() + " is not supported in config files");
-                    });
-                    if (configField.getType().isEnum()) {
-                        writtenValue = Enum.valueOf((Class<Enum>) configField.getType(), (String) writtenValue);
-                    }
-//                    if
-                    if (writtenValue instanceof JSONObject json) {
-                        if (JsonSerializable.class.isAssignableFrom(configField.getType())) {
-                            JsonSerializable serializable = (JsonSerializable) configField.getType().getDeclaredConstructor(QuiptIntegration.class).newInstance(integration);
-                            serializable.fromJson(json);
-                            writtenValue = serializable;
+                if (stored.has(field.getName())) {
+                    Object cacheValue = field.get(content);
+                    Object writtenValue = storedValue(field.getName(), stored, field.getType());
+                    if (data.override()) {
+                        if (cacheValue != writtenValue){
+                            integration.logger().log("Config Manager", "Overriding config value for field: " + field.getName());
+                            if(field.getName().equals("version")){
+                                content.update(field, Integer.parseInt(writtenValue.toString()));
+                            }
                         }
-                        if (ConfigObject.class.isAssignableFrom(configField.getType())) {
-                            ConfigObject configObject = (ConfigObject) configField.getType().getDeclaredConstructor(QuiptIntegration.class).newInstance(integration);
-                            json.remove("integration");
-                            configObject.fromJson(json);
-                            writtenValue = configObject;
-                        }
+                        continue;
                     }
-                    if (configField.getType() == BigDecimal.class) {
-                        writtenValue = BigDecimal.valueOf(Double.parseDouble(writtenValue.toString()));
-                    }
-                    configField.set(content, writtenValue);
+                    field.set(content, writtenValue);
                 }
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException |
                      NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private Object storedValue(String name, JSONObject writtenData, Class<?> fieldType) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Object writtenValue = writtenData.get(name);
+        Arrays.stream(incompatibleTypes).filter(type -> type.isAssignableFrom(fieldType)).forEach(type -> {
+            throw new IllegalArgumentException("Type " + type.getName() + " is not supported in config files");
+        });
+
+        if (fieldType.isEnum()) {
+            writtenValue = Enum.valueOf((Class<Enum>) fieldType, (String) writtenValue);
+        }
+//                    if
+        if (writtenValue instanceof JSONObject json) {
+            if (JsonSerializable.class.isAssignableFrom(fieldType)) {
+                JsonSerializable serializable = (JsonSerializable) fieldType.getDeclaredConstructor(QuiptIntegration.class).newInstance(integration);
+                serializable.fromJson(json);
+                writtenValue = serializable;
+            }
+            if (ConfigObject.class.isAssignableFrom(fieldType)) {
+                ConfigObject configObject = (ConfigObject) fieldType.getDeclaredConstructor(QuiptIntegration.class).newInstance(integration);
+                json.remove("integration");
+                configObject.fromJson(json);
+                writtenValue = configObject;
+            }
+        }
+        if (fieldType == BigDecimal.class) {
+            writtenValue = BigDecimal.valueOf(Double.parseDouble(writtenValue.toString()));
+        }
+        return writtenValue;
     }
 
 
@@ -227,7 +245,7 @@ public class ConfigManager {
      * This method removes the existing configuration from the internal data store for the
      * specified integration and template, and re-registers it to ensure an updated configuration.
      *
-     * @param template    The class of the configuration template to be reloaded.
+     * @param template The class of the configuration template to be reloaded.
      */
     public void reload(Class<? extends Config> template) {
         ConfigTemplate cf = template.getAnnotation(ConfigTemplate.class);
@@ -245,7 +263,7 @@ public class ConfigManager {
     public <T extends Config> T config(Class<T> clazz) {
         if (!clazz.isAnnotationPresent(ConfigTemplate.class))
             throw new IllegalStateException("The ConfigTemplate class " + clazz.getName() + " must have @ConfigFile annotation present, however none are detected.");
-        if (!configs.containsKey(clazz.getAnnotation(ConfigTemplate.class).name())){
+        if (!configs.containsKey(clazz.getAnnotation(ConfigTemplate.class).name())) {
             register(clazz);
         }
         return (T) configs.get(clazz.getAnnotation(ConfigTemplate.class).name());

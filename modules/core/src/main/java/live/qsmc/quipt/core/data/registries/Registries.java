@@ -1,5 +1,6 @@
 package live.qsmc.quipt.core.data.registries;
 
+import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
 import org.json.JSONObject;
 
@@ -13,12 +14,19 @@ public class Registries {
     private final Map<RegistryKey, Registry<?>> registries = new HashMap<>();
     private final Map<String, RegistryKey> keys = new HashMap<>();
 
+    private final Quipt quipt;
+
+    public Registries(Quipt quipt){
+        this.quipt = quipt;
+    }
+
     public <T> Registry<T> register(String key, Supplier<T> defaultSupplier) {
         if (keys.containsKey(key)) throw new IllegalArgumentException("Key already registered: " + key);
         RegistryKey registryKey = new RegistryKey(key);
         keys.put(key, registryKey);
         Registry<T> registry = new Registry<>(registryKey);
         registries.put(registryKey, registry);
+        quipt.logger().log("Registries", "Registered new registry: " + key);
         return registry;
     }
 
