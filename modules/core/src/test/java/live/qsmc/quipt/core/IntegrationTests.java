@@ -1,10 +1,16 @@
 package live.qsmc.quipt.core;
 
 import live.qsmc.quipt.core.charity.el.ExtraLifePlatform;
+import live.qsmc.quipt.core.config.Config;
+import live.qsmc.quipt.core.config.ConfigTemplate;
 import live.qsmc.quipt.core.events.*;
 import live.qsmc.quipt.core.utils.TestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +26,25 @@ public class IntegrationTests {
         QUIPT.enable();
         TEST_INTEGRATION = TestUtils.getTestIntegration();
         QUIPT.enable(TEST_INTEGRATION);
+    }
+
+    @Test
+    public void testFakeConfig() throws IOException {
+        String name = System.currentTimeMillis() + "";
+        ConfigTemplate.Extension ext = ConfigTemplate.Extension.JSON;
+        File file = TEST_INTEGRATION.configs().file(name, ext);
+        Config config = new Config(file, name, ext, TEST_INTEGRATION) {
+            @Override
+            public File file() {
+                return super.file();
+            }
+
+            @Override
+            public void update(Field versionField, int storedVersion) {
+
+            }
+        };
+        TEST_INTEGRATION.configs().register(config);
     }
 
 //    @Test

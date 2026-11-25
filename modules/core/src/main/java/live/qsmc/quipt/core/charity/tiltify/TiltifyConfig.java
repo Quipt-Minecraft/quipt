@@ -7,6 +7,7 @@ import live.qsmc.quipt.core.config.ConfigValue;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 /**
  * Configuration for Tiltify integration.
@@ -47,6 +48,11 @@ public class TiltifyConfig extends Config {
 
     public TiltifyConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 
 }

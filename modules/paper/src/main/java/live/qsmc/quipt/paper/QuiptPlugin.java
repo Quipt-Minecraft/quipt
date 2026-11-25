@@ -1,5 +1,6 @@
 package live.qsmc.quipt.paper;
 
+import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.data.Metadata;
 import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.minecraft.MinecraftIntegration;
@@ -16,26 +17,26 @@ public abstract class QuiptPlugin extends JavaPlugin {
 
     protected PaperIntegration integration = null;
 
-
-
-
     @Override
     public void onEnable() {
-        listeners();
-        commands();
         JSONObject data = new JSONObject();
         data.put("name", getPluginMeta().getName());
         data.put("version", getPluginMeta().getVersion());
         data.put("id", getPluginMeta().getName().toLowerCase().replace(" ", "_"));
         data.put("folder", getDataFolder());
         Metadata metadata = Metadata.of(data);
+        Quipt.INSTANCE.logger().log("Paper-Loader", "Loading " + metadata.value("id", String.class));
+
         integration = new PaperIntegration(metadata, this) {
             @Override
             public void enable() {
                 QuiptPlugin.this.enable();
             }
         };
+        listeners();
+        commands();
         Quipt.INSTANCE.enable(integration);
+
     }
 
     public PaperIntegration integration() {

@@ -16,6 +16,7 @@ import live.qsmc.quipt.core.config.ConfigValue;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 @ConfigTemplate(name = "resources",ext = ConfigTemplate.Extension.QPT)
 public class ResourceConfig extends Config {
@@ -38,6 +39,11 @@ public class ResourceConfig extends Config {
         super(file, name, extension, integration);
         auth = new Auth(integration);
         hashes = new Hashes(integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 
     public static class Auth extends ConfigObject {

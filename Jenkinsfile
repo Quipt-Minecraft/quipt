@@ -1,16 +1,12 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build and publish')
-    }
     environment {
-        BRANCH_NAME = "${params.BRANCH}"
         MODRINTH_TOKEN = credentials('modrinth_token')
     }
     stages {
         stage('Update') {
             steps {
-                git branch: "${params.BRANCH}", url: 'https://github.com/Quipt-Minecraft/quipt'
+                git branch: "${env.BRANCH_NAME}", url: 'https://github.com/Quipt-Minecraft/quipt'
             }
         }
         stage('Build') {

@@ -6,6 +6,7 @@ import live.qsmc.quipt.core.config.ConfigTemplate;
 import live.qsmc.quipt.core.config.ConfigValue;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 @ConfigTemplate(name = "bot", ext = ConfigTemplate.Extension.JSON)
 public class BotConfig extends Config {
@@ -22,5 +23,10 @@ public class BotConfig extends Config {
      */
     public BotConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 }

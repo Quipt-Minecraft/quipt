@@ -7,6 +7,7 @@ import live.qsmc.quipt.core.config.ConfigTemplate;
 import live.qsmc.quipt.core.config.ConfigValue;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 @ConfigTemplate(name = "extralife", ext = ConfigTemplate.Extension.JSON)
 public class ExtraLifeConfig extends CharityConfig<ExtraLifeDonation> {
@@ -21,6 +22,11 @@ public class ExtraLifeConfig extends CharityConfig<ExtraLifeDonation> {
 
     public ExtraLifeConfig(File file, String name, ConfigTemplate.Extension extension, QuiptIntegration integration) {
         super(file, name, extension, integration);
+    }
+
+    @Override
+    public void update(Field versionField, int storedVersion) {
+
     }
 
 //    public ProcessResult<ExtraLifeDonation> process(ExtraLifeDonation donation) {

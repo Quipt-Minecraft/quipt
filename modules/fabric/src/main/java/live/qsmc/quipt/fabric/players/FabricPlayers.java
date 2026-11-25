@@ -2,6 +2,7 @@ package live.qsmc.quipt.fabric.players;
 
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.core.config.objects.ConfigObject;
+import live.qsmc.quipt.fabric.QuiptMod;
 import live.qsmc.quipt.minecraft.MinecraftIntegration;
 import live.qsmc.quipt.minecraft.api.PlayerManager;
 import net.fabricmc.loader.api.ModContainer;
@@ -17,7 +18,7 @@ public class FabricPlayers extends PlayerManager<ServerPlayerAudience, FabricPla
 
 
     public FabricPlayers() {
-        super(FabricPlayer::new, new ConfigObject.Factory<>() {
+        super(FabricPlayer::new, FabricPlayer::new, new ConfigObject.Factory<>() {
             @Override
             public String getClassName() {
                 return FabricPlayer.class.getName();
@@ -30,4 +31,6 @@ public class FabricPlayers extends PlayerManager<ServerPlayerAudience, FabricPla
             }
         });
     }
+
+
 }

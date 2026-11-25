@@ -163,4 +163,10 @@ public abstract class Config {
             throw new RuntimeException(e);
         }
     }
+
+    public ConfigTemplate.Extension ext() {
+        return extension;
+    }
+
+    public abstract void update(Field versionField, int storedVersion);
 }

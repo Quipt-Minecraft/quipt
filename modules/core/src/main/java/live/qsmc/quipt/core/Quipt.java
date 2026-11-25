@@ -32,14 +32,16 @@ public class Quipt extends QuiptIntegration {
     private CharityManager charities = null;
 
     public Quipt(){
+        registries();
         this.integrationRegistry = registries().register("integrations", () -> null);
         this.integrationRegistry.register("core", this);
+        enable();
     }
 
     public Registries registries() {
         if(registries == null){
             logger().log("Registries", "Initializing Registries...");
-            registries = new Registries();
+            registries = new Registries(this);
         }
         return registries;
     }

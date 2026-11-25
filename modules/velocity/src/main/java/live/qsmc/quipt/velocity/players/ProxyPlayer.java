@@ -1,6 +1,7 @@
 package live.qsmc.quipt.velocity.players;
 
 import com.velocitypowered.api.proxy.Player;
+import live.qsmc.quipt.core.Quipt;
 import live.qsmc.quipt.core.QuiptIntegration;
 import live.qsmc.quipt.minecraft.api.MinecraftPlayer;
 import net.kyori.adventure.audience.Audience;
@@ -11,10 +12,6 @@ import java.util.UUID;
 public class ProxyPlayer extends MinecraftPlayer<Player> {
 
 
-    public ProxyPlayer(QuiptIntegration integration, UUID uuid) {
-        super(integration, uuid);
-    }
-
     public ProxyPlayer(Player audience) {
         super(audience);
     }
@@ -22,6 +19,10 @@ public class ProxyPlayer extends MinecraftPlayer<Player> {
     @Deprecated
     public ProxyPlayer(JSONObject json) {
         super(json);
+    }
+
+    public ProxyPlayer(UUID uuid) {
+        super(uuid);
     }
 
     @Override

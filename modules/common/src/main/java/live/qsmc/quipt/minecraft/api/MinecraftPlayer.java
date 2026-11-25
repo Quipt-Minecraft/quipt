@@ -13,23 +13,23 @@ import java.util.UUID;
 
 public abstract class MinecraftPlayer<A extends Audience> extends ConfigObject implements Audience {
 
-    public Metadata metadata = new Metadata();
+    public JSONObject metadata = new JSONObject();
 
-    public MinecraftPlayer(QuiptIntegration integration, UUID uuid) {
-        super(integration);
+    public MinecraftPlayer(UUID uuid) {
+        super(Quipt.INSTANCE);
         super.id = uuid.toString();
     }
 
     @Deprecated
     public MinecraftPlayer(A audience) {
-        this(Quipt.INSTANCE, audience.get(Identity.UUID).orElseThrow());
+        this(audience.get(Identity.UUID).orElseThrow());
     }
 
     @Deprecated
     public MinecraftPlayer(JSONObject json) {
         super(Quipt.INSTANCE, json);
         if(json.has("metadata")){
-            this.metadata = Metadata.of(json.getJSONObject("metadata"));
+            this.metadata = json.getJSONObject("metadata");
         }
     }
 
